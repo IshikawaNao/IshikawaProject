@@ -4,73 +4,43 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    float movespeed = 7;
-    float pushSpeed = 3;
-    float force = 7;
-    float jumpPower = 5;
     float distance = 1.05f;
-    float pushRayDistance = 0.5f;
-    float drag = 5;
-
     bool isGround;
-    bool isPush = false;
-    
-    Vector2 move;
 
+    [SerializeField]
+    Camera camera;
     Rigidbody rb;
-    PlayerJump pj;
-    PlayerMove pm;
     GroundLayer gl;
-    PlayerPush pp;
-    Parachute pc;
-
+    IPlayerMover iMover;
     InputKey input;
+
     void Start()
     {
-        rb = GetComponent<Rigidbody>();
-        pj = GetComponent<PlayerJump>();
-        pm = GetComponent<PlayerMove>();
-        gl = GetComponent<GroundLayer>();
-        pp = GetComponent<PlayerPush>();
-        pc = GetComponent<Parachute>();
 
+        rb = GetComponent<Rigidbody>();
+        gl = GetComponent<GroundLayer>();
+        
         input = GetComponent<InputKey>();
+
+        iMover = new PlayerMove(rb);
     }
 
     
     void Update()
     {
-        move = input.Move;
-
         isGround = gl.IsGround(distance);
-        isPush = pp.Push(pushRayDistance);
+        
         if (input.Jump)
         {
             if(isGround)
             {
-                pj.Jump(rb, jumpPower);
-            }
-            else
-            {
-                pc.Para(rb, drag, isGround);
+                iMover.Jump();
             }
         }
-        if(isGround)
-        {
-            pc.Para(rb, drag, isGround);
-        }
-       
     }
 
     private void FixedUpdate()
     {
-        if(isPush)
-        {
-            pm.Move(rb, move, pushSpeed, force);
-        }
-        else
-        {
-            pm.Move(rb, move, movespeed, force);
-        }
+        iMover.Move(input.Move, camera, this.gameObject);
     }
 }

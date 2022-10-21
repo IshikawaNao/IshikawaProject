@@ -1,20 +1,22 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerMove : MonoBehaviour, IPlayerMover
 {
     float speed = 7;
     float force = 7;
-    float jumpPower = 5;
+    float jumpPower = 3;
     
     Rigidbody rb;
+    GameObject player;
 
-    public PlayerMove(Rigidbody _rb)
+    public PlayerMove(Rigidbody _rb, GameObject _player)
     {
-        rb = _rb;    
+        rb = _rb;
+        player = _player;
     }
-    public void Move(Vector2 move, Camera camera,  GameObject player)
+
+    // 移動処理
+    public void Move(Vector2 move, GameObject camera)
     {
         //カメラ方向
         Vector3 cameraForward = Vector3.Scale(camera.transform.forward, new Vector3(1, 0, 1));
@@ -26,9 +28,10 @@ public class PlayerMove : MonoBehaviour, IPlayerMover
         // キャラクターの向きを進行方向に
         if (moveForward != Vector3.zero)
         {
-            player.transform.rotation = Quaternion.LookRotation(moveForward);
+            player.transform.rotation = Quaternion.LookRotation(moveVector);
         }
     }
+    // ジャンプ処理
     public void Jump()
     {
         Vector3 jumpVector = new Vector3(0, jumpPower, 0);

@@ -2,7 +2,7 @@ using UnityEngine;
 
 public interface IPlayerMover
 {
-    void Move(Vector2 move, Camera camera, GameObject player);
+    void Move(Vector2 move, GameObject camera);
     void Jump();
 }
 

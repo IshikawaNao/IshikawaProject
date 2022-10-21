@@ -51,7 +51,7 @@ public partial class @MyInput : IInputActionCollection2, IDisposable
                     ""id"": ""c8bb4119-8733-4d50-b31d-8cb028f7ae6a"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
-                    ""interactions"": """",
+                    ""interactions"": ""Hold"",
                     ""initialStateCheck"": false
                 }
             ],
@@ -135,6 +135,17 @@ public partial class @MyInput : IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""ecde2ac5-bcd9-4a89-a98c-faaac7c33f3b"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Jump"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""24ea4687-f28d-491c-a3ef-2a548999b821"",
                     ""path"": ""<Mouse>/leftButton"",
                     ""interactions"": """",
@@ -166,7 +177,7 @@ public partial class @MyInput : IInputActionCollection2, IDisposable
                     ""id"": ""6837f323-30f6-496b-809e-6b6bb6679c4c"",
                     ""path"": ""<Mouse>/delta"",
                     ""interactions"": """",
-                    ""processors"": ""ScaleVector2"",
+                    ""processors"": ""ScaleVector2(x=0.3)"",
                     ""groups"": """",
                     ""action"": ""Move"",
                     ""isComposite"": false,

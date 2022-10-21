@@ -4,43 +4,49 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    float distance = 1.05f;
-    bool isGround;
-
     [SerializeField]
-    Camera camera;
+    GameObject cameraPos;
+
     Rigidbody rb;
     GroundLayer gl;
+    KeyInput input;
+
     IPlayerMover iMover;
-    InputKey input;
+    IMoveObject iObject;
 
     void Start()
     {
-
         rb = GetComponent<Rigidbody>();
         gl = GetComponent<GroundLayer>();
-        
-        input = GetComponent<InputKey>();
+        input = GetComponent<KeyInput>();
 
-        iMover = new PlayerMove(rb);
+        iMover = new PlayerMove(rb, this.gameObject);
+        iObject = new PushObject();
     }
 
     
     void Update()
     {
-        isGround = gl.IsGround(distance);
-        
-        if (input.Jump)
+        if (input.InputJump())
         {
-            if(isGround)
+            if(gl.IsGround())
             {
                 iMover.Jump();
+            }
+        }
+
+        if (iObject.Push(this.gameObject))
+        {
+            iObject.Move(iObject.Box_rb(), input.InputMove(), this.gameObject);
+            if (input.InputAction())
+            {
+                print("a");
             }
         }
     }
 
     private void FixedUpdate()
     {
-        iMover.Move(input.Move, camera, this.gameObject);
+        iMover.Move(input.InputMove(), cameraPos);
     }
 }

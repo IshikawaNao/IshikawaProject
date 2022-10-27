@@ -6,19 +6,16 @@ using UnityEngine.InputSystem;
 
 public class KeyInput : MonoBehaviour
 {
-    bool isJump;
-    bool pushAction;
-    Vector2 move;
-    Vector2 pos;
-
     // 移送入力
-    public Vector2 InputMove() { return move; }
+    public Vector2 InputMove { get; set; }
     // マウスポジション
-    public Vector2 CameraPos() { return pos; }
+    public Vector2 CameraPos { get; set; }
     // ジャンプ入力
-    public bool InputJump() { return isJump; }
+    public bool InputJump { get; set; }
     // アクションボタン入力
-    public bool InputAction() { return pushAction; }
+    public bool PushAction { get; set; }
+    // アクションボタン入力
+    public bool ClimbAction { get; set; }
 
     #region　InputAction
     MyInput myInput;
@@ -30,12 +27,10 @@ public class KeyInput : MonoBehaviour
 
     private void Update()
     {
-        move = myInput.Player.Move.ReadValue<Vector2>();
-        pos = myInput.Camera.Move.ReadValue<Vector2>();
-        isJump = myInput.Player.Jump.triggered;
-        pushAction = myInput.Player.Action.triggered;
+        InputMove = myInput.Player.Move.ReadValue<Vector2>();
+        CameraPos = myInput.Camera.Move.ReadValue<Vector2>();
+        InputJump = myInput.Player.Jump.triggered;
+        PushAction = myInput.Player.PushAction.triggered;
+        ClimbAction = myInput.Player.ClimbAction.triggered;
     }
-
-   
-    
 }

@@ -46,12 +46,21 @@ public partial class @MyInput : IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Action"",
+                    ""name"": ""PushAction"",
                     ""type"": ""Button"",
                     ""id"": ""c8bb4119-8733-4d50-b31d-8cb028f7ae6a"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
-                    ""interactions"": ""Hold"",
+                    ""interactions"": ""Press"",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ClimbAction"",
+                    ""type"": ""Button"",
+                    ""id"": ""ee14597c-1c86-41bf-8066-2f71cdee3967"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press"",
                     ""initialStateCheck"": false
                 }
             ],
@@ -151,7 +160,18 @@ public partial class @MyInput : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Action"",
+                    ""action"": ""PushAction"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""15419a63-da54-4d77-b569-75780f2c830b"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ClimbAction"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -203,7 +223,8 @@ public partial class @MyInput : IInputActionCollection2, IDisposable
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
         m_Player_Move = m_Player.FindAction("Move", throwIfNotFound: true);
         m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
-        m_Player_Action = m_Player.FindAction("Action", throwIfNotFound: true);
+        m_Player_PushAction = m_Player.FindAction("PushAction", throwIfNotFound: true);
+        m_Player_ClimbAction = m_Player.FindAction("ClimbAction", throwIfNotFound: true);
         // Camera
         m_Camera = asset.FindActionMap("Camera", throwIfNotFound: true);
         m_Camera_Move = m_Camera.FindAction("Move", throwIfNotFound: true);
@@ -268,14 +289,16 @@ public partial class @MyInput : IInputActionCollection2, IDisposable
     private IPlayerActions m_PlayerActionsCallbackInterface;
     private readonly InputAction m_Player_Move;
     private readonly InputAction m_Player_Jump;
-    private readonly InputAction m_Player_Action;
+    private readonly InputAction m_Player_PushAction;
+    private readonly InputAction m_Player_ClimbAction;
     public struct PlayerActions
     {
         private @MyInput m_Wrapper;
         public PlayerActions(@MyInput wrapper) { m_Wrapper = wrapper; }
         public InputAction @Move => m_Wrapper.m_Player_Move;
         public InputAction @Jump => m_Wrapper.m_Player_Jump;
-        public InputAction @Action => m_Wrapper.m_Player_Action;
+        public InputAction @PushAction => m_Wrapper.m_Player_PushAction;
+        public InputAction @ClimbAction => m_Wrapper.m_Player_ClimbAction;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -291,9 +314,12 @@ public partial class @MyInput : IInputActionCollection2, IDisposable
                 @Jump.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnJump;
                 @Jump.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnJump;
                 @Jump.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnJump;
-                @Action.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAction;
-                @Action.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAction;
-                @Action.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAction;
+                @PushAction.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPushAction;
+                @PushAction.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPushAction;
+                @PushAction.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPushAction;
+                @ClimbAction.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnClimbAction;
+                @ClimbAction.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnClimbAction;
+                @ClimbAction.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnClimbAction;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -304,9 +330,12 @@ public partial class @MyInput : IInputActionCollection2, IDisposable
                 @Jump.started += instance.OnJump;
                 @Jump.performed += instance.OnJump;
                 @Jump.canceled += instance.OnJump;
-                @Action.started += instance.OnAction;
-                @Action.performed += instance.OnAction;
-                @Action.canceled += instance.OnAction;
+                @PushAction.started += instance.OnPushAction;
+                @PushAction.performed += instance.OnPushAction;
+                @PushAction.canceled += instance.OnPushAction;
+                @ClimbAction.started += instance.OnClimbAction;
+                @ClimbAction.performed += instance.OnClimbAction;
+                @ClimbAction.canceled += instance.OnClimbAction;
             }
         }
     }
@@ -348,7 +377,8 @@ public partial class @MyInput : IInputActionCollection2, IDisposable
     {
         void OnMove(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
-        void OnAction(InputAction.CallbackContext context);
+        void OnPushAction(InputAction.CallbackContext context);
+        void OnClimbAction(InputAction.CallbackContext context);
     }
     public interface ICameraActions
     {

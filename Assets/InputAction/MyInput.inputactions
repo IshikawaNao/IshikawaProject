@@ -24,12 +24,21 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Action",
+                    "name": "PushAction",
                     "type": "Button",
                     "id": "c8bb4119-8733-4d50-b31d-8cb028f7ae6a",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": "Hold",
+                    "interactions": "Press",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "ClimbAction",
+                    "type": "Button",
+                    "id": "ee14597c-1c86-41bf-8066-2f71cdee3967",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press",
                     "initialStateCheck": false
                 }
             ],
@@ -129,7 +138,18 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Action",
+                    "action": "PushAction",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "15419a63-da54-4d77-b569-75780f2c830b",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ClimbAction",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

@@ -23,7 +23,7 @@ public class CameraMove : MonoBehaviour
         targetPos = playerObj.transform.position;
 
         //マウスの移動量
-        float mouseInputX = input.CameraPos().x;
+        float mouseInputX = input.CameraPos.x;
 
         // targetの位置のY軸を中心に、回転（公転）する
         transform.RotateAround(targetPos, Vector3.up, mouseInputX * Time.deltaTime * 100f);

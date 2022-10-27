@@ -1,13 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class PlayerController : MonoBehaviour
 {
+    bool a = false;
+    bool b = false;
+
+    bool isMove = true;
+
+
     [SerializeField]
     GameObject cameraPos;
 
     Rigidbody rb;
+    CapsuleCollider col;
     GroundLayer gl;
     KeyInput input;
 
@@ -17,6 +25,7 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        col = GetComponent<CapsuleCollider>();
         gl = GetComponent<GroundLayer>();
         input = GetComponent<KeyInput>();
 
@@ -27,7 +36,9 @@ public class PlayerController : MonoBehaviour
     
     void Update()
     {
-        if (input.InputJump())
+        bool isPush = iObject.Push(this.gameObject);
+        bool isClimb =  iObject.Climb(this.gameObject);
+        if (input.InputJump)
         {
             if(gl.IsGround())
             {
@@ -35,18 +46,52 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        if (iObject.Push(this.gameObject))
+        if (isPush)
         {
-            iObject.Move(iObject.Box_rb(), input.InputMove(), this.gameObject);
-            if (input.InputAction())
+            if (input.PushAction)
             {
-                print("a");
+                a = true;
+            }
+            if(a)
+            {
+                iObject.Move(iObject.Box_rb(), input.InputMove, this.gameObject);
             }
         }
+        else
+        {
+            a = false;
+        }
+
+        if(isClimb)
+        {
+            if(input.ClimbAction)
+            {
+                
+                b = true;
+                isMove = false;
+            }
+            if(b)
+            {
+                iObject.ClimbPlayer(rb, this.gameObject);
+            }
+        }
+        else
+        {
+            if(b)
+            {
+                transform.DOMove(this.transform.position + 0.1f * Vector3.up + col.radius * 2f * this.transform.forward, 0.1f);
+            }
+            b = false;
+            isMove = true;
+        }
+        
     }
 
     private void FixedUpdate()
     {
-        iMover.Move(input.InputMove(), cameraPos);
+        if(isMove)
+        {
+            iMover.Move(input.InputMove, cameraPos);
+        }
     }
 }

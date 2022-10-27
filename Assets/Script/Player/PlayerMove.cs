@@ -31,6 +31,7 @@ public class PlayerMove : MonoBehaviour, IPlayerMover
             player.transform.rotation = Quaternion.LookRotation(moveVector);
         }
     }
+
     // ƒWƒƒƒ“ƒvˆ—
     public void Jump()
     {

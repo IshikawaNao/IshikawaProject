@@ -1,3 +1,6 @@
+/// <summary>
+/// プレイヤー制御
+/// </summary>
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,14 +8,15 @@ using DG.Tweening;
 
 public class PlayerController : MonoBehaviour
 {
-    bool a = false;
-    bool b = false;
+    
+    bool isPush = false;　　  // オブジェクトが動くフラグ
 
-    bool isMove = true;
+    bool isClimb = false;　　 // オブジェクトを登るフラグ
 
+    bool isMove = true;　    // プレイヤーの移動のフラグ
 
     [SerializeField]
-    GameObject cameraPos;
+    GameObject cameraPos;   // カメラの位置
 
     Rigidbody rb;
     CapsuleCollider col;
@@ -21,6 +25,7 @@ public class PlayerController : MonoBehaviour
 
     IPlayerMover iMover;
     IMoveObject iObject;
+    IClimb iClimb;
 
     void Start()
     {
@@ -31,67 +36,83 @@ public class PlayerController : MonoBehaviour
 
         iMover = new PlayerMove(rb, this.gameObject);
         iObject = new PushObject();
+        iClimb = new PlayerClimb();
     }
 
     
     void Update()
     {
-        bool isPush = iObject.Push(this.gameObject);
-        bool isClimb =  iObject.Climb(this.gameObject);
+        Jump();
+        ObjectMove();
+        ObjectClimb();
+    }
+
+    private void FixedUpdate()
+    {
+        // 移動
+        if(isMove)
+        {
+            iMover.Move(input.InputMove, cameraPos);
+        }
+    }
+
+    // ジャンプ
+    void Jump()
+    {
         if (input.InputJump)
         {
-            if(gl.IsGround())
+            if (gl.IsGround())
             {
                 iMover.Jump();
             }
         }
+    }
 
-        if (isPush)
+    // オブジェクトを動かす
+    void ObjectMove()
+    {
+        if (iObject.Push(this.gameObject) && gl.IsGround())
         {
             if (input.PushAction)
             {
-                a = true;
+                isPush = true;
             }
-            if(a)
+            if (isPush)
             {
                 iObject.Move(iObject.Box_rb(), input.InputMove, this.gameObject);
             }
         }
         else
         {
-            a = false;
+            isPush = false;
         }
+    }
 
-        if(isClimb)
+
+    // オブジェクトを登る
+    void ObjectClimb()
+    {
+        if (iClimb.Climb(this.gameObject))
         {
-            if(input.ClimbAction)
+            if (input.ClimbAction && gl.IsGround())
             {
-                
-                b = true;
+
+                isClimb = true;
                 isMove = false;
             }
-            if(b)
+            if (isClimb)
             {
-                iObject.ClimbPlayer(rb, this.gameObject);
+                iClimb.ClimbPlayer(rb);
             }
         }
         else
         {
-            if(b)
+            if (isClimb)
             {
-                transform.DOMove(this.transform.position + 0.1f * Vector3.up + col.radius * 2f * this.transform.forward, 0.1f);
+                transform.DOMove(this.transform.position + 0.2f * Vector3.up + col.radius * 2f * this.transform.forward, 0.1f);
             }
-            b = false;
+            isClimb = false;
             isMove = true;
-        }
-        
-    }
-
-    private void FixedUpdate()
-    {
-        if(isMove)
-        {
-            iMover.Move(input.InputMove, cameraPos);
         }
     }
 }

@@ -1,3 +1,6 @@
+/// <summary
+/// ƒvƒŒƒCƒ„[‚ÌˆÚ“®
+/// </summary>
 using UnityEngine;
 
 public class PlayerMove : MonoBehaviour, IPlayerMover

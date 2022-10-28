@@ -1,17 +1,18 @@
-using System.Collections;
-using System.Collections.Generic;
+/// <summary
+/// ƒJƒƒ‰‚ÌˆÚ“®
+/// </summary>
 using UnityEngine;
 
 
 public class CameraMove : MonoBehaviour
 {
+    [SerializeField]
     GameObject playerObj;
     Vector3 targetPos;
 
     KeyInput input;
     void Start()
     {
-        playerObj = GameObject.Find("Player");
         input = playerObj.GetComponent<KeyInput>();
         targetPos = playerObj.transform.position;
     }

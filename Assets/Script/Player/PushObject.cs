@@ -1,12 +1,12 @@
+/// <summary>
+/// オブジェクトを押す
+/// </summary>
 using UnityEngine;
-using DG.Tweening;
 
 public class PushObject : MonoBehaviour, IMoveObject
 {
-    float speed = 30;
-    float force = 7;
-    bool a = true;
-    bool b = false;
+    float speed = 1.5f;
+    
     Vector3 moveForward;
 
     RaycastHit hit;
@@ -31,8 +31,7 @@ public class PushObject : MonoBehaviour, IMoveObject
         {
             moveForward = -playerForward * move.x;
         }
-        Vector3 moveVector = moveForward * speed;
-        rb.AddForce(moveForward * speed);
+        rb.velocity = (moveForward * speed);
     }
 
 

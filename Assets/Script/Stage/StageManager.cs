@@ -29,6 +29,7 @@ public class StageManager : MonoBehaviour
         if(Goal)
         {
             input.enabled = false;
+            input.InputMove = new Vector2(0, 0);
             goalPanale.SetActive(true);
             Invoke("ReStart", 1.5f);
         }

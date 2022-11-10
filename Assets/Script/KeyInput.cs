@@ -1,9 +1,9 @@
-/// <summary>
-/// Key“ü—Í
-/// </summary>
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+/// <summary>
+/// Key“ü—Í
+/// </summary>
 public class KeyInput : MonoBehaviour
 {
     // ˆÚ‘—“ü—Í

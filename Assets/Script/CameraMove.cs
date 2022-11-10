@@ -1,9 +1,8 @@
-/// <summary
-/// ƒJƒƒ‰‚ÌˆÚ“®
-/// </summary>
 using UnityEngine;
 
-
+/// <summary>
+/// ƒJƒƒ‰‚ÌˆÚ“®
+/// </summary>
 public class CameraMove : MonoBehaviour
 {
     [SerializeField]

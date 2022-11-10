@@ -1,11 +1,11 @@
-/// <summary>
-/// ステージマネージャー
-/// </summary>
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+/// <summary>
+/// ステージマネージャー
+/// </summary>
 public class StageManager : MonoBehaviour
 {
     public bool Goal { get; set; } = false;
@@ -16,7 +16,7 @@ public class StageManager : MonoBehaviour
 
     void Start()
     {
-        input = GameObject.Find("Player").GetComponent<KeyInput>();
+        //input = GameObject.Find("Player").GetComponent<KeyInput>();
     }
 
     void Update()

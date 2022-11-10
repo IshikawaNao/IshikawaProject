@@ -1,8 +1,8 @@
-/// <summary
-/// プレイヤーの移動
-/// </summary>
 using UnityEngine;
 
+/// <summary>
+/// プレイヤーの移動
+/// </summary>
 public class PlayerMove : MonoBehaviour, IPlayerMover
 {
     float speed = 7;

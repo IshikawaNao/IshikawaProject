@@ -8,11 +8,11 @@ using DG.Tweening;
 /// </summary>
 public class PlayerController : MonoBehaviour
 {
-    bool isPush = false;　　  // オブジェクトが動くフラグ
+    bool isPush = false;        // オブジェクトが動くフラグ
 
-    bool isClimb = false;　　 // オブジェクトを登るフラグ
+    bool isClimb = false;       // オブジェクトを登るフラグ
 
-    bool isMove = true;　    // プレイヤーの移動のフラグ
+    bool isMove = true;         // プレイヤーの移動のフラグ
 
     [SerializeField]
     GameObject cameraPos;   // カメラの位置
@@ -32,7 +32,7 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         col = GetComponent<CapsuleCollider>();
         gl = GetComponent<GroundLayer>();
-        input = GetComponent<KeyInput>();
+        input = GameObject.Find("KeyInput").GetComponent<KeyInput>();
 
         iMover = new PlayerMove(rb, this.gameObject);
         iObject = new PushObject();
@@ -109,7 +109,7 @@ public class PlayerController : MonoBehaviour
         {
             if (isClimb)
             {
-                transform.DOMove(this.transform.position + 0.2f * Vector3.up + col.radius * 2f * this.transform.forward, 0.1f);
+                this.transform.DOMove(this.transform.position + 0.2f * Vector3.up + col.radius * 2f * this.transform.forward, 0.1f);
             }
             isClimb = false;
             isMove = true;

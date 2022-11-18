@@ -16,6 +16,8 @@ public class KeyInput : MonoBehaviour
     public bool PushAction { get; set; }
     // アクションボタン入力
     public bool ClimbAction { get; set; }
+    // ソナーギミックボタン入力
+    public bool SonarAction { get; set; }
 
     #region　InputAction
     MyInput myInput;
@@ -32,5 +34,6 @@ public class KeyInput : MonoBehaviour
         InputJump = myInput.Player.Jump.triggered;
         PushAction = myInput.Player.PushAction.triggered;
         ClimbAction = myInput.Player.ClimbAction.triggered;
+        SonarAction = myInput.Player.SonarKey.IsPressed();
     }
 }

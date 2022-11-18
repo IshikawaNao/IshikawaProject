@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Utility_Map_1
-  m_Shader: {fileID: 4800000, guid: 99c351628a2f86d478724dec9d192299, type: 3}
+  m_Shader: {fileID: 4800000, guid: cc6491e8f1fe8634f8b024877f0a2fca, type: 3}
   m_ValidKeywords: []
   m_InvalidKeywords:
   - _EMISSION
@@ -78,6 +78,14 @@ Material:
     m_Floats:
     - _BumpScale: 1
     - _Cutoff: 0.5
+    - _Depth1: 0.6
+    - _Depth1_1: 0.6
+    - _Depth2: 0.5
+    - _Depth2_1: 0.5
+    - _Depth2_2: 0.5
+    - _Depth3: 0.5
+    - _Depth3_1: 0.5
+    - _Depth3_2: 0.4
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
     - _EmissionScaleUI: 0
@@ -87,9 +95,15 @@ Material:
     - _IsSonar: 0
     - _Metallic: 0.5
     - _Mode: 0
+    - _Normal1: 0.8
+    - _Normal1_1: 0.7
+    - _Normal2: 0.5
+    - _Normal2_1: 0.1
+    - _Normal2_2: 0.1
+    - _NormalCutOff: 0.04
     - _OcclusionStrength: 1
     - _OutlineWeight: 0.02
-    - _OutlineWidth: 0.03
+    - _OutlineWidth: 0.0093
     - _Parallax: 0.005
     - _ShadowStrength: 0.5
     - _SmoothnessTextureChannel: 0

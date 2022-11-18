@@ -63,7 +63,7 @@ Shader "Custom/ToonLit"
                 float3 mainColor = tex2D(_MainTexture, i.uv).rgb;
                 //補間値を用いて色を塗分け　影の強さ(影テクスチャーの濃さ)もここで調整
                 float3 finalColor = lerp(mainColor, shadowColor * (1 - _ShadowStrength) * mainColor,interpolation);
-                return float4(finalColor,1);
+                return float4(finalColor,1)  ;
             }
             ENDCG
         }

@@ -12,7 +12,7 @@ public class CameraMove : MonoBehaviour
     KeyInput input;
     void Start()
     {
-        input = playerObj.GetComponent<KeyInput>();
+        input = GameObject.Find("KeyInput").GetComponent<KeyInput>();
         targetPos = playerObj.transform.position;
     }
 

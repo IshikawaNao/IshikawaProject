@@ -14,7 +14,7 @@ Shader "Custom/OutLine"
     SubShader
     {
         
-       UsePass "Custom/ToonLit/Toon" 
+       //UsePass "Custom/ToonLit/Toon" 
         //アウトラインを描画
         Pass
         {
@@ -64,19 +64,19 @@ Shader "Custom/OutLine"
 
                 //ビュー座標系に変換した法線を投影座標系に変換　
                 //アウトラインとして描画予定であるピクセルのXY方向のオフセット
-                float2 offset = TransformViewToProjection(n.xy);
-                o.pos.xy += offset * _OutlineWidth;
+                float2 offset = TransformViewToProjection(n.xyz);
+                o.pos.xy += (offset *sin(1 * _Time)) * _OutlineWidth ;
                 return o;
             }
 
             //フラグメントシェーダー
             fixed4 frag(v2f i) : SV_Target
             {
-                return _OutlineColor * sin(50 * _Time);
+                return _OutlineColor;
             }
             ENDCG
         }
-		Pass
+        Pass
 	   	{
 			CGPROGRAM
             #pragma vertex vert
@@ -121,6 +121,7 @@ Shader "Custom/OutLine"
             }
             ENDCG
         }
+		
     }
     FallBack "Diffuse"
 }

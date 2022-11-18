@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Rendering;
 
 /// <summary>
 /// ステージマネージャー
@@ -10,13 +11,14 @@ public class StageManager : MonoBehaviour
 {
     public bool Goal { get; set; } = false;
 
+
     [SerializeField]
     GameObject goalPanale;
     KeyInput input;
 
     void Start()
     {
-        //input = GameObject.Find("Player").GetComponent<KeyInput>();
+        input = GameObject.Find("KeyInput").GetComponent<KeyInput>();
     }
 
     void Update()

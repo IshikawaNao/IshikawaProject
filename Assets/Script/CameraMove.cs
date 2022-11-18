@@ -1,9 +1,8 @@
-/// <summary
-/// ƒJƒƒ‰‚ÌˆÚ“®
-/// </summary>
 using UnityEngine;
 
-
+/// <summary>
+/// ƒJƒƒ‰‚ÌˆÚ“®
+/// </summary>
 public class CameraMove : MonoBehaviour
 {
     [SerializeField]
@@ -13,7 +12,7 @@ public class CameraMove : MonoBehaviour
     KeyInput input;
     void Start()
     {
-        input = playerObj.GetComponent<KeyInput>();
+        input = GameObject.Find("KeyInput").GetComponent<KeyInput>();
         targetPos = playerObj.transform.position;
     }
 

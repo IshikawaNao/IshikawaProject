@@ -1,19 +1,18 @@
-/// <summary>
-/// プレイヤー制御
-/// </summary>
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 
+/// <summary>
+/// プレイヤー制御
+/// </summary>
 public class PlayerController : MonoBehaviour
 {
-    
-    bool isPush = false;　　  // オブジェクトが動くフラグ
+    bool isPush = false;        // オブジェクトが動くフラグ
 
-    bool isClimb = false;　　 // オブジェクトを登るフラグ
+    bool isClimb = false;       // オブジェクトを登るフラグ
 
-    bool isMove = true;　    // プレイヤーの移動のフラグ
+    bool isMove = true;         // プレイヤーの移動のフラグ
 
     [SerializeField]
     GameObject cameraPos;   // カメラの位置
@@ -26,25 +25,27 @@ public class PlayerController : MonoBehaviour
     IPlayerMover iMover;
     IMoveObject iObject;
     IClimb iClimb;
+    IFly iFly;
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         col = GetComponent<CapsuleCollider>();
         gl = GetComponent<GroundLayer>();
-        input = GetComponent<KeyInput>();
+        input = GameObject.Find("KeyInput").GetComponent<KeyInput>();
 
         iMover = new PlayerMove(rb, this.gameObject);
         iObject = new PushObject();
         iClimb = new PlayerClimb();
+        iFly = new PlayerFly();
     }
 
-    
     void Update()
     {
         Jump();
         ObjectMove();
         ObjectClimb();
+        Fly();
     }
 
     private void FixedUpdate()
@@ -88,7 +89,6 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-
     // オブジェクトを登る
     void ObjectClimb()
     {
@@ -109,10 +109,18 @@ public class PlayerController : MonoBehaviour
         {
             if (isClimb)
             {
-                transform.DOMove(this.transform.position + 0.2f * Vector3.up + col.radius * 2f * this.transform.forward, 0.1f);
+                this.transform.DOMove(this.transform.position + 0.2f * Vector3.up + col.radius * 2f * this.transform.forward, 0.1f);
             }
             isClimb = false;
             isMove = true;
+        }
+    }
+
+    void Fly()
+    {
+        if(input.InputJump)
+        {
+            iFly.Fly(rb, iFly.FlyFrag(this.gameObject));
         }
     }
 }

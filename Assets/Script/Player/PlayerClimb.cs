@@ -1,8 +1,8 @@
+using UnityEngine;
+
 /// <summary>
 /// オブジェクトを登る
 /// </summary>
-using UnityEngine;
-
 public class PlayerClimb : MonoBehaviour, IClimb
 {
     RaycastHit hit;

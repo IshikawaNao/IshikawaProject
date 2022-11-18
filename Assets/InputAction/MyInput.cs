@@ -62,6 +62,15 @@ public partial class @MyInput : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": ""Press"",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SonarKey"",
+                    ""type"": ""Button"",
+                    ""id"": ""18f7c9d9-516d-4bce-b44d-e7a6b7f1a318"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -196,6 +205,17 @@ public partial class @MyInput : IInputActionCollection2, IDisposable
                     ""action"": ""ClimbAction"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""62fa1acb-8873-4e5a-8aa0-63dfa1304acf"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SonarKey"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -247,6 +267,7 @@ public partial class @MyInput : IInputActionCollection2, IDisposable
         m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
         m_Player_PushAction = m_Player.FindAction("PushAction", throwIfNotFound: true);
         m_Player_ClimbAction = m_Player.FindAction("ClimbAction", throwIfNotFound: true);
+        m_Player_SonarKey = m_Player.FindAction("SonarKey", throwIfNotFound: true);
         // Camera
         m_Camera = asset.FindActionMap("Camera", throwIfNotFound: true);
         m_Camera_Move = m_Camera.FindAction("Move", throwIfNotFound: true);
@@ -313,6 +334,7 @@ public partial class @MyInput : IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Jump;
     private readonly InputAction m_Player_PushAction;
     private readonly InputAction m_Player_ClimbAction;
+    private readonly InputAction m_Player_SonarKey;
     public struct PlayerActions
     {
         private @MyInput m_Wrapper;
@@ -321,6 +343,7 @@ public partial class @MyInput : IInputActionCollection2, IDisposable
         public InputAction @Jump => m_Wrapper.m_Player_Jump;
         public InputAction @PushAction => m_Wrapper.m_Player_PushAction;
         public InputAction @ClimbAction => m_Wrapper.m_Player_ClimbAction;
+        public InputAction @SonarKey => m_Wrapper.m_Player_SonarKey;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -342,6 +365,9 @@ public partial class @MyInput : IInputActionCollection2, IDisposable
                 @ClimbAction.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnClimbAction;
                 @ClimbAction.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnClimbAction;
                 @ClimbAction.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnClimbAction;
+                @SonarKey.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSonarKey;
+                @SonarKey.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSonarKey;
+                @SonarKey.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSonarKey;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -358,6 +384,9 @@ public partial class @MyInput : IInputActionCollection2, IDisposable
                 @ClimbAction.started += instance.OnClimbAction;
                 @ClimbAction.performed += instance.OnClimbAction;
                 @ClimbAction.canceled += instance.OnClimbAction;
+                @SonarKey.started += instance.OnSonarKey;
+                @SonarKey.performed += instance.OnSonarKey;
+                @SonarKey.canceled += instance.OnSonarKey;
             }
         }
     }
@@ -401,6 +430,7 @@ public partial class @MyInput : IInputActionCollection2, IDisposable
         void OnJump(InputAction.CallbackContext context);
         void OnPushAction(InputAction.CallbackContext context);
         void OnClimbAction(InputAction.CallbackContext context);
+        void OnSonarKey(InputAction.CallbackContext context);
     }
     public interface ICameraActions
     {

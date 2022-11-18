@@ -1,8 +1,8 @@
-/// <summary
-/// プレイヤーの移動
-/// </summary>
 using UnityEngine;
 
+/// <summary>
+/// プレイヤーの移動
+/// </summary>
 public class PlayerMove : MonoBehaviour, IPlayerMover
 {
     float speed = 7;
@@ -31,7 +31,7 @@ public class PlayerMove : MonoBehaviour, IPlayerMover
         // キャラクターの向きを進行方向に
         if (moveForward != Vector3.zero)
         {
-            player.transform.rotation = Quaternion.LookRotation(moveVector);
+            player.transform.rotation = Quaternion.RotateTowards(Quaternion.LookRotation(moveVector), player.transform.rotation,0.1f);
         }
     }
 

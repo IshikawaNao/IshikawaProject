@@ -1,8 +1,8 @@
-/// <summary
-/// ƒS[ƒ‹ˆ—
-/// </summary>
 using UnityEngine;
 
+/// <summary>
+/// ƒS[ƒ‹ˆ—
+/// </summary>
 public class GoalCheck : MonoBehaviour
 {
     StageManager sm;

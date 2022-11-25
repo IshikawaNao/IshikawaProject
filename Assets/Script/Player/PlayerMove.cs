@@ -1,44 +1,20 @@
 using UnityEngine;
 
-/// <summary>
-/// プレイヤーの移動
-/// </summary>
-public class PlayerMove : MonoBehaviour, IPlayerMover
+class PlayerMove
 {
-    float speed = 7;
-    float force = 7;
-    float jumpPower = 3;
-    
-    Rigidbody rb;
-    GameObject player;
-
-    public PlayerMove(Rigidbody _rb, GameObject _player)
+    private IPlayerMover _playerMover;
+    public PlayerMove(IPlayerMover playerMover)
     {
-        rb = _rb;
-        player = _player;
+        _playerMover = playerMover;
     }
 
-    // 移動処理
-    public void Move(Vector2 move, GameObject camera)
+    public void ExcuteMove(Vector2 move, GameObject camera, Animator anim)
     {
-        //カメラ方向
-        Vector3 cameraForward = Vector3.Scale(camera.transform.forward, new Vector3(1, 0, 1));
-        Vector3 moveForward = cameraForward * move.y + camera.transform.right * move.x;
-        Vector3 moveVector = moveForward.normalized * speed;   //移動速度
-        Vector3 vector = new Vector3(rb.velocity.x, 0, rb.velocity.z);              //velocity
-        rb.AddForce((moveVector - vector) * force, ForceMode.Acceleration);
-
-        // キャラクターの向きを進行方向に
-        if (moveForward != Vector3.zero)
-        {
-            player.transform.rotation = Quaternion.RotateTowards(Quaternion.LookRotation(moveVector), player.transform.rotation,0.1f);
-        }
+        _playerMover.Move(move, camera, anim);
     }
 
-    // ジャンプ処理
-    public void Jump()
+    public void ChangeMove(IPlayerMover playerMover)
     {
-        Vector3 jumpVector = new Vector3(0, jumpPower, 0);
-        rb.AddForce(jumpVector, ForceMode.Impulse);
+        _playerMover = playerMover;
     }
 }

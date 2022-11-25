@@ -6,11 +6,11 @@ public class PlayerFly : MonoBehaviour, IFly
 {
     RaycastHit hit;
 
-    public void Fly(Rigidbody _rb, bool isFly)
+    public void Fly(Rigidbody _rb, bool isFly, Animator anim)
     {
-        print("a");
         if(isFly)
         {
+            anim.SetBool("IsJump", true);
             _rb.AddForce(0, 10, 0,ForceMode.Impulse);
         }
     }

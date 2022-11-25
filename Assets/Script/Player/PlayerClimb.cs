@@ -17,7 +17,7 @@ public class PlayerClimb : MonoBehaviour, IClimb
     // playerの正面に登れるオブジェクトがあるか
     public bool Climb(GameObject _player)
     {
-        Vector3 orgin = new Vector3(_player.transform.position.x, _player.transform.position.y - 0.3f, _player.transform.position.z);
+        Vector3 orgin = new Vector3(_player.transform.position.x, _player.transform.position.y , _player.transform.position.z);
         Vector3 direction = Vector3.Scale(_player.transform.forward, new Vector3(1, 0, 1));
         ray = new Ray(orgin, direction);
 

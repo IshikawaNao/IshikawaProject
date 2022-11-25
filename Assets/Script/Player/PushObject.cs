@@ -12,26 +12,30 @@ public class PushObject : MonoBehaviour, IMoveObject
     RaycastHit hit;
     Ray ray;
 
-    public void Move(Rigidbody rb, Vector2 move, GameObject _player) 
+    public void Move(Rigidbody rb, Vector2 move, GameObject _player, Animator anim) 
     {
-        Vector3 playerForward = Vector3.Scale(_player.transform.forward, new Vector3(1, 0, 1));
-        if (move.y > 0)
+        if(move != Vector2.zero)
         {
-            moveForward = playerForward * move.y; 
+            Vector3 playerForward = Vector3.Scale(_player.transform.forward, new Vector3(1, 0, 1));
+            if (move.y > 0)
+            {
+                moveForward = playerForward * move.y;
+            }
+            else if (move.y < 0)
+            {
+                moveForward = -playerForward * move.y;
+            }
+            else if (move.x > 0)
+            {
+                moveForward = playerForward * move.x;
+            }
+            else if (move.x < 0)
+            {
+                moveForward = -playerForward * move.x;
+            }
+            anim.SetBool("IsObjectMove", true);
+            rb.velocity = (moveForward * speed);
         }
-        else if (move.y < 0)
-        {
-            moveForward = -playerForward * move.y;
-        }
-        else if(move.x > 0)
-        {
-            moveForward = playerForward  * move.x;
-        }
-        else if(move.x < 0)
-        {
-            moveForward = -playerForward * move.x;
-        }
-        rb.velocity = (moveForward * speed);
     }
 
 

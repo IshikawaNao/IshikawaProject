@@ -19,6 +19,7 @@ public class TitleSelect : MonoBehaviour, ITitleSelect
                 break;
             case 1:
                 print("オプション");
+                
                 break;
             case 2:
                 print("終了");
@@ -30,23 +31,13 @@ public class TitleSelect : MonoBehaviour, ITitleSelect
     public int SelectNum(float input, int num)
     {
         select = num;
-        if (input > 0)
-        {
-            select--;
-            if (select < 0) { select = 0; }
-        
-
-        }
-        else if (input < 0)
-        {
-            select++;
-            if (select > 2) { select = 2; }
-        }
+        if (input > 0){ select--; }
+        else if (input < 0){ select++; }
         return select;
     }
 
     // 決定処理
-    public void SelecDecision(int num, GameObject[] ui)
+    public void SelecDecision(int num, Animator anim)
     {
         switch (num)
         {
@@ -55,10 +46,12 @@ public class TitleSelect : MonoBehaviour, ITitleSelect
                 print("シーン遷移");
                 break;
             case 1:
-                ui[0].SetActive(true);
+                anim.SetTrigger("Start");
+                anim.SetInteger("PanelInt", 1);
                 break;
             case 2:
-                ui[1].SetActive(true);
+                anim.SetTrigger("Start");
+                anim.SetInteger("PanelInt", 2);
                 break;
         }
     }
@@ -80,12 +73,12 @@ public class TitleSelect : MonoBehaviour, ITitleSelect
     }
 
     // 終了選択決定処理
-    public void QuitDecision(int num, GameObject[] ui)
+    public void QuitDecision(int num, Animator anim)
     {
         switch(num)
         {
             case 3:
-                ui[1].SetActive(false);
+                anim.SetTrigger("PanelEnd");
                 break;
             case 4:
 #if UNITY_EDITOR

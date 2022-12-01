@@ -120,7 +120,7 @@ public class TitleManager : MonoBehaviour
                 title.UISelect(num);
                 isDelay = false;
                 //Ÿ‚Ìˆ—‚Ü‚Å‚ÌƒfƒBƒŒƒC
-                Invoke("Delay", 0.2f);
+                Invoke("Delay", 0.5f);
             }
             else if (myInput.Player.Move.IsPressed())
             {

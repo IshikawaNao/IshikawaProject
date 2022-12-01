@@ -53,17 +53,18 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        // ˆÚ“®
-        if(!isPush)
+        // ˆÚ“®‚ÌØ‚è‘Ö‚¦
+        if (!isPush)
         {
             playerMove = new PlayerMove(new PlayerNormalMove(rb, this.gameObject));
         }
-        else if(isPush)
+        else if (isPush)
         {
             playerMove.ChangeMove(new PlayerPushMove(rb, this.gameObject));
         }
 
-        if(isMove)
+        // ˆÚ“®
+        if (isMove)
         {
             playerMove.ExcuteMove(input.InputMove, cameraPos, anim);
         }

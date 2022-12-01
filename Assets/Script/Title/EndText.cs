@@ -5,7 +5,6 @@ using TMPro;
 
 public class EndText : MonoBehaviour
 {
-
     bool flag;
 
     TextMeshProUGUI text;

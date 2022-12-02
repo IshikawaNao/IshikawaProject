@@ -6,8 +6,8 @@ using TMPro;
 public interface ITitleSelect
 {
     void UISelect(int num);
-    void SelecDecision(int num, GameObject[] ui);
-    void QuitDecision(int num, GameObject[] ui);
+    void SelecDecision(int num, Animator anim);
+    void QuitDecision(int num, Animator anim);
     int QuitNum(float input);
     int SelectNum(float input, int num);
 }

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-//using SoundSystem;
+using SoundSystem;
 using UnityEngine.SceneManagement;
 using DG.Tweening;
 
@@ -16,21 +16,17 @@ public class TitleManager : MonoBehaviour
     // 選択ディレイのためのフラグ
     bool isDelay = true;
 
-    bool isFlag = true;
     // 選択イメージ
     [SerializeField]
-    GameObject[] img; 
+    Animator anim; 
 
-    // 選択テキスト
-    [SerializeField]
-    TextMeshProUGUI[] text;
 
     // UIパネル
     [SerializeField]
     GameObject[] uiPanel;
 
 
-    //[SerializeField] VolumeConfigUI volumeConfigUI;
+    [SerializeField] VolumeConfigUI volumeConfigUI;
 
     ITitleSelect title;
 
@@ -44,7 +40,7 @@ public class TitleManager : MonoBehaviour
 
     void Start()
     {
-       /* // スライダーの数値反映
+        // スライダーの数値反映
         volumeConfigUI.SetMasterVolume(SoundManager.Instance.MasterVolume);
         volumeConfigUI.SetBGMVolume(SoundManager.Instance.BGMVolume);
         volumeConfigUI.SetSeVolume(SoundManager.Instance.SEVolume);
@@ -52,14 +48,14 @@ public class TitleManager : MonoBehaviour
         // ボリュームの設定
         volumeConfigUI.SetMasterSliderEvent(vol => SoundManager.Instance.MasterVolume = vol);
         volumeConfigUI.SetBGMSliderEvent(vol => SoundManager.Instance.BGMVolume = vol);
-        volumeConfigUI.SetSeSliderEvent(vol => SoundManager.Instance.SEVolume = vol);*/
+        volumeConfigUI.SetSeSliderEvent(vol => SoundManager.Instance.SEVolume = vol);
 
         title = new TitleSelect();
+        num = 0;
     }
 
     void Update()
     {
-
         print(num);
         //入力をvector2でもって来る
         Vector2 selectvalue = myInput.Player.Move.ReadValue<Vector2>();
@@ -67,15 +63,21 @@ public class TitleManager : MonoBehaviour
         // 終了パネル表示時
         if (uiPanel[1].activeSelf == true)
         {
-            //　終了パネル表示時選択番号取得
-            num = title.QuitNum(selectvalue.x);
+            if (num == 2) { num = 3; }
 
+            // アニメーションが再生されている間この処理に入らないようにする
+            if (anim.GetCurrentAnimatorClipInfo(0)[0].clip.name != "TitleStart" && myInput.Player.Move.WasPressedThisFrame())
+            {
+                //　終了パネル表示時選択番号取得
+                num = title.QuitNum(selectvalue.x);
+            }
+            
             isDelay = false;
 
             if (myInput.UI.Decision.WasPressedThisFrame())
             {
                 // 終了処理
-                title.QuitDecision(num, uiPanel);
+                title.QuitDecision(num, anim);
                 num = 2;
                 //次の処理までのディレイ
                 Invoke("Delay", 0.5f);
@@ -84,7 +86,8 @@ public class TitleManager : MonoBehaviour
             // 戻る決定時
             if (myInput.UI.Return.WasPressedThisFrame())
             {
-                uiPanel[1].SetActive(false);
+                anim.SetTrigger("PanelEnd");
+ 
                 //次の処理までのディレイ
                 Invoke("Delay", 0.5f);
                 num = 2;
@@ -97,7 +100,7 @@ public class TitleManager : MonoBehaviour
             // 戻る決定時
             if (myInput.UI.Return.WasPressedThisFrame())
             {
-                uiPanel[0].SetActive(false);
+                anim.SetTrigger("PanelEnd");
                 //次の処理までのディレイ
                 Invoke("Delay", 0.5f);
             }
@@ -107,9 +110,9 @@ public class TitleManager : MonoBehaviour
             //　決定処理
             if (myInput.UI.Decision.WasPressedThisFrame())
             {
-                title.SelecDecision(num, uiPanel);
+                title.SelecDecision(num, anim);
             }
-
+    
             // key入力orLスティック操作時
             if (myInput.Player.Move.WasPressedThisFrame())
             {
@@ -135,10 +138,12 @@ public class TitleManager : MonoBehaviour
                     isDelay = false;
                 }
             }
+
+            if (num < 0) { num = 0; }
+            else if (num > 2) { num = 2; }
         }
        
     }
-
     // 選択ディレイ
     void Delay()
     {

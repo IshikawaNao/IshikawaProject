@@ -6,6 +6,8 @@ using UnityEngine.InputSystem;
 /// </summary>
 public class KeyInput : MonoBehaviour
 {
+    public static KeyInput Instance { get; private set; }
+
     // 移送入力
     public Vector2 InputMove { get; set; }
     // マウスポジション
@@ -21,7 +23,21 @@ public class KeyInput : MonoBehaviour
 
     #region　InputAction
     MyInput myInput;
-    void Awake() => myInput = new MyInput();
+    void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(this.gameObject);
+        }
+        else
+        {
+            Destroy(this.gameObject);
+            return;
+        }
+
+        myInput = new MyInput();
+    }
     void OnEnable() => myInput.Enable();
     void OnDisable() => myInput.Disable();
     void OnDestroy() => myInput.Dispose();

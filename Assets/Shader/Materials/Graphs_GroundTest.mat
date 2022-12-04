@@ -41,11 +41,11 @@ Material:
     - _BUILTIN_QueueControl: 0
     - _BUILTIN_QueueOffset: 0
     - _Boolean: 0
-    - _Float: 3
+    - _Float: 7
     - _QueueControl: 0
     - _QueueOffset: 0
     m_Colors:
-    - _Color: {r: 0.7169812, g: 0.14542542, b: 0.19053608, a: 0}
+    - _Color: {r: 0.6886792, g: 0.21115166, b: 0.21115166, a: 0}
   m_BuildTextureStacks: []
 --- !u!114 &8216946403174924076
 MonoBehaviour:

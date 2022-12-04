@@ -61,8 +61,7 @@ public class TitleManager : MonoBehaviour
 
     void Update()
     {
-        print(num);
-        //入力をvector2でもって来る
+        //入力
         Vector2 selectvalue = myInput.Player.Move.ReadValue<Vector2>();
 
         // 終了パネル表示時

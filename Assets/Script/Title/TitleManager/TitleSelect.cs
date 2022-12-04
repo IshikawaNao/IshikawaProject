@@ -42,16 +42,16 @@ public class TitleSelect : MonoBehaviour, ITitleSelect
         switch (num)
         {
             case 0:
-                SceneManager.LoadScene("Main");
-                print("ƒV[ƒ“‘JˆÚ");
-                break;
-            case 1:
                 anim.SetTrigger("Start");
                 anim.SetInteger("PanelInt", 1);
                 break;
-            case 2:
+            case 1:
                 anim.SetTrigger("Start");
                 anim.SetInteger("PanelInt", 2);
+                break;
+            case 2:
+                anim.SetTrigger("Start");
+                anim.SetInteger("PanelInt", 3);
                 break;
         }
     }

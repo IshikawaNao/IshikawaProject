@@ -11,7 +11,7 @@ public class PlayerFly : MonoBehaviour, IFly
         if(isFly)
         {
             anim.SetBool("IsJump", true);
-            _rb.AddForce(0, 10, 0,ForceMode.Impulse);
+            _rb.AddForce(0, 20, 0,ForceMode.Impulse);
         }
     }
 

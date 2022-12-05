@@ -9,7 +9,7 @@ public class PlayerLook : MonoBehaviour
 
     private void Start()
     {
-        input = player.GetComponent<KeyInput>();
+        input = GameObject.Find("KeyInput").GetComponent<KeyInput>();
     }
 
     void Update()
@@ -18,7 +18,7 @@ public class PlayerLook : MonoBehaviour
         float mouseInputX = input.CameraPos.x;
 
         // targetの位置のY軸を中心に、回転（公転）する
-        transform.rotation = Quaternion.Euler(new Vector3(this.transform.rotation.x, mouseInputX * Time.deltaTime * 100f, transform.rotation.z));
-        this.transform.position = player.transform.position;
+        //transform.rotation = Quaternion.Euler(new Vector3(this.transform.rotation.x, mouseInputX * Time.deltaTime * 100f, transform.rotation.z));
+        this.transform.position = new Vector3(player.transform.position.x, player.transform.position.y + 1.5f, player.transform.position.z);
     }
 }

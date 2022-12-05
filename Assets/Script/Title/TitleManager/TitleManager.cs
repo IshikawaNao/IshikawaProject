@@ -19,7 +19,6 @@ public class TitleManager : MonoBehaviour
     [SerializeField]
     Animator anim; 
 
-
     // UIƒpƒlƒ‹
     [SerializeField]
     GameObject[] uiPanel;
@@ -57,6 +56,8 @@ public class TitleManager : MonoBehaviour
         optionManager = new OptionManager();
         endPanelManager = new EndPanelManager();
         num = 0;
+
+        SoundManager.Instance.PlayBGMWithFadeIn("Title", 1f);
     }
 
     void Update()

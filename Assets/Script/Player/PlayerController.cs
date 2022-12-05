@@ -17,6 +17,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     GameObject cameraPos;   // カメラの位置
 
+    [SerializeField]
+    GameObject Pause;       // ポーズ画面
+
     PlayerMove playerMove;  // プレイヤーの移動
     Rigidbody rb;           // rigidbody
     CapsuleCollider col;    // コライダー
@@ -49,6 +52,7 @@ public class PlayerController : MonoBehaviour
         ObjectMove();
         ObjectClimb();
         Fly();
+        PauseOpen();
     }
 
     private void FixedUpdate()
@@ -134,11 +138,18 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    // 上空へ飛ぶ
     void Fly()
     {
         if(input.InputJump)
         {
             iFly.Fly(rb, iFly.FlyFrag(this.gameObject), anim);
         }
+    }
+
+    void PauseOpen()
+    {
+        if (Pause.activeSelf){ isMove = false;}
+        else { isMove = true; }
     }
 }

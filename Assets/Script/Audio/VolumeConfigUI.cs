@@ -32,7 +32,9 @@ public class VolumeConfigUI : MonoBehaviour
     #endregion
     private void Start()
     {
-
+        masterSlider.value = 0.5f;
+        bgmSlider.value = 0.5f;
+        seSlider.value = 0.5f;
     }
 
     private void Update()

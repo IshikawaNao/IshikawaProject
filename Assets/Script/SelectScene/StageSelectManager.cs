@@ -6,6 +6,7 @@ public class StageSelectManager : MonoBehaviour
 {
     // ステージナンバー
     public int sutageNum { get; set; } = 0;
+
     [SerializeField]
     GameObject stage;
 

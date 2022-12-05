@@ -250,7 +250,7 @@ public partial class @MyInput : IInputActionCollection2, IDisposable
                     ""id"": ""87e3755f-0548-4b0e-903f-df4fd2ba191a"",
                     ""path"": ""<Gamepad>/rightStick"",
                     ""interactions"": """",
-                    ""processors"": ""ScaleVector2"",
+                    ""processors"": ""ScaleVector2(x=0.3)"",
                     ""groups"": """",
                     ""action"": ""Move"",
                     ""isComposite"": false,

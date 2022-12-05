@@ -10,6 +10,7 @@ public class KeyInput : MonoBehaviour
 
     // 移送入力
     public Vector2 InputMove { get; set; }
+    public bool PressedMove { get; set; }   
     // マウスポジション
     public Vector2 CameraPos { get; set; }
     // ジャンプ入力
@@ -20,12 +21,16 @@ public class KeyInput : MonoBehaviour
     public bool ClimbAction { get; set; }
     // ソナーギミックボタン入力
     public bool SonarAction { get; set; }
+    // 決定ボタン入力
+    public bool DecisionInput { get; set; }
+    // Escキー入力
+    public bool EscInput { get; set; }
 
     #region　InputAction
     MyInput myInput;
     void Awake()
     {
-        if (Instance == null)
+        /*if (Instance == null)
         {
             Instance = this;
             DontDestroyOnLoad(this.gameObject);
@@ -34,7 +39,7 @@ public class KeyInput : MonoBehaviour
         {
             Destroy(this.gameObject);
             return;
-        }
+        }*/
 
         myInput = new MyInput();
     }
@@ -47,9 +52,12 @@ public class KeyInput : MonoBehaviour
     {
         InputMove = myInput.Player.Move.ReadValue<Vector2>();
         CameraPos = myInput.Camera.Move.ReadValue<Vector2>();
+        PressedMove = myInput.Player.Move.WasPressedThisFrame();
         InputJump = myInput.Player.Jump.triggered;
         PushAction = myInput.Player.PushAction.triggered;
         ClimbAction = myInput.Player.ClimbAction.triggered;
         SonarAction = myInput.Player.SonarKey.IsPressed();
+        DecisionInput = myInput.UI.Decision.WasPressedThisFrame();
+        EscInput = myInput.UI.Return.WasPressedThisFrame();
     }
 }

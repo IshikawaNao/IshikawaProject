@@ -4,14 +4,17 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
+using SoundSystem;
 
 /// <summary>
 /// ステージマネージャー
 /// </summary>
 public class StageManager : MonoBehaviour
 {
+    // ゴールフラグ
     public bool Goal { get; set; } = false;
 
+    
     public float intensityVal = 0;
 
     float gammmaValue = 0;
@@ -27,6 +30,8 @@ public class StageManager : MonoBehaviour
     [SerializeField]
     Volume postVol;
 
+    [SerializeField] VolumeConfigUI volumeConfigUI;
+
     LiftGammaGain liftGammaGain;
     ChromaticAberration chromaticAberration;
 
@@ -34,9 +39,21 @@ public class StageManager : MonoBehaviour
 
     void Start()
     {
+        // スライダーの数値反映
+        volumeConfigUI.SetMasterVolume(SoundManager.Instance.MasterVolume);
+        volumeConfigUI.SetBGMVolume(SoundManager.Instance.BGMVolume);
+        volumeConfigUI.SetSeVolume(SoundManager.Instance.SEVolume);
+
+        // ボリュームの設定
+        volumeConfigUI.SetMasterSliderEvent(vol => SoundManager.Instance.MasterVolume = vol);
+        volumeConfigUI.SetBGMSliderEvent(vol => SoundManager.Instance.BGMVolume = vol);
+        volumeConfigUI.SetSeSliderEvent(vol => SoundManager.Instance.SEVolume = vol);
+
         postVol.profile.TryGet(out liftGammaGain);
         postVol.profile.TryGet(out chromaticAberration);
         input = GameObject.Find("KeyInput").GetComponent<KeyInput>();
+
+        SoundManager.Instance.PlayBGMWithFadeIn("Main", 1f);
     }
 
     void Update()
@@ -84,7 +101,7 @@ public class StageManager : MonoBehaviour
 
     void ReStart()
     {
-        SceneManager.LoadScene("Main");
+        SceneManager.LoadScene("Title");
     }
 
     IEnumerator GammaDown()

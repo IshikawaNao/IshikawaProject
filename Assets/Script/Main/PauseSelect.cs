@@ -3,24 +3,24 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class StageSelect : MonoBehaviour, ISelectManager
+public class PauseSelect : IPauseSelect
 {
     int select;
 
     // ‘I‘ðˆ—
-    public void StageDecision(int num, Animator anim)
+    public void StageDecision(int num, Animator anim, GameObject option, GameObject Pause)
     {
         switch (num)
         {
             case 0:
-                SceneManager.LoadScene("Main");
-                print("ƒV[ƒ“‘JˆÚ");
+                option.SetActive(true);
+                Pause.SetActive(false);
                 break;
             case 1:
-                
+                SceneManager.LoadScene("Main");
                 break;
             case 2:
-               
+                SceneManager.LoadScene("Title");
                 break;
         }
     }
@@ -29,12 +29,12 @@ public class StageSelect : MonoBehaviour, ISelectManager
     public int SutageNum(float input, int num)
     {
         select = num;
-        if (input > 0)
+        if (input > 0) 
         {
-            if (select == 0) { select = 0; }
-            else { select--; }
+            if(select == 0) { select = 0; }
+            else { select--; } 
         }
-        else if (input < 0)
+        else if (input < 0) 
         {
             if (select == 2) { select = 2; }
             else { select++; }

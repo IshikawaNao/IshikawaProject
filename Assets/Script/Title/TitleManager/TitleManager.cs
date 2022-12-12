@@ -62,6 +62,7 @@ public class TitleManager : MonoBehaviour
 
     void Update()
     {
+         print(myInput.Camera.Scroll.ReadValue<Vector2>());
         //“ü—Í
         Vector2 selectvalue = myInput.Player.Move.ReadValue<Vector2>();
 

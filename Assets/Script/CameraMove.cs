@@ -1,31 +1,83 @@
 using UnityEngine;
+using System.Collections;
+using Cinemachine;
 
 /// <summary>
 /// カメラの移動
 /// </summary>
 public class CameraMove : MonoBehaviour
 {
-    [SerializeField]
-    GameObject playerObj;
-    Vector3 targetPos;
+    PlayerController pl;
+    CinemachineFreeLook _camera;
 
+    GameObject targetPos;
     KeyInput input;
+    IMoveObject iObject;
+    
+
     void Start()
     {
+        _camera = GetComponent<CinemachineFreeLook>();
+        pl = GameObject.Find("Player").GetComponent<PlayerController>();
         input = GameObject.Find("KeyInput").GetComponent<KeyInput>();
-        targetPos = playerObj.transform.position;
+        iObject = new PushObject();
     }
 
     void Update()
     {
-        // playerの移動量分、カメラを移動
-        transform.position += playerObj.transform.position - targetPos;
-        targetPos = playerObj.transform.position;
+       if(pl.Push)
+       {
+            LookTarget();
+       }
+    }
 
-        //マウスの移動量
-        float mouseInputX = input.CameraPos.x;
+    void LookTarget()
+    {
+        targetPos = serchTag(pl.gameObject,"Move");
 
-        // targetの位置のY軸を中心に、回転（公転）する
-        transform.RotateAround(targetPos, Vector3.up, mouseInputX * Time.deltaTime * 100f);
+        transform.LookAt(targetPos.transform);
+
+       /* Vector3 followObjectPosition = new Vector3(_camera.Follow.position.x, _camera.transform.position.y, _camera.Follow.position.z);
+        Vector3 target = new Vector3(targetPos.transform.position.x, _camera.transform.position.y, targetPos.transform.position.z);
+
+        // ベクトルの計算
+        Vector3 followTarget = target - followObjectPosition;
+        // 外積
+        Vector3 fllowReverse = Vector3.Scale(followTarget, new Vector3(-1, 1, -1));
+        // カメラ
+        Vector3 followCamera = _camera.transform.position - followObjectPosition;
+
+        // カメラ角度
+        Vector3 axis = Vector3.Cross(followCamera, fllowReverse);
+
+        float direction = axis.y < 0 ? -1 : 1;
+        float angle = Vector3.Angle(followCamera, fllowReverse);
+
+        _camera.m_XAxis.Value = angle * direction;*/
+    }
+
+    // 近くにあるオブジェクトを参照
+    GameObject serchTag(GameObject nowObj, string tagName)
+    {
+        // 距離を測る用の変数
+        float distance = 0;
+        // 一番近いオブジェクトの距離
+        float closeDistance = 0;
+
+        GameObject target = null;
+
+        foreach (GameObject obs in GameObject.FindGameObjectsWithTag(tagName))
+        {
+            distance = Vector3.Distance(obs.transform.position, nowObj.transform.position);
+
+            // 距離が近ければオブジェクトを取得
+            if (distance > closeDistance)
+            {
+                distance = closeDistance;
+                target = obs;
+            }
+        }
+
+        return target;
     }
 }

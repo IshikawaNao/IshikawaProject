@@ -231,6 +231,15 @@ public partial class @MyInput : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Scroll"",
+                    ""type"": ""Value"",
+                    ""id"": ""b947e97f-4ff1-4bc2-a25a-ed2743f4a57f"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -239,7 +248,7 @@ public partial class @MyInput : IInputActionCollection2, IDisposable
                     ""id"": ""6837f323-30f6-496b-809e-6b6bb6679c4c"",
                     ""path"": ""<Mouse>/delta"",
                     ""interactions"": """",
-                    ""processors"": ""ScaleVector2(x=0.3)"",
+                    ""processors"": ""ScaleVector2(x=0.3,y=0.3)"",
                     ""groups"": """",
                     ""action"": ""Move"",
                     ""isComposite"": false,
@@ -250,9 +259,20 @@ public partial class @MyInput : IInputActionCollection2, IDisposable
                     ""id"": ""87e3755f-0548-4b0e-903f-df4fd2ba191a"",
                     ""path"": ""<Gamepad>/rightStick"",
                     ""interactions"": """",
-                    ""processors"": ""ScaleVector2(x=0.3)"",
+                    ""processors"": ""ScaleVector2"",
                     ""groups"": """",
                     ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c07390e0-1287-4cda-add5-f460e412a8bc"",
+                    ""path"": ""<Mouse>/scroll"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Scroll"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -295,8 +315,30 @@ public partial class @MyInput : IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""0c1898fe-0d01-4d05-9ecb-631c94334e30"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Decision"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""041ecee9-9eb4-4f79-9bd8-f3df36502e26"",
                     ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Return"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b9e049e9-3608-4787-b802-15d38c4ccb9f"",
+                    ""path"": """",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -319,6 +361,7 @@ public partial class @MyInput : IInputActionCollection2, IDisposable
         // Camera
         m_Camera = asset.FindActionMap("Camera", throwIfNotFound: true);
         m_Camera_Move = m_Camera.FindAction("Move", throwIfNotFound: true);
+        m_Camera_Scroll = m_Camera.FindAction("Scroll", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Decision = m_UI.FindAction("Decision", throwIfNotFound: true);
@@ -448,11 +491,13 @@ public partial class @MyInput : IInputActionCollection2, IDisposable
     private readonly InputActionMap m_Camera;
     private ICameraActions m_CameraActionsCallbackInterface;
     private readonly InputAction m_Camera_Move;
+    private readonly InputAction m_Camera_Scroll;
     public struct CameraActions
     {
         private @MyInput m_Wrapper;
         public CameraActions(@MyInput wrapper) { m_Wrapper = wrapper; }
         public InputAction @Move => m_Wrapper.m_Camera_Move;
+        public InputAction @Scroll => m_Wrapper.m_Camera_Scroll;
         public InputActionMap Get() { return m_Wrapper.m_Camera; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -465,6 +510,9 @@ public partial class @MyInput : IInputActionCollection2, IDisposable
                 @Move.started -= m_Wrapper.m_CameraActionsCallbackInterface.OnMove;
                 @Move.performed -= m_Wrapper.m_CameraActionsCallbackInterface.OnMove;
                 @Move.canceled -= m_Wrapper.m_CameraActionsCallbackInterface.OnMove;
+                @Scroll.started -= m_Wrapper.m_CameraActionsCallbackInterface.OnScroll;
+                @Scroll.performed -= m_Wrapper.m_CameraActionsCallbackInterface.OnScroll;
+                @Scroll.canceled -= m_Wrapper.m_CameraActionsCallbackInterface.OnScroll;
             }
             m_Wrapper.m_CameraActionsCallbackInterface = instance;
             if (instance != null)
@@ -472,6 +520,9 @@ public partial class @MyInput : IInputActionCollection2, IDisposable
                 @Move.started += instance.OnMove;
                 @Move.performed += instance.OnMove;
                 @Move.canceled += instance.OnMove;
+                @Scroll.started += instance.OnScroll;
+                @Scroll.performed += instance.OnScroll;
+                @Scroll.canceled += instance.OnScroll;
             }
         }
     }
@@ -528,6 +579,7 @@ public partial class @MyInput : IInputActionCollection2, IDisposable
     public interface ICameraActions
     {
         void OnMove(InputAction.CallbackContext context);
+        void OnScroll(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

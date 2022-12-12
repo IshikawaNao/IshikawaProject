@@ -209,6 +209,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "Scroll",
+                    "type": "Value",
+                    "id": "b947e97f-4ff1-4bc2-a25a-ed2743f4a57f",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -217,7 +226,7 @@
                     "id": "6837f323-30f6-496b-809e-6b6bb6679c4c",
                     "path": "<Mouse>/delta",
                     "interactions": "",
-                    "processors": "ScaleVector2(x=0.3)",
+                    "processors": "ScaleVector2(x=0.3,y=0.3)",
                     "groups": "",
                     "action": "Move",
                     "isComposite": false,
@@ -228,9 +237,20 @@
                     "id": "87e3755f-0548-4b0e-903f-df4fd2ba191a",
                     "path": "<Gamepad>/rightStick",
                     "interactions": "",
-                    "processors": "ScaleVector2(x=0.3)",
+                    "processors": "ScaleVector2",
                     "groups": "",
                     "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "c07390e0-1287-4cda-add5-f460e412a8bc",
+                    "path": "<Mouse>/scroll",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Scroll",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
@@ -273,8 +293,30 @@
                 },
                 {
                     "name": "",
+                    "id": "0c1898fe-0d01-4d05-9ecb-631c94334e30",
+                    "path": "<Gamepad>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Decision",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "041ecee9-9eb4-4f79-9bd8-f3df36502e26",
                     "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Return",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b9e049e9-3608-4787-b802-15d38c4ccb9f",
+                    "path": "",
                     "interactions": "",
                     "processors": "",
                     "groups": "",

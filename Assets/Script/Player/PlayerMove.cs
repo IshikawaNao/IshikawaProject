@@ -8,9 +8,9 @@ class PlayerMove
         _playerMover = playerMover;
     }
 
-    public void ExcuteMove(Vector2 move, GameObject camera, Animator anim)
+    public void ExcuteMove(Vector2 move, Animator anim)
     {
-        _playerMover.Move(move, camera, anim);
+        _playerMover.Move(move, anim);
     }
 
     public void ChangeMove(IPlayerMover playerMover)

@@ -9,6 +9,7 @@ using DG.Tweening;
 public class PlayerController : MonoBehaviour
 {
     bool isPush = false;        // オブジェクトが動くフラグ
+    public bool Push { get { return isPush; } }
 
     bool isClimb = false;       // オブジェクトを登るフラグ
 
@@ -20,7 +21,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     GameObject Pause;       // ポーズ画面
 
-    PlayerMove playerMove;  // プレイヤーの移動
+
+    SwitchingMove switchMove;// 移動の切り替え
     Rigidbody rb;           // rigidbody
     CapsuleCollider col;    // コライダー
     GroundLayer gl;         // 接地判定
@@ -40,7 +42,7 @@ public class PlayerController : MonoBehaviour
         input = GameObject.Find("KeyInput").GetComponent<KeyInput>();
         anim = GetComponent<Animator>();
 
-        playerMove = new PlayerMove(new PlayerNormalMove(rb, this.gameObject));
+        switchMove = new SwitchingMove();
         iObject = new PushObject();
         iClimb = new PlayerClimb();
         iFly = new PlayerFly();
@@ -57,21 +59,7 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        // 移動の切り替え
-        if (!isPush)
-        {
-            playerMove = new PlayerMove(new PlayerNormalMove(rb, this.gameObject));
-        }
-        else if (isPush)
-        {
-            playerMove.ChangeMove(new PlayerPushMove(rb, this.gameObject));
-        }
-
-        // 移動
-        if (isMove)
-        {
-            playerMove.ExcuteMove(input.InputMove, cameraPos, anim);
-        }
+        switchMove.SwitchMove(this.gameObject,rb, input.InputMove, anim, isPush, isMove);
     }
 
     // ジャンプ
@@ -122,8 +110,7 @@ public class PlayerController : MonoBehaviour
             }
             if (isClimb)
             {
-                anim.SetBool("IsClimb",true);
-                iClimb.ClimbPlayer(rb);
+                iClimb.ClimbPlayer(rb,anim);
             }
         }
         else

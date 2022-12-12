@@ -1,7 +1,7 @@
 using UnityEngine;
 
 /// <summary>
-/// オブジェクトを登る
+/// 正面オブジェクトが登れるか
 /// </summary>
 public class PlayerClimb : MonoBehaviour, IClimb
 {
@@ -9,9 +9,13 @@ public class PlayerClimb : MonoBehaviour, IClimb
     Ray ray;
 
     // 登る処理
-    public void ClimbPlayer(Rigidbody _rb)
+    public void ClimbPlayer(Rigidbody rb,Animator anim)
     {
-        _rb.velocity = 8 * 0.5f * new Vector2(0, 1);
+        anim.SetBool("IsIdle", true);
+        anim.SetBool("IsWalk", false);
+        anim.SetBool("IsRan", false);
+        anim.SetBool("IsClimb", true);
+        rb.velocity = 6 * 0.8f * new Vector2(0, 1);
     }
 
     // playerの正面に登れるオブジェクトがあるか

@@ -15,17 +15,15 @@ public class PlayerController : MonoBehaviour
 
     bool isMove = true;         // プレイヤーの移動のフラグ
 
-    [SerializeField]
-    GameObject cameraPos;   // カメラの位置
+    bool isJump = false;
 
     [SerializeField]
     GameObject Pause;       // ポーズ画面
 
-
     SwitchingMove switchMove;// 移動の切り替え
     Rigidbody rb;           // rigidbody
     CapsuleCollider col;    // コライダー
-    GroundLayer gl;         // 接地判定
+    GroundRay gl;         // 接地判定
     KeyInput input;         // 入力受け取り
 
     Animator anim;          // animator
@@ -38,7 +36,7 @@ public class PlayerController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         col = GetComponent<CapsuleCollider>();
-        gl = GetComponent<GroundLayer>();
+        gl = GetComponent<GroundRay>();
         input = GameObject.Find("KeyInput").GetComponent<KeyInput>();
         anim = GetComponent<Animator>();
 
@@ -50,25 +48,36 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        Jump();
         ObjectMove();
         ObjectClimb();
         Fly();
         PauseOpen();
+        Jump();
     }
 
     private void FixedUpdate()
     {
-        switchMove.SwitchMove(this.gameObject,rb, input.InputMove, anim, isPush, isMove);
+        switchMove.SwitchMove(this.gameObject,rb, input.InputMove, anim, isPush, isClimb , gl.IsGround(), isMove);
+        if (isPush)
+        {
+            iObject.Move(iObject.Box_rb(), input.InputMove, this.gameObject, anim);
+        }
     }
 
     // ジャンプ
     void Jump()
     {
-        if (anim.GetCurrentAnimatorClipInfo(0)[0].clip.name == "Jmp_Base_A_Keep" && gl.IsGround())
+        if (gl.IsGround() && isJump)
         {
-            anim.SetTrigger("IsIanding");
+            isJump = false;
             anim.SetBool("IsJump", false);
+            anim.SetBool("IsIanding",true);
+        }
+        else if(!gl.IsGround() && !isClimb && !isJump)
+        {
+            isJump = true;
+            anim.SetBool("IsIanding", false);
+            anim.SetBool("IsJump", true);
         }
     }
 
@@ -81,19 +90,16 @@ public class PlayerController : MonoBehaviour
             {
                 isPush = true;
             }
-            if (isPush)
-            {
-                iObject.Move(iObject.Box_rb(), input.InputMove, this.gameObject,anim);
-            }
             else
             {
+                anim.SetBool("IsObjectMove", false);
+                isPush = false;
             }
         }
         else
         {
             anim.SetBool("IsObjectMove", false);
             isPush = false;
-            
         }
     }
 
@@ -104,7 +110,6 @@ public class PlayerController : MonoBehaviour
         {
             if (input.ClimbAction && gl.IsGround())
             {
-
                 isClimb = true;
                 isMove = false;
             }
@@ -117,7 +122,7 @@ public class PlayerController : MonoBehaviour
         {
             if (isClimb)
             {
-                this.transform.DOMove(this.transform.position + 0.2f * Vector3.up + col.radius * 2f * this.transform.forward, 0.1f);
+                this.transform.DOMove(this.transform.position + 0.1f * Vector3.up + col.radius * 2f * this.transform.forward, 0.05f);
             }
             isClimb = false;
             anim.SetBool("IsClimb", false);

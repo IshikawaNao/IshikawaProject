@@ -54,7 +54,7 @@ public class KeyInput : MonoBehaviour
         CameraPos = myInput.Camera.Move.ReadValue<Vector2>();
         PressedMove = myInput.Player.Move.WasPressedThisFrame();
         InputJump = myInput.Player.Jump.triggered;
-        PushAction = myInput.Player.PushAction.triggered;
+        PushAction = myInput.Player.PushAction.IsPressed();
         ClimbAction = myInput.Player.ClimbAction.triggered;
         SonarAction = myInput.Player.SonarKey.IsPressed();
         DecisionInput = myInput.UI.Decision.WasPressedThisFrame();

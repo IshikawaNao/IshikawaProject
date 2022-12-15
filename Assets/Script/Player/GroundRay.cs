@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class GroundLayer : MonoBehaviour
+public class GroundRay : MonoBehaviour
 {
     float distance = 1.05f;
     public bool IsGround()

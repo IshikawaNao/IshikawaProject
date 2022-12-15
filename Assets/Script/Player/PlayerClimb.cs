@@ -11,7 +11,7 @@ public class PlayerClimb : MonoBehaviour, IClimb
     // “o‚éˆ—
     public void ClimbPlayer(Rigidbody rb,Animator anim)
     {
-        anim.SetBool("IsIdle", true);
+        anim.SetBool("IsIdle", false);
         anim.SetBool("IsWalk", false);
         anim.SetBool("IsRan", false);
         anim.SetBool("IsClimb", true);
@@ -29,7 +29,6 @@ public class PlayerClimb : MonoBehaviour, IClimb
         {
             if (hit.collider.gameObject.layer == 6)
             {
-                print("hit");
                 return true;
             }
         }

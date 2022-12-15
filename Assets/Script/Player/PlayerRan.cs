@@ -18,9 +18,12 @@ public class PlayerRan : IPlayerMover
 
     public void Move(Vector2 move, Animator anim)
     {
+        anim.SetInteger("IsPush", 0);
+        anim.SetBool("IsObjectMove", false);
         anim.SetBool("IsIdle", false);
         anim.SetBool("IsWalk", false);
         anim.SetBool("IsRan", true);
+
 
         //ƒJƒƒ‰•ûŒü@
         Camera mc = Camera.main;

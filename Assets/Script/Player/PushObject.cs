@@ -5,10 +5,9 @@ using UnityEngine;
 
 public class PushObject : MonoBehaviour, IMoveObject
 {
-    float speed = 1.5f;
+    // —v’²®
+    float speed = 2.95f;
     
-    Vector3 moveForward;
-
     RaycastHit hit;
     Ray ray;
 
@@ -17,24 +16,9 @@ public class PushObject : MonoBehaviour, IMoveObject
         if(move != Vector2.zero)
         {
             Vector3 playerForward = Vector3.Scale(_player.transform.forward, new Vector3(1, 0, 1));
-            if (move.y > 0)
-            {
-                moveForward = playerForward * move.y;
-            }
-            else if (move.y < 0)
-            {
-                moveForward = -playerForward * move.y;
-            }
-            else if (move.x > 0)
-            {
-                moveForward = playerForward * move.x;
-            }
-            else if (move.x < 0)
-            {
-                moveForward = -playerForward * move.x;
-            }
-            anim.SetBool("IsObjectMove", true);
-            rb.velocity = (moveForward * speed);
+            Vector3 moveForward = playerForward * move.y + _player.transform.right * move.x;
+            Vector3 moveVector = moveForward.normalized * speed;   //ˆÚ“®‘¬“x
+            rb.velocity = moveVector;
         }
     }
 

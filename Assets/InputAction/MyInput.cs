@@ -248,7 +248,7 @@ public partial class @MyInput : IInputActionCollection2, IDisposable
                     ""id"": ""6837f323-30f6-496b-809e-6b6bb6679c4c"",
                     ""path"": ""<Mouse>/delta"",
                     ""interactions"": """",
-                    ""processors"": ""ScaleVector2(x=0.5,y=0.5)"",
+                    ""processors"": ""ScaleVector2"",
                     ""groups"": """",
                     ""action"": ""Move"",
                     ""isComposite"": false,

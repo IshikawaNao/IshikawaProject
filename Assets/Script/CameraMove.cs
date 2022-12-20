@@ -1,83 +1,76 @@
 using UnityEngine;
-using System.Collections;
-using Cinemachine;
 
-/// <summary>
-/// カメラの移動
-/// </summary>
 public class CameraMove : MonoBehaviour
 {
-    PlayerController pl;
-    CinemachineFreeLook _camera;
+    CameraRotate cm;
+    float dis = 0;
+    float cmPos = 8;
 
-    GameObject targetPos;
-    KeyInput input;
-    IMoveObject iObject;
-    
+    Vector3 target = new Vector3(0, 1, 8);
 
-    void Start()
+    bool colliderHit = false;
+    bool rayHit = false;
+
+
+    private void Start()
     {
-        _camera = GetComponent<CinemachineFreeLook>();
-        pl = GameObject.Find("Player").GetComponent<PlayerController>();
-        input = GameObject.Find("KeyInput").GetComponent<KeyInput>();
-        iObject = new PushObject();
+        cm = GameObject.Find("CameraManager").GetComponent<CameraRotate>();
+        this.transform.localPosition = new Vector3(0, 1, 8);
     }
 
-    void Update()
+    private void Update()
     {
-       if(pl.Push)
-       {
-            LookTarget();
-       }
+        Avoid();
+        Rayhit();
     }
 
-    void LookTarget()
+    void Avoid()
     {
-        targetPos = serchTag(pl.gameObject,"Move");
-
-        transform.LookAt(targetPos.transform);
-
-       /* Vector3 followObjectPosition = new Vector3(_camera.Follow.position.x, _camera.transform.position.y, _camera.Follow.position.z);
-        Vector3 target = new Vector3(targetPos.transform.position.x, _camera.transform.position.y, targetPos.transform.position.z);
-
-        // ベクトルの計算
-        Vector3 followTarget = target - followObjectPosition;
-        // 外積
-        Vector3 fllowReverse = Vector3.Scale(followTarget, new Vector3(-1, 1, -1));
-        // カメラ
-        Vector3 followCamera = _camera.transform.position - followObjectPosition;
-
-        // カメラ角度
-        Vector3 axis = Vector3.Cross(followCamera, fllowReverse);
-
-        float direction = axis.y < 0 ? -1 : 1;
-        float angle = Vector3.Angle(followCamera, fllowReverse);
-
-        _camera.m_XAxis.Value = angle * direction;*/
-    }
-
-    // 近くにあるオブジェクトを参照
-    GameObject serchTag(GameObject nowObj, string tagName)
-    {
-        // 距離を測る用の変数
-        float distance = 0;
-        // 一番近いオブジェクトの距離
-        float closeDistance = 0;
-
-        GameObject target = null;
-
-        foreach (GameObject obs in GameObject.FindGameObjectsWithTag(tagName))
+        if (colliderHit)
         {
-            distance = Vector3.Distance(obs.transform.position, nowObj.transform.position);
-
-            // 距離が近ければオブジェクトを取得
-            if (distance > closeDistance)
-            {
-                distance = closeDistance;
-                target = obs;
-            }
+            this.transform.localPosition = new Vector3(0, 1, Mathf.Clamp(cmPos, 3, 8));
         }
+        else if (!colliderHit && cm.VerticalVal < -5 && !rayHit)
+        {
+            cmPos = 8;
+            this.transform.localPosition = Vector3.MoveTowards(this.transform.localPosition, target, 0.1f);
+        }
+    }
 
-        return target;
+    void Rayhit()
+    {
+        RaycastHit hit;
+        Vector3 rayPosition = this.transform.position;
+        
+        if(Physics.SphereCast(rayPosition, 5, Vector3.right, out hit, 10.0f))
+        {   
+            if(hit.collider.gameObject.name == "Player")
+            {
+                return;
+            }
+            rayHit = true;
+        }
+        else
+        {
+            rayHit = false;
+        }
+    }
+
+    void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(this.transform.position , 1.0f);
+    }
+
+    private void OnCollisionStay(Collision collision)
+    {
+        dis = -0.1f;
+        cmPos += dis;
+        colliderHit = true;
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        colliderHit = false;
     }
 }

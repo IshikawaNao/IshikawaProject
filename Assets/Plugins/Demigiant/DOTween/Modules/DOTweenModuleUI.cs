@@ -12,7 +12,7 @@ using DG.Tweening.Core.Enums;
 using DG.Tweening.Plugins;
 using DG.Tweening.Plugins.Options;
 using Outline = UnityEngine.UI.Outline;
-using Text = UnityEngine.UI.Text;
+using TMPro;
 
 #pragma warning disable 1591
 namespace DG.Tweening
@@ -479,7 +479,7 @@ namespace DG.Tweening
         /// <summary>Tweens a Text's color to the given value.
         /// Also stores the Text as the tween's target so it can be used for filtered operations</summary>
         /// <param name="endValue">The end value to reach</param><param name="duration">The duration of the tween</param>
-        public static TweenerCore<Color, Color, ColorOptions> DOColor(this Text target, Color endValue, float duration)
+        public static TweenerCore<Color, Color, ColorOptions> DOColor(this TextMeshProUGUI target, Color endValue, float duration)
         {
             TweenerCore<Color, Color, ColorOptions> t = DOTween.To(() => target.color, x => target.color = x, endValue, duration);
             t.SetTarget(target);
@@ -495,7 +495,7 @@ namespace DG.Tweening
         /// <param name="addThousandsSeparator">If TRUE (default) also adds thousands separators</param>
         /// <param name="culture">The <see cref="CultureInfo"/> to use (InvariantCulture if NULL)</param>
         public static TweenerCore<int, int, NoOptions> DOCounter(
-            this Text target, int fromValue, int endValue, float duration, bool addThousandsSeparator = true, CultureInfo culture = null
+            this TextMeshProUGUI target, int fromValue, int endValue, float duration, bool addThousandsSeparator = true, CultureInfo culture = null
         ){
             int v = fromValue;
             CultureInfo cInfo = !addThousandsSeparator ? null : culture ?? CultureInfo.InvariantCulture;
@@ -512,7 +512,7 @@ namespace DG.Tweening
         /// <summary>Tweens a Text's alpha color to the given value.
         /// Also stores the Text as the tween's target so it can be used for filtered operations</summary>
         /// <param name="endValue">The end value to reach</param><param name="duration">The duration of the tween</param>
-        public static TweenerCore<Color, Color, ColorOptions> DOFade(this Text target, float endValue, float duration)
+        public static TweenerCore<Color, Color, ColorOptions> DOFade(this TextMeshProUGUI target, float endValue, float duration)
         {
             TweenerCore<Color, Color, ColorOptions> t = DOTween.ToAlpha(() => target.color, x => target.color = x, endValue, duration);
             t.SetTarget(target);
@@ -528,7 +528,7 @@ namespace DG.Tweening
         /// <param name="scrambleChars">A string containing the characters to use for scrambling.
         /// Use as many characters as possible (minimum 10) because DOTween uses a fast scramble mode which gives better results with more characters.
         /// Leave it to NULL (default) to use default ones</param>
-        public static TweenerCore<string, string, StringOptions> DOText(this Text target, string endValue, float duration, bool richTextEnabled = true, ScrambleMode scrambleMode = ScrambleMode.None, string scrambleChars = null)
+        public static TweenerCore<string, string, StringOptions> DOText(this TextMeshProUGUI target, string endValue, float duration, bool richTextEnabled = true, ScrambleMode scrambleMode = ScrambleMode.None, string scrambleChars = null)
         {
             if (endValue == null) {
                 if (Debugger.logPriority > 0) Debugger.LogWarning("You can't pass a NULL string to DOText: an empty string will be used instead to avoid errors");
@@ -593,7 +593,7 @@ namespace DG.Tweening
         /// instead than fight each other as multiple DOColor would do.
         /// Also stores the Text as the tween's target so it can be used for filtered operations</summary>
         /// <param name="endValue">The value to tween to</param><param name="duration">The duration of the tween</param>
-        public static Tweener DOBlendableColor(this Text target, Color endValue, float duration)
+        public static Tweener DOBlendableColor(this TextMeshProUGUI target, Color endValue, float duration)
         {
             endValue = endValue - target.color;
             Color to = new Color(0, 0, 0, 0);

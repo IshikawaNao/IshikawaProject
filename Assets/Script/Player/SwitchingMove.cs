@@ -1,21 +1,22 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// ˆÚ“®ˆ—‚ÌØ‚è‘Ö‚¦
+/// </summary>
 public class SwitchingMove 
 {
     PlayerMove playerMove;  // ƒvƒŒƒCƒ„[‚ÌˆÚ“®
 
     Vector2 range = new Vector2(0.5f, -0.5f);
 
-    public void SwitchMove(GameObject player,Rigidbody rb, Vector2 input, Animator anim, bool isPush, bool isMove)
+    public void SwitchMove(GameObject player,Rigidbody rb, Vector2 input, Animator anim, bool isPush, bool isClimb,bool isGround ,bool isMove)
     {
         // ˆÚ“®‚ÌØ‚è‘Ö‚¦
-        if (!isPush && !IsRan(input,range))
+        if (!isPush && !IsRan(input,range) && isGround)
         {
             playerMove = new PlayerMove(new PlayerNormalMove(rb, player));
         }
-        else if(!isPush && IsRan(input, range))
+        else if(!isPush && IsRan(input, range) && isGround)
         {
             playerMove.ChangeMove(new PlayerRan(rb, player));
         }
@@ -23,19 +24,21 @@ public class SwitchingMove
         {
             playerMove.ChangeMove(new PlayerPushMove(rb, player));
         }
+        else if(!isGround && !isClimb)
+        {
+            playerMove.ChangeMove(new PlayerAirMobile(rb, player));
+        }
 
         // ˆÚ“®
         if (isMove)
         {
             playerMove.ExcuteMove(input, anim);
-            //rb.velocity = new Vector3(rb.velocity.x, rb.velocity.y - 5, rb.velocity.z);
         }
         else if(!isMove)
         {
-            Debug.Log("a");
-            //rb.velocity = new Vector3(0, 0, 0);
         }
     }
+    // •à‚«‚Æ‘–‚è‚ğØ‚è‘Ö‚¦‚é
     bool IsRan(Vector2 input, Vector2 range)
     {
         if (input == Vector2.zero)

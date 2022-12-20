@@ -25,12 +25,14 @@ public class PlayerNormalMove : IPlayerMover
             anim.SetBool("IsWalk",true);
             anim.SetBool("IsIdle", false);
             anim.SetBool("IsRan", false);
+            anim.SetBool("IsObjectMove", false);
         }
         else
         {
             anim.SetBool("IsIdle",true);
             anim.SetBool("IsWalk", false);
             anim.SetBool("IsRan", false);
+            anim.SetBool("IsObjectMove", false);
         }
         //ƒJƒƒ‰•ûŒü@
         Camera mc = Camera.main;

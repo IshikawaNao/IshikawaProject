@@ -20,6 +20,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     GameObject Pause;       // ポーズ画面
 
+    [SerializeField]
+    OperationExplanationMove operation;
+
     SwitchingMove switchMove;// 移動の切り替え
     Rigidbody rb;           // rigidbody
     CapsuleCollider col;    // コライダー
@@ -50,6 +53,7 @@ public class PlayerController : MonoBehaviour
     {
         ObjectMove();
         ObjectClimb();
+        OperationOpen();
         Fly();
         PauseOpen();
         Jump();
@@ -62,6 +66,13 @@ public class PlayerController : MonoBehaviour
         {
             iObject.Move(iObject.Box_rb(), input.InputMove, this.gameObject, anim);
         }
+    }
+
+    void OperationOpen()
+    {
+        operation.ClimbCheck(iClimb.Climb(this.gameObject));
+        operation.PushCheck(iObject.Push(this.gameObject));
+        operation.JumpCheck(iFly.FlyFrag(this.gameObject));
     }
 
     // ジャンプ

@@ -6,9 +6,9 @@ public class OperationExplanationMove : MonoBehaviour
     GameObject plyer;
 
     [SerializeField]
-    GameObject climb;
-    [SerializeField]
     GameObject push;
+    [SerializeField]
+    GameObject climb;
     [SerializeField]
     GameObject jump;
 

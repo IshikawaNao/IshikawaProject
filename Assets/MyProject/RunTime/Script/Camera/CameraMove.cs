@@ -12,7 +12,10 @@ public class CameraMove : MonoBehaviour
     const float minCmPos = 3;
 
     // ƒJƒƒ‰‚ÌˆÊ’u‚ğ‰º‚°‚é”
-    const float dis = -0.1f;
+    const float dis = 0.1f;
+
+    const float waiteTime = 1;
+    float saveTime;
 
     // Ray”¼Œa‹——£
     const float radius = 5;
@@ -39,6 +42,7 @@ public class CameraMove : MonoBehaviour
 
         Avoid(scrollvalue);
         ResetCamera();
+        MoveInput();
     }
 
     void Avoid(float scrollvalue)
@@ -59,21 +63,19 @@ public class CameraMove : MonoBehaviour
 
     }
 
-    bool Rayhit()
+    void MoveInput()
     {
-        Vector3 rayPosition = this.transform.position;
-        
-        if(Physics.SphereCast(rayPosition, radius, Vector3.right, out RaycastHit hit, maxDistance))
-        {   
-            if(hit.collider.gameObject.name == "Player")
+        if(input.LongPressedMove)
+        {
+            if(waiteTime + saveTime <= Time.time)
             {
-                return false;
+                cmPos += dis;
+                cmPos = Mathf.Clamp(cmPos, minCmPos, maxCmPos);
             }
-            return true;
         }
         else
         {
-            return false;
+            saveTime = Time.time;
         }
     }
 
@@ -87,7 +89,7 @@ public class CameraMove : MonoBehaviour
 
     private void OnCollisionStay(Collision collision)
     {
-        cmPos += dis;
+        cmPos -= dis;
         colliderHit = true;
     }
 

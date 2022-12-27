@@ -13,7 +13,6 @@ public class StageManager : MonoBehaviour
     // ƒS[ƒ‹ƒtƒ‰ƒO
     public bool Goal { get; set; } = false;
 
-    
     float intensityVal = 0;
 
     float gammmaValue = 0;
@@ -34,6 +33,11 @@ public class StageManager : MonoBehaviour
 
     const float soundFadeTime = 1f;
 
+    const int minOperationNum = 0; 
+    const int maxOperationNum = 3;
+
+    bool operation;
+
     [SerializeField, Header("player")]
     PlayerController player;
 
@@ -45,6 +49,12 @@ public class StageManager : MonoBehaviour
 
     [SerializeField, Header("OptionPanel")] 
     VolumeConfigUI volumeConfigUI;
+
+    [SerializeField]
+    GameObject[] keyOperation;
+    [SerializeField]
+    GameObject[] padOperation;
+
     [SerializeField,Header("“ü—Í‚ğæ“¾")]
     KeyInput input;
 
@@ -74,6 +84,27 @@ public class StageManager : MonoBehaviour
     {
         Cliar();
         SonarEffect();
+        SwithingOperation();
+    }
+
+    void SwithingOperation()
+    {
+        if(input.PadCurrent)
+        {
+            for(int i = minOperationNum; i <= maxOperationNum; i++)
+            {
+                keyOperation[i].SetActive(false);
+                padOperation[i].SetActive(true);
+            }
+        }
+        else if(!input.PadCurrent)
+        {
+            for (int i = minOperationNum; i <= maxOperationNum; i++)
+            {
+                keyOperation[i].SetActive(true);
+                padOperation[i].SetActive(false);
+            }
+        }
     }
 
     void Cliar()

@@ -28,6 +28,8 @@ public class KeyInput : MonoBehaviour
     public bool CameraReset { get; set; }
     // スクロール入力
     public float Scroll { get; set; }
+    // PAD入力
+    public bool PadCurrent { get; set; }
 
     #region　InputAction
     MyInput myInput;
@@ -54,5 +56,7 @@ public class KeyInput : MonoBehaviour
         EscInput = myInput.UI.Return.WasPressedThisFrame();
         CameraReset = myInput.Camera.CameraReset.WasPerformedThisFrame();
         Scroll = myInput.Camera.Scroll.ReadValue<Vector2>().y;
+        if (Gamepad.current == null) PadCurrent = false;
+        else PadCurrent = true;
     }
 }

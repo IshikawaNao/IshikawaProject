@@ -55,8 +55,9 @@ public class PauseManager : MonoBehaviour
     {
         if (pausePanel.activeSelf == true)
         {
+            print("a");
             // key入力orLスティック操作時
-            if (input.PressedMove && bm.SelectDelyTime())
+            if (input.LongPressedMove && bm.SelectDelyTime())
             {
                 num = ua.Addition(num,minNum,maxNum,input.InputMove.y);
                 bm.SelectTextMove(selectButton,num, maxNum);

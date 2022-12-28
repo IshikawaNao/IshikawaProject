@@ -3,7 +3,7 @@ using UnityEngine;
 /// <summary>
 /// オブジェクトを押す
 /// </summary>
-public class PushObject : MonoBehaviour, IMoveObject
+public class PushObject : IMoveObject
 {
     // 要調整
     const float speed = 2.95f;

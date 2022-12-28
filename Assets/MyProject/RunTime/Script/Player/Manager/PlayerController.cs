@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 
@@ -47,6 +45,8 @@ public class PlayerController : MonoBehaviour
         iObject = new PushObject();
         iClimb = new PlayerClimb();
         iFly = new PlayerFly();
+
+        IsMove = true;
     }
 
     void Update()

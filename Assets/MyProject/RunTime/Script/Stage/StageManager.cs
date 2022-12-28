@@ -4,6 +4,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 using SoundSystem;
+using TMPro;
 
 /// <summary>
 /// ステージマネージャー
@@ -16,6 +17,8 @@ public class StageManager : MonoBehaviour
     float intensityVal = 0;
 
     float gammmaValue = 0;
+
+    float tm = 0;
 
     Vector4 gammmaVal = Vector4.one;
 
@@ -41,9 +44,6 @@ public class StageManager : MonoBehaviour
     [SerializeField, Header("player")]
     PlayerController player;
 
-    [SerializeField,Header("リザルトパネル")]
-    GameObject goalPanale;
-
     [SerializeField,Header("Volume")]
     Volume postVol;
 
@@ -58,8 +58,34 @@ public class StageManager : MonoBehaviour
     [SerializeField,Header("入力を取得")]
     KeyInput input;
 
+    [SerializeField]
+    CreateData cd;
+
+    [SerializeField]
+    TextMeshProUGUI  TaimeText;
+
+    SaveData save;
+
+    StageNumberSelect sn;
+
     LiftGammaGain liftGammaGain;
     ChromaticAberration chromaticAberration;
+
+    private void Awake()
+    {
+        sn = StageNumberSelect.Instance;
+
+        if (sn == null)
+        {
+            GameObject obj = (GameObject)Resources.Load("Stage" + 0);
+            Instantiate(obj, Vector3.zero, Quaternion.identity);
+        }
+        else
+        {
+            GameObject obj = (GameObject)Resources.Load("Stage" + sn.StageNumber);
+            Instantiate(obj, Vector3.zero, Quaternion.identity);
+        }
+    }
 
 
     void Start()
@@ -77,6 +103,9 @@ public class StageManager : MonoBehaviour
         postVol.profile.TryGet(out liftGammaGain);
         postVol.profile.TryGet(out chromaticAberration);
 
+        save = new SaveData();
+        save = cd.loadData();
+
         SoundManager.Instance.PlayBGMWithFadeIn("Main", soundFadeTime);
     }
 
@@ -85,6 +114,7 @@ public class StageManager : MonoBehaviour
         Cliar();
         SonarEffect();
         SwithingOperation();
+        TimeMeasurement();
     }
 
     void SwithingOperation()
@@ -106,6 +136,12 @@ public class StageManager : MonoBehaviour
             }
         }
     }
+    
+    void TimeMeasurement()
+    {
+        tm = Mathf.Ceil(Time.time);
+        TaimeText.text = tm.ToString();
+    }
 
     void Cliar()
     {
@@ -114,7 +150,10 @@ public class StageManager : MonoBehaviour
             player.IsMove = false;
             input.InputMove = Vector2.zero;
             input.CameraPos = player.transform.forward;
-            goalPanale.SetActive(true);
+            save.ClearTime[sn.StageNumber] = tm;
+            cd.SaveData(save);
+            SoundManager.Instance.StopBGMWithFadeOut("Main", soundFadeTime);
+            FadeManager.Instance.LoadScene("Result", 1.0f);
         }
     }
 
@@ -136,11 +175,6 @@ public class StageManager : MonoBehaviour
         gammmaVal.w = gammmaValue;
         liftGammaGain.gamma.value = gammmaVal;
         chromaticAberration.intensity.value = intensityVal;
-    }
-
-    void ReStart()
-    {
-        SceneManager.LoadScene("Title");
     }
 
     IEnumerator GammaDown()

@@ -3,21 +3,6 @@ using UnityEngine;
 
 public class CreateData : MonoBehaviour
 {
-    public static CreateData instance;
-
-    private void Awake()
-    {
-        if (instance == null)
-        {
-            instance = this;
-            DontDestroyOnLoad(this);
-        }
-        else
-        {
-            Destroy(this);
-            return;
-        }
-    }
     public void SaveData(SaveData save)
     {
         StreamWriter writer;

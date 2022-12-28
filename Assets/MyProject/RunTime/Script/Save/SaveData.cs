@@ -1,5 +1,3 @@
-using UnityEngine;
-using System.Collections;
 using System;
 
 [Serializable]
@@ -9,5 +7,8 @@ public class SaveData
     public float masterVol;
     public float BGMVol;
     public float SEVol;
+
+    public float[] ClearTime;
+    public string[] ClearRank;
         
 }

@@ -27,4 +27,28 @@ public class ButtonMove
             });
         }
     }
+
+    public void SelectUIMove(GameObject obj, float moveVal, float input)
+    {
+        if(selectDelyTime)
+        {
+            if (input > 0)
+            {
+                selectDelyTime = false;
+                obj.transform.DOLocalMove(new Vector3(obj.transform.localPosition.x,
+                    Mathf.Clamp(obj.transform.localPosition.y - moveVal, 0, 700), obj.transform.localPosition.z), waitTime).OnComplete(CallbackFunction);
+            }
+            else if (input < 0)
+            {
+                selectDelyTime = false;
+                obj.transform.DOLocalMove(new Vector3(obj.transform.localPosition.x,
+                    Mathf.Clamp(obj.transform.localPosition.y + moveVal, 0, 700), obj.transform.localPosition.z), waitTime).OnComplete(CallbackFunction);
+            }
+        }
+    }
+
+    void CallbackFunction()
+    {
+        selectDelyTime = true;
+    }
 }

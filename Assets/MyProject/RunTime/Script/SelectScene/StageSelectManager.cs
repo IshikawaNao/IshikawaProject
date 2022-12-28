@@ -1,15 +1,17 @@
-using System.Collections;
-using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
+using SoundSystem;
 
 public class StageSelectManager : MonoBehaviour
 {
     // ステージナンバー
     int stageNum = 0;
     const int minStageNum = 0;
-    const int maxStageNum = 2;
+    const int maxStageNum = 1;
+
+    const float moveVal = 700;
+    const float waiteTime = 2;
 
     [SerializeField]
     StageNumberSelect stageNumberSelect;
@@ -19,6 +21,9 @@ public class StageSelectManager : MonoBehaviour
 
     [SerializeField]
     Image[] stage;
+
+    [SerializeField]
+    GameObject startButton;
 
     [SerializeField, Header("入力")]
     KeyInput input;
@@ -41,27 +46,33 @@ public class StageSelectManager : MonoBehaviour
     {
         if(stageOpen.activeSelf == true)
         {
+            startButton.SetActive(true);
             // key入力orLスティック操作時
-            if (input.PressedMove)
+            if (input.PressedMove && bm.SelectDelyTime())
             {
                 // 選択番号取得
                 stageNum = ua.Addition(stageNum, minStageNum,
                     maxStageNum, input.InputMove.y);
 
-                bm.SelectTextMove(stage, stageNum, maxStageNum);
+                bm.SelectUIMove(stageOpen, moveVal,  input.InputMove.y);
             }
 
             //　決定処理
-            if (input.DecisionInput)
+            if (input.DecisionInput && bm.SelectDelyTime())
             {
                 stageNumberSelect.StageNumber = stageNum;
-                SceneManager.LoadScene("Main");
+                SoundManager.Instance.StopBGMWithFadeOut("Title", 1);
+                FadeManager.Instance.LoadScene("Main", 1.0f);
             }
 
             if (input.EscInput)
             {
                 anim.SetBool("PanelEnd", true);
             }
+        }
+        else
+        {
+            startButton.SetActive(false);
         }
         
     }

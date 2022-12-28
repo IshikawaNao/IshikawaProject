@@ -30,7 +30,7 @@ public class PlayerRan : IPlayerMover
         Vector3 cameraForward = Vector3.Scale(mc.transform.forward, new Vector3(1, 0, 1));
         Vector3 moveForward = cameraForward * move.y + mc.transform.right * move.x;
         Vector3 moveVector = moveForward.normalized * speed;   //移動速度
-        Vector3 vector = new Vector3(rb.velocity.x, 5, rb.velocity.z);              //velocity
+        Vector3 vector = new Vector3(rb.velocity.x, 10, rb.velocity.z);              //velocity
         rb.AddForce((moveVector - vector) * force, ForceMode.Acceleration);
         
         // キャラクターの向きを進行方向に

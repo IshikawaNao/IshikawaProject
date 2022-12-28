@@ -3,7 +3,7 @@ using UnityEngine;
 /// <summary>
 /// 正面オブジェクトが登れるか
 /// </summary>
-public class PlayerClimb : MonoBehaviour, IClimb
+public class PlayerClimb : IClimb
 {
     RaycastHit hit;
     Ray ray;

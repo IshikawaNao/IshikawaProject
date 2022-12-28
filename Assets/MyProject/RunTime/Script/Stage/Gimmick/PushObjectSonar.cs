@@ -10,8 +10,13 @@ public class PushObjectSonar : MonoBehaviour
     Renderer rend;
     [SerializeField]
     Material mate;
-    [SerializeField]
+
     KeyInput input;
+
+    private void Start()
+    {
+        input = GameObject.Find("KeyInput").GetComponent<KeyInput>();
+    }
 
     void Update()
     {

@@ -1,18 +1,21 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class DoorOpen : MonoBehaviour
 {
     [SerializeField]
     Animator anim;
-    private void OnCollisionEnter(Collision collision)
-    {
-        print(collision);
-        if(collision.gameObject.name == "Player")
-        {
+    [SerializeField]
+    HouseRoom hr;
 
+    private void Update()
+    {
+        if(hr.Placed)
+        {
             anim.SetBool("Open", true);
+        }
+        else
+        {
+            anim.SetBool("Open", false);
         }
     }
 }

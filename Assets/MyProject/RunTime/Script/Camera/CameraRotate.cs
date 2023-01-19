@@ -7,11 +7,11 @@ public class CameraRotate : MonoBehaviour
 {
     [SerializeField]
     GameObject mainCM;
-    [SerializeField]
-    KeyInput input;
+
     [SerializeField]
     GameObject player;
 
+    KeyInput input;
     Vector3 target = new Vector3(0,1,0);
 
     float sensitivity = 0.1f;
@@ -26,6 +26,7 @@ public class CameraRotate : MonoBehaviour
     void Start()
     {
         mainCM.transform.localPosition = new Vector3(0, 1, 10);
+        input = KeyInput.Instance;
     }
 
     void Update()

@@ -19,6 +19,7 @@ public class StageManager : MonoBehaviour
     float gammmaValue = 0;
 
     float tm = 0;
+    float timer;
 
     Vector4 gammmaVal = Vector4.one;
 
@@ -39,7 +40,12 @@ public class StageManager : MonoBehaviour
     const int minOperationNum = 0; 
     const int maxOperationNum = 3;
 
+    int stageNum;
+
     bool operation;
+    bool isGoal = true;
+
+    string rank = "";
 
     [SerializeField, Header("player")]
     PlayerController player;
@@ -55,16 +61,12 @@ public class StageManager : MonoBehaviour
     [SerializeField]
     GameObject[] padOperation;
 
-    [SerializeField,Header("入力を取得")]
     KeyInput input;
 
-    [SerializeField]
     CreateData cd;
 
     [SerializeField]
     TextMeshProUGUI  TaimeText;
-
-    SaveData save;
 
     StageNumberSelect sn;
 
@@ -85,11 +87,14 @@ public class StageManager : MonoBehaviour
             GameObject obj = (GameObject)Resources.Load("Stage" + sn.StageNumber);
             Instantiate(obj, Vector3.zero, Quaternion.identity);
         }
+        stageNum = sn.StageNumber;
     }
 
 
     void Start()
     {
+        input = KeyInput.Instance;
+
         // スライダーの数値反映
         volumeConfigUI.SetMasterVolume(SoundManager.Instance.MasterVolume);
         volumeConfigUI.SetBGMVolume(SoundManager.Instance.BGMVolume);
@@ -103,8 +108,9 @@ public class StageManager : MonoBehaviour
         postVol.profile.TryGet(out liftGammaGain);
         postVol.profile.TryGet(out chromaticAberration);
 
-        save = new SaveData();
-        save = cd.loadData();
+        cd = CreateData.Instance;
+
+        timer = Time.time - 6;
 
         SoundManager.Instance.PlayBGMWithFadeIn("Main", soundFadeTime);
     }
@@ -139,19 +145,19 @@ public class StageManager : MonoBehaviour
     
     void TimeMeasurement()
     {
-        tm = Mathf.Ceil(Time.time);
-        TaimeText.text = tm.ToString();
+        tm = Time.time - timer;
+        TaimeText.text = Mathf.Floor(tm).ToString();
     }
 
     void Cliar()
     {
-        if(Goal)
+        if(Goal && isGoal)
         {
+            isGoal = false;
             player.IsMove = false;
             input.InputMove = Vector2.zero;
             input.CameraPos = player.transform.forward;
-            save.ClearTime[sn.StageNumber] = tm;
-            cd.SaveData(save);
+            cd.SaveClearData(Mathf.Floor(tm),rank, stageNum);
             SoundManager.Instance.StopBGMWithFadeOut("Main", soundFadeTime);
             FadeManager.Instance.LoadScene("Result", 1.0f);
         }
@@ -195,5 +201,13 @@ public class StageManager : MonoBehaviour
         intensityVal -= intensityAddend;
         gammaUp = true;
         gammaDown = true;
+    }
+
+    void ClearRank()
+    {
+        if(tm <= 30) { rank = "S"; }
+        else if(tm <= 50) { rank = "A"; }
+        else if(tm <= 180) { rank = "B"; }
+        else { rank = "C"; }
     }
 }

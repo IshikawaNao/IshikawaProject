@@ -3,7 +3,6 @@ using UnityEngine.InputSystem;
 
 public class CameraMove : MonoBehaviour
 {
-    [SerializeField]
     KeyInput input;
 
     // ƒJƒƒ‰ˆÊ’u
@@ -28,6 +27,7 @@ public class CameraMove : MonoBehaviour
 
     private void Start()
     {
+        input = KeyInput.Instance;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = true;
         var cam = Vector3.up;

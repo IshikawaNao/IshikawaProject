@@ -3,30 +3,29 @@ using TMPro;
 
 public class ResultManager : MonoBehaviour
 {
-    float crearTime;
-    string rank = "S";
+    float clearTime = 0;
+    string rank = "";
 
     [SerializeField]
     TextMeshProUGUI crearTimeText;
 
-    [SerializeField]
     CreateData cd;
 
-    [SerializeField]
     KeyInput input;
-
-    SaveData save;
+    StageNumberSelect sn;
 
     void Start()
     {
-        save = new SaveData();
-        save = cd.loadData();
-        crearTime = save.ClearTime[StageNumberSelect.Instance.StageNumber];
+        cd = CreateData.Instance;
+        sn = StageNumberSelect.Instance;
+        input = KeyInput.Instance;
+        cd.LoadClearData(ref clearTime, ref rank,sn.StageNumber);
+        
     }
 
     void Update()
     {
-        crearTimeText.text = crearTime.ToString();
+        crearTimeText.text = clearTime.ToString();
 
         if(input.DecisionInput)
         {

@@ -6,6 +6,8 @@ using UnityEngine.InputSystem;
 /// </summary>
 public class KeyInput : MonoBehaviour
 {
+    public static KeyInput Instance { get; private set; }
+
     // ˆÚ‘—“ü—Í
     public Vector2 InputMove { get; set; }
     public bool PressedMove { get; set; }   
@@ -35,6 +37,19 @@ public class KeyInput : MonoBehaviour
     MyInput myInput;
     void Awake()
     {
+        DontDestroyOnLoad(gameObject);
+
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(this);
+        }
+        else
+        {
+            Destroy(this);
+            return;
+        }
+
         myInput = new MyInput();
     }
     void OnEnable() => myInput.Enable();

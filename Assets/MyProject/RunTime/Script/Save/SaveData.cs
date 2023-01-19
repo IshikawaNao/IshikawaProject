@@ -5,10 +5,11 @@ public class SaveData
 {
     // ミキサー初期値
     public float masterVol;
-    public float BGMVol;
-    public float SEVol;
+    public float bgmVol;
+    public float seVol;
+
+    public float sensitivity;
 
     public float[] ClearTime;
     public string[] ClearRank;
-        
 }

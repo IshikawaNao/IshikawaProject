@@ -38,7 +38,7 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         col = GetComponent<CapsuleCollider>();
         gl = GetComponent<GroundRay>();
-        input = GameObject.Find("KeyInput").GetComponent<KeyInput>();
+        input = KeyInput.Instance;
         anim = GetComponent<Animator>();
 
         switchMove = new SwitchingMove();

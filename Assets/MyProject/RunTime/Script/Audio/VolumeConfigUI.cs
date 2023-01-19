@@ -13,65 +13,76 @@ public class VolumeConfigUI : MonoBehaviour
     const float volAddition = 0.005f;
     const float deadZone = 0.3f;
 
-    public bool IsSelect { get; set; } = true;
+    float volMaster = 0f, volBgm = 0f, volSe = 0f;
 
     // 選択ディレイフラグ
     bool isDelay = true;
-    SaveData save;
-    [SerializeField ,Header("セーブ")] CreateData cd;
-    [SerializeField] KeyInput input;
-    [SerializeField] Animator anim;
-    [SerializeField] TextMeshProUGUI masterText;
-    [SerializeField] TextMeshProUGUI bgmText;
-    [SerializeField] TextMeshProUGUI seText;
-    [SerializeField] Image saveButton;
-    [SerializeField] GameObject volumePanel;
-    [SerializeField] Slider masterSlider;
-    [SerializeField] Slider bgmSlider;
-    [SerializeField] Slider seSlider;
+
+    ButtonMove bm;
+    UiAddition ua;
+    KeyInput input;
+    
+    [SerializeField ,Header("セーブ")] 
+    CreateData cd;
+    [SerializeField] 
+    Animator anim;
+    [SerializeField] 
+    TextMeshProUGUI masterText;
+    [SerializeField] 
+    TextMeshProUGUI bgmText;
+    [SerializeField] 
+    TextMeshProUGUI seText;
+    [SerializeField] 
+    Image saveButton;
+    [SerializeField] 
+    GameObject volumePanel;
+    [SerializeField] 
+    Slider masterSlider;
+    [SerializeField] 
+    Slider bgmSlider;
+    [SerializeField] 
+    Slider seSlider;
+    [SerializeField] 
+    OptionUIManager optionManager;
+    [SerializeField]
+    Image[] sliderButton;
 
     Vector2 inputValue;                 // 操作インプットの向き
 
-    #region　InputAction
-    MyInput myInput;
-    void Awake() => myInput = new MyInput();
-    void OnEnable()
-    {
-        myInput.Enable();
-        soundMenuNum = 0;
-    }
-    void OnDisable() => myInput.Disable();
-    void OnDestroy() => myInput.Dispose();
-    #endregion
+
     private void Start()
     {
-        save = new SaveData();
-        save = cd.loadData();
-        masterSlider.value = save.masterVol;
-        bgmSlider.value = save.BGMVol;
-        seSlider.value = save.SEVol;
+        bm = new ButtonMove();
+        ua = new UiAddition();
+        input = KeyInput.Instance;
+        cd.LoadVol(ref volMaster, ref volBgm, ref volSe);
+        masterSlider.value = volMaster;
+        bgmSlider.value = volBgm;
+        seSlider.value = volSe;
+        sliderButton[0].color = Color.white;
+        sliderButton[1].color = Color.blue;
+        sliderButton[2].color = Color.blue;
     }
 
     private void Update()
     {
         inputValue = input.InputMove;
         AudioPanelControll();
-        Decision();
+        SaveButton();
     }
 
     private void AudioPanelControll()        // サウンドの調整
     {
         // keybord入力Lスティック操作
-        if (input.PressedMove)
+        if (input.PressedMove && bm.SelectDelyTime() && !optionManager.IsPanelSelect && optionManager.IsAudioOpen)
         {
-            if (inputValue.y > deadZone) { soundMenuNum--; }
-            else if (inputValue.y < -deadZone) { soundMenuNum++; }
-            else if (inputValue.x > deadZone) { AudioVolumeChange(soundMenuNum, volAddition); }
+            soundMenuNum = ua.Addition(soundMenuNum, minNum, maxNum, input.InputMove.y);
+            if (inputValue.x > deadZone) { AudioVolumeChange(soundMenuNum, volAddition); }
             else if (inputValue.x < -deadZone) { AudioVolumeChange(soundMenuNum, -volAddition); }
-
+            bm.SelectTextMove(sliderButton, soundMenuNum, maxNum);
             isDelay = false;
         }
-        else if (input.LongPressedMove)
+        else if (input.LongPressedMove && bm.SelectDelyTime() && !optionManager.IsPanelSelect && optionManager.IsAudioOpen)
         {
             if (inputValue.x > deadZone) { AudioVolumeChange(soundMenuNum, volAddition); }
             else if (inputValue.x < -deadZone) { AudioVolumeChange(soundMenuNum, -volAddition); }
@@ -84,33 +95,11 @@ public class VolumeConfigUI : MonoBehaviour
                 isDelay = false;
             }
         }
-
-        switch (soundMenuNum)
+        else if(optionManager.IsPanelSelect)
         {
-            case 0:
-                masterText.color = Color.yellow;
-                bgmText.color = Color.white;
-                seText.color = Color.white;
-                saveButton.color = Color.white;
-                break;
-            case 1:
-                masterText.color = Color.white;
-                bgmText.color = Color.yellow;
-                seText.color = Color.white;
-                saveButton.color = Color.white;
-                break;
-            case 2:
-                masterText.color = Color.white;
-                bgmText.color = Color.white;
-                seText.color = Color.yellow;
-                saveButton.color = Color.white;
-                break;
-            case 3:
-                masterText.color = Color.white;
-                bgmText.color = Color.white;
-                seText.color = Color.white;
-                saveButton.color = Color.yellow;
-                break;
+            sliderButton[0].color = Color.white;
+            sliderButton[1].color = Color.blue;
+            sliderButton[2].color = Color.blue;
         }
     }
 
@@ -130,26 +119,20 @@ public class VolumeConfigUI : MonoBehaviour
         }
     }
 
-    void Decision()
+    void SaveButton()
     {
         //　決定処理
         if (input.DecisionInput && maxNum == soundMenuNum)
         {
-            save.masterVol = masterSlider.value;
-            save.BGMVol = bgmSlider.value;
-            save.SEVol = seSlider.value;
-            cd.SaveData(save);
-            anim.SetBool("PanelEnd", true);
-            //次の処理までのディレイ
-            Invoke("Delay", 0.5f);
+            VolSave();
         }
     }
 
-    // 選択ディレイ
-    void Delay()
+    public void VolSave()
     {
-        IsSelect = true;
-        isDelay = true;
+        cd.VolumeSave(masterSlider.value, bgmSlider.value, seSlider.value);
+        Invoke("Dylay", 0.2f);
+        optionManager.panelCover.color = new Color(.5f, 0, 0, 1);
     }
 
     // スライダーの位置をボリュームに合わせてセット
@@ -188,5 +171,10 @@ public class VolumeConfigUI : MonoBehaviour
             slider.onValueChanged.RemoveAllListeners();
         }
         slider.onValueChanged.AddListener(sliderCallback);
+    }
+
+    void Dylay()
+    {
+        optionManager.IsPanelSelect = true;
     }
 }

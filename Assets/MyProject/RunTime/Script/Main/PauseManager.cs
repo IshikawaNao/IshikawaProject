@@ -28,7 +28,6 @@ public class PauseManager : MonoBehaviour
 
     Animator anim;
 
-    [SerializeField,Header("入力")]
     KeyInput input;
 
     IPauseSelect select;
@@ -41,6 +40,7 @@ public class PauseManager : MonoBehaviour
         ua = new UiAddition();
         pausePanel.SetActive(false);
         optionPanel.SetActive(false);
+        input = KeyInput.Instance;
     }
 
 
@@ -55,7 +55,6 @@ public class PauseManager : MonoBehaviour
     {
         if (pausePanel.activeSelf == true)
         {
-            print("a");
             // key入力orLスティック操作時
             if (input.LongPressedMove && bm.SelectDelyTime())
             {

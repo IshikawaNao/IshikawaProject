@@ -1,12 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using TMPro;
 using SoundSystem;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
-using DG.Tweening;
-
 
 public class TitleManager : MonoBehaviour
 {
@@ -19,8 +13,8 @@ public class TitleManager : MonoBehaviour
 
     // 選択ディレイのためのフラグ
     public bool isDelay { get; set; }
+    public bool EndPanel { get; set; } = true;
 
-    [SerializeField, Header("入力")]
     KeyInput input;
 
     [SerializeField, Header("Animator")]
@@ -37,16 +31,23 @@ public class TitleManager : MonoBehaviour
     [SerializeField]
     EndPanelManager endPanelManager;
 
-    [SerializeField] VolumeConfigUI volumeConfigUI;
+    [SerializeField] 
+    VolumeConfigUI volumeConfigUI;
 
+    [SerializeField] 
+    OptionUIManager optionUIManager;
 
-    #region　InputAction
-    MyInput myInput;
-    void Awake() => myInput = new MyInput();
-    void OnEnable() => myInput.Enable();
-    void OnDisable() => myInput.Disable();
-    void OnDestroy() => myInput.Dispose();
-    #endregion
+    [SerializeField]
+    CreateData cd;
+
+    
+    void Awake()
+    {
+        if(cd.SaveDataCheck()) 
+        {
+            cd.CreateSaveData(); 
+        } 
+    }
 
     void Start()
     {
@@ -64,8 +65,11 @@ public class TitleManager : MonoBehaviour
         bm = new ButtonMove();
         ua = new UiAddition();
         uiPanelController = new UiPanelController();
+        input = KeyInput.Instance;
 
         button[0].color = Color.white;
+        button[1].color = Color.blue;
+        button[2].color = Color.blue;
 
         SoundManager.Instance.PlayBGMWithFadeIn("Title", fadeTime);
     }
@@ -73,45 +77,39 @@ public class TitleManager : MonoBehaviour
     void Update()
     {
         SelectNum();
-        Decision();
-        Return();
+        DecisionButton();
     }
 
+    // 選択数字
     void SelectNum()
     {
-        if(input.PressedMove && (volumeConfigUI.IsSelect || endPanelManager.EndPanel) && bm.SelectDelyTime())
+        if(input.PressedMove && (optionUIManager.IsOptionOpen || EndPanel) && bm.SelectDelyTime())
         {
             num = ua.Addition(num, minNum, maxNum, input.InputMove.y);
             bm.SelectTextMove(button, num, maxNum);
         }
-        else if(input.LongPressedMove && (volumeConfigUI.IsSelect || endPanelManager.EndPanel) && bm.SelectDelyTime())
+        else if(input.LongPressedMove && (optionUIManager.IsOptionOpen || EndPanel) && bm.SelectDelyTime())
         {
             num = ua.Addition(num, minNum, maxNum, input.InputMove.y);
             bm.SelectTextMove(button, num, maxNum);
         }
     }
 
-    void Decision()
+    // 決定
+    void DecisionButton()
     {
-        if(input.DecisionInput && (volumeConfigUI.IsSelect || endPanelManager.EndPanel))
+        if(input.DecisionInput && (optionUIManager.IsOptionOpen || EndPanel) && 
+            !anim.GetCurrentAnimatorStateInfo(0).IsTag("Panel"))
         {
             uiPanelController.PanelSwitching(this, anim, num);
-            volumeConfigUI.IsSelect = false;
-            endPanelManager.EndPanel = false;
+            optionUIManager.IsOptionOpen = false;
+            EndPanel = false;
+            anim.SetBool("PanelEnd", false);
         }
     }
 
-    void Return()
+    void ReturnButton()
     {
-        if(input.EscInput)
-        {
-            volumeConfigUI.IsSelect = true;
-            endPanelManager.EndPanel = true;
-            anim.SetBool("PanelEnd",true);
-        }
-        else
-        {
-            anim.SetBool("PanelEnd", false);
-        }
+        //if(optionUIManager.IsPanelSelect && )
     }
 }

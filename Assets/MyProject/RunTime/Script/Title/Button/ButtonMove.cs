@@ -4,7 +4,7 @@ using DG.Tweening;
 
 public class ButtonMove
 {
-    const int waitTime = 1;
+    const float waitTime = 0.5f;
     const int minNum = 0;
 
     bool selectDelyTime = true;
@@ -12,11 +12,11 @@ public class ButtonMove
 
     public void SelectTextMove(Image[] img, int num, int maxNum)
     {
-        if (img[num].color == Color.red)
+        if (img[num].color == Color.blue)
         {
             for (int i = minNum; i <= maxNum; i++)
             {
-                img[i].color = Color.red;
+                img[i].color = Color.blue;
             }
 
             selectDelyTime = false;

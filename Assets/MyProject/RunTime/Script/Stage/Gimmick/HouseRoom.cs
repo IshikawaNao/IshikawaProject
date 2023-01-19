@@ -20,7 +20,7 @@ public class HouseRoom : MonoBehaviour
 
     private void Start()
     {
-        input = GameObject.Find("KeyInput").GetComponent<KeyInput>();
+        input = KeyInput.Instance;
     }
 
     private void Update()

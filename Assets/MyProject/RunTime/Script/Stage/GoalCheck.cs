@@ -5,8 +5,12 @@ using UnityEngine;
 /// </summary>
 public class GoalCheck : MonoBehaviour
 {
-    [SerializeField,Header("ステージマネージャー")]
+    [Header("ステージマネージャー")]
     StageManager sm;
+    private void Start()
+    {
+        sm = GameObject.Find("StageManager").GetComponent<StageManager>();
+    }
 
     private void OnTriggerEnter(Collider other)
     {

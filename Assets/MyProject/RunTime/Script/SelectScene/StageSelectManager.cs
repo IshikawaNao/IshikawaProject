@@ -12,9 +12,8 @@ public class StageSelectManager : MonoBehaviour
 
     const float moveVal = 700;
     const float waiteTime = 2;
-
-    [SerializeField]
-    StageNumberSelect stageNumberSelect;
+    
+    
 
     [SerializeField]
     GameObject stageOpen;
@@ -25,7 +24,6 @@ public class StageSelectManager : MonoBehaviour
     [SerializeField]
     GameObject startButton;
 
-    [SerializeField, Header("“ü—Í")]
     KeyInput input;
 
     [SerializeField]
@@ -37,6 +35,7 @@ public class StageSelectManager : MonoBehaviour
 
     void Start()
     {
+        input = KeyInput.Instance;
         bm = new ButtonMove();
         ua = new UiAddition();
     }
@@ -60,7 +59,7 @@ public class StageSelectManager : MonoBehaviour
             //@Œˆ’èˆ—
             if (input.DecisionInput && bm.SelectDelyTime())
             {
-                stageNumberSelect.StageNumber = stageNum;
+                StageNumberSelect.Instance.StageNumber = stageNum;
                 SoundManager.Instance.StopBGMWithFadeOut("Title", 1);
                 FadeManager.Instance.LoadScene("Main", 1.0f);
             }

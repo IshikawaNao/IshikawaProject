@@ -5,9 +5,12 @@ public class PlayerLook : MonoBehaviour
     [SerializeField]
     GameObject player;
 
-    [SerializeField]
     KeyInput input;
 
+    private void Start()
+    {
+        input = KeyInput.Instance;
+    }
     void Update()
     {
         //ƒ}ƒEƒX‚ÌˆÚ“®—Ê

@@ -7,8 +7,6 @@ public class EndPanelManager : MonoBehaviour
     const int maxQuitNum = 1;
     int quitNum = 0;
 
-    public bool EndPanel { get; set; } = true;
-
     [SerializeField]
     TitleManager tm;
 
@@ -17,7 +15,6 @@ public class EndPanelManager : MonoBehaviour
 
     ButtonMove bm;
 
-    [SerializeField]
     KeyInput input;
 
     [SerializeField]
@@ -28,12 +25,14 @@ public class EndPanelManager : MonoBehaviour
 
     private void Start()
     {
+        input = KeyInput.Instance;
         bm = new ButtonMove();
     }
 
     private void Update()
     {
         EndWindow(tm, anim, bm, input.InputMove.x, input.PressedMove, input.DecisionInput);
+        ReturnButton();
     }
 
     public void EndWindow(TitleManager tm , Animator anim, ButtonMove bm, float value, bool input, bool decision)
@@ -59,7 +58,17 @@ public class EndPanelManager : MonoBehaviour
     // 選択ディレイ
     void Delay()
     {
-        EndPanel = true;
+        tm.EndPanel = true;
+    }
+
+    // 戻る
+    void ReturnButton()
+    {
+        if (input.EscInput)
+        {
+            tm.EndPanel = true;
+            anim.SetBool("PanelEnd", true);
+        }
     }
 
     //　終了パネル表示時選択番号取得

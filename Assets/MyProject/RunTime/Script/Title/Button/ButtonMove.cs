@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+using SoundSystem;
 
 public class ButtonMove
 {
@@ -18,7 +19,7 @@ public class ButtonMove
             {
                 img[i].color = Color.blue;
             }
-
+            SoundManager.Instance.PlayOneShotSe("select");
             selectDelyTime = false;
 
             img[num].DOColor(Color.white, waitTime).OnComplete(() =>

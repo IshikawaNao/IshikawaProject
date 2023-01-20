@@ -22,7 +22,7 @@ public class VolumeConfigUI : MonoBehaviour
     UiAddition ua;
     KeyInput input;
     
-    [SerializeField ,Header("セーブ")] 
+    [Header("セーブ")] 
     CreateData cd;
     [SerializeField] 
     Animator anim;
@@ -55,6 +55,7 @@ public class VolumeConfigUI : MonoBehaviour
         bm = new ButtonMove();
         ua = new UiAddition();
         input = KeyInput.Instance;
+        cd = CreateData.Instance;
         cd.LoadVol(ref volMaster, ref volBgm, ref volSe);
         masterSlider.value = volMaster;
         bgmSlider.value = volBgm;
@@ -124,15 +125,8 @@ public class VolumeConfigUI : MonoBehaviour
         //　決定処理
         if (input.DecisionInput && maxNum == soundMenuNum)
         {
-            VolSave();
+            optionManager.Save();
         }
-    }
-
-    public void VolSave()
-    {
-        cd.VolumeSave(masterSlider.value, bgmSlider.value, seSlider.value);
-        Invoke("Dylay", 0.2f);
-        optionManager.panelCover.color = new Color(.5f, 0, 0, 1);
     }
 
     // スライダーの位置をボリュームに合わせてセット
@@ -171,10 +165,5 @@ public class VolumeConfigUI : MonoBehaviour
             slider.onValueChanged.RemoveAllListeners();
         }
         slider.onValueChanged.AddListener(sliderCallback);
-    }
-
-    void Dylay()
-    {
-        optionManager.IsPanelSelect = true;
     }
 }

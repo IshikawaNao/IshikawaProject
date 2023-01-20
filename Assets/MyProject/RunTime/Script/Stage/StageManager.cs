@@ -21,6 +21,9 @@ public class StageManager : MonoBehaviour
     float tm = 0;
     float timer;
 
+    float loadTime;
+    string loadrank;
+
     Vector4 gammmaVal = Vector4.one;
 
     const float maxGammma = 0;
@@ -108,9 +111,7 @@ public class StageManager : MonoBehaviour
         postVol.profile.TryGet(out liftGammaGain);
         postVol.profile.TryGet(out chromaticAberration);
 
-        cd = CreateData.Instance;
-
-        timer = Time.time - 6;
+        timer = Time.time;
 
         SoundManager.Instance.PlayBGMWithFadeIn("Main", soundFadeTime);
     }
@@ -157,9 +158,10 @@ public class StageManager : MonoBehaviour
             player.IsMove = false;
             input.InputMove = Vector2.zero;
             input.CameraPos = player.transform.forward;
-            cd.SaveClearData(Mathf.Floor(tm),rank, stageNum);
-            SoundManager.Instance.StopBGMWithFadeOut("Main", soundFadeTime);
-            FadeManager.Instance.LoadScene("Result", 1.0f);
+            ClearRank();
+            cd = CreateData.Instance;
+            cd.SaveClearData(Mathf.Floor(tm), rank, stageNum);
+            FadeManager.Instance.LoadScene("Result", 1.5f);
         }
     }
 

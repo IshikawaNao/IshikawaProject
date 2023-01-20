@@ -21,23 +21,35 @@ public class CreateData : MonoBehaviour
     BinaryFormatter bf;
     string filePath;
 
-    public static CreateData Instance { get; private set; }
+    private static CreateData instance;
+    public static CreateData Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                instance = (CreateData)FindObjectOfType(typeof(CreateData));
+
+                if (instance == null)
+                {
+                    Debug.LogError(typeof(CreateData) + "is nothing");
+                }
+            }
+            return instance;
+        }
+    }
+
     private void Awake()
     {
-        DontDestroyOnLoad(gameObject);
-
-        if (Instance == null)
-        {
-            Instance = this;
-            DontDestroyOnLoad(this);
-        }
-        else
-        {
-            Destroy(this);
-            return;
-        }
+        DontDestroyOnLoad(this.gameObject);
 
         filePath = Application.dataPath + FileName;
+
+        if(!SaveDataCheck())
+        {
+            CreateSaveData();
+        }
+
     }
 
     // ファイル更新準備
@@ -81,10 +93,10 @@ public class CreateData : MonoBehaviour
             data.bgmVol = DefaultBGMVol;
             data.seVol = DefaultSEVol;
             data.sensitivity = DefaultSensitivity;
-            data.ClearTime[0] = DefaultClearTime; 
-            data.ClearTime[1] = DefaultClearTime; 
-            data.ClearRank[0] = DefaultRank; 
-            data.ClearRank[1] = DefaultRank; 
+            data.ClearTime1 = DefaultClearTime; 
+            data.ClearTime2 = DefaultClearTime; 
+            data.ClearRank1 = DefaultRank; 
+            data.ClearRank2 = DefaultRank; 
             bf.Serialize(file, data);
         }
         catch (IOException)
@@ -100,7 +112,7 @@ public class CreateData : MonoBehaviour
 
     // データセーブ(一括)
     // ＊データ追加するたび追記
-    public void Save(float vm, float vb, float vs)
+    public void Save(float vm, float vb, float vs, float sn, float ct1, float ct2, string cr1, string cr2)
     {
         try
         {
@@ -111,6 +123,11 @@ public class CreateData : MonoBehaviour
             data.masterVol = vm;
             data.bgmVol = vb;
             data.seVol = vs;
+            data.sensitivity = sn;
+            data.ClearTime1 = ct1;
+            data.ClearTime2 = ct2;
+            data.ClearRank1 = cr1;
+            data.ClearRank2 = cr2;
             bf.Serialize(file, data);
         }
         catch (IOException)
@@ -161,7 +178,6 @@ public class CreateData : MonoBehaviour
             data.masterVol = vm;
             data.bgmVol = vb;
             data.seVol = vs;
-            bf.Serialize(file, data);
         }
         catch (IOException)
         {
@@ -206,8 +222,16 @@ public class CreateData : MonoBehaviour
 
             // セーブ
             SaveData data = new SaveData();
-            data.ClearTime[num] = time;
-            data.ClearRank[num] = rank;
+            if (num == 0)
+            {
+                data.ClearTime1 = time;
+                data.ClearRank1 = rank;
+            }
+            else if (num == 1)
+            {
+                data.ClearTime2 = time;
+                data.ClearRank2 = rank;
+            }
             bf.Serialize(file, data);
         }
         catch (IOException)
@@ -233,6 +257,7 @@ public class CreateData : MonoBehaviour
             vm = data.masterVol;
             vb = data.bgmVol;
             vs = data.seVol;
+            bf.Serialize(file, data);
         }
         catch (IOException)
         {
@@ -276,8 +301,17 @@ public class CreateData : MonoBehaviour
 
             // セーブデータ読み込み
             SaveData data = bf.Deserialize(file) as SaveData;
-            time = data.ClearTime[num];
-            rank = data.ClearRank[num];
+            if (num == 0)
+            {
+                time = data.ClearTime1;
+                rank = data.ClearRank1;
+            }
+            else if(num == 1)
+            {
+                time = data.ClearTime2;
+                rank = data.ClearRank2;
+            }
+            
         }
         catch (IOException)
         {

@@ -1,5 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
+using SoundSystem;
 using UnityEngine;
 
 public class PlayerRan : IPlayerMover
@@ -32,7 +31,9 @@ public class PlayerRan : IPlayerMover
         Vector3 moveVector = moveForward.normalized * speed;   //移動速度
         Vector3 vector = new Vector3(rb.velocity.x, 10, rb.velocity.z);              //velocity
         rb.AddForce((moveVector - vector) * force, ForceMode.Acceleration);
-        
+
+        SoundManager.Instance.PlayShotSe("Ran");
+
         // キャラクターの向きを進行方向に
         if (moveForward != Vector3.zero)
         {

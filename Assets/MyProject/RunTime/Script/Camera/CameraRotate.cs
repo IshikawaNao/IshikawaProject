@@ -12,6 +12,7 @@ public class CameraRotate : MonoBehaviour
     GameObject player;
 
     KeyInput input;
+    CreateData data;
     Vector3 target = new Vector3(0,1,0);
 
     float sensitivity = 0.1f;
@@ -27,6 +28,7 @@ public class CameraRotate : MonoBehaviour
     {
         mainCM.transform.localPosition = new Vector3(0, 1, 10);
         input = KeyInput.Instance;
+        data.LoadSensitivity(ref sensitivity);
     }
 
     void Update()

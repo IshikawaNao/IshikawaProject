@@ -8,7 +8,23 @@ namespace SoundSystem
 {
     public class SoundManager : MonoBehaviour
     {
-        public static SoundManager Instance { get; private set; }
+        private static SoundManager instance;
+        public static SoundManager Instance
+        {
+            get
+            {
+                if (instance == null)
+                {
+                    instance = (SoundManager)FindObjectOfType(typeof(SoundManager));
+
+                    if (instance == null)
+                    {
+                        Debug.LogError(typeof(SoundManager) + "is nothing");
+                    }
+                }
+                return instance;
+            }
+        }
 
         // BGM・SE・VoiceのAudioClipリスト
         public List<AudioClip> bgmAudioClipList = new List<AudioClip>();
@@ -50,18 +66,14 @@ namespace SoundSystem
 
         private void Awake()
         {
-            DontDestroyOnLoad(gameObject);
-
-            if (Instance == null)
+            if (this != Instance)
             {
-                Instance = this;
-                DontDestroyOnLoad(this);
-            }
-            else
-            {
-                Destroy(this);
+                Destroy(this.gameObject);
                 return;
             }
+
+            DontDestroyOnLoad(this.gameObject);
+
             seAudioSource = InitializeAudioSource(gameObject, false, seAMG);
             bgmAudioSourceList = InitializeAudioSources(gameObject, true, bgmAMG, BGMAudioSourceNum);
 
@@ -108,6 +120,19 @@ namespace SoundSystem
 
             seAudioSource.PlayOneShot(audioClip);
         }
+
+        public void PlayShotSe(string clipName)
+        {
+            var audioClip = seAudioClipList.FirstOrDefault(clip => clip.name == clipName);
+
+            if (audioClip == null)
+            {
+                Debug.Log(clipName + "は見つかりません");
+                return;
+            }
+
+            seAudioSource.Play(audioClip);
+        }
       
         public void PlayBGMWithFadeIn(string clipName, float fadeTime = 2f)
         {
@@ -139,7 +164,7 @@ namespace SoundSystem
             }
         }
 
-        public void StopBGMWithFadeOut(string clipName, float fadeTime = 2f)
+        public void StopBGMWithFadeOut(string clipName, float fadeTime)
         {
             if (IsPaused) { return; }
 

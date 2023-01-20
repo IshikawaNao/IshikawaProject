@@ -37,17 +37,7 @@ public class TitleManager : MonoBehaviour
     [SerializeField] 
     OptionUIManager optionUIManager;
 
-    [SerializeField]
     CreateData cd;
-
-    
-    void Awake()
-    {
-        if(cd.SaveDataCheck()) 
-        {
-            cd.CreateSaveData(); 
-        } 
-    }
 
     void Start()
     {
@@ -104,6 +94,7 @@ public class TitleManager : MonoBehaviour
             uiPanelController.PanelSwitching(this, anim, num);
             optionUIManager.IsOptionOpen = false;
             EndPanel = false;
+            SoundManager.Instance.PlayOneShotSe("decision");
             anim.SetBool("PanelEnd", false);
         }
     }

@@ -1,5 +1,6 @@
 using UnityEngine.UI;
 using UnityEngine;
+using SoundSystem;
 
 public class OptionUIManager : MonoBehaviour
 {
@@ -13,9 +14,15 @@ public class OptionUIManager : MonoBehaviour
     public bool IsAudioOpen { get; set; } = true;
     public bool IsSystemOpen { get; set; } = true;
 
+    float clearTime1 = 0;
+    float clearTime2 = 0;
+    string clearRank1 = "";
+    string clearRank2 = "";
+
     ButtonMove bm;
     UiAddition ua;
     KeyInput input;
+    CreateData cd;
 
     [SerializeField]
     GameObject option;
@@ -31,11 +38,25 @@ public class OptionUIManager : MonoBehaviour
     [SerializeField] 
     VolumeConfigUI volumeConfigUI;
 
+    [SerializeField]
+    Slider masterSlider;
+    [SerializeField]
+    Slider bgmSllider;
+    [SerializeField]
+    Slider seSllider;
+    [SerializeField]
+    Slider cameraSlider;
+
     void Start()
     {
         bm = new ButtonMove();
         ua = new UiAddition();
         input = KeyInput.Instance;
+
+        cd = CreateData.Instance;
+
+        cd.LoadClearData(ref clearTime1, ref clearRank1, 0);
+        cd.LoadClearData(ref clearTime2, ref clearRank2, 0);
 
         button[0].color = Color.white;
         button[1].color = Color.blue;
@@ -98,6 +119,7 @@ public class OptionUIManager : MonoBehaviour
     {
         if (input.DecisionInput && IsPanelSelect)
         {
+            SoundManager.Instance.PlayOneShotSe("decision");
             switch (num)
             {
                 case 0:
@@ -136,9 +158,29 @@ public class OptionUIManager : MonoBehaviour
             }
             else if(!IsPanelSelect)
             {
-                IsPanelSelect = true;
-                panelCover.color = new Color(.5f,0,0,1);
+                Save();
             }
         }
+    }
+
+    public void Save()
+    {
+        float vm = masterSlider.value,
+            vb = bgmSllider.value,
+            vs = seSllider.value,
+            sn = cameraSlider.value,
+            ct1 = clearTime1,
+            ct2 = clearTime2;
+        string cr1 = clearRank1,
+            cr2 = clearRank2;
+       
+        cd.Save(vm, vb, vs, sn, ct1, ct2, cr1, cr2);
+        Invoke("Dylay", 0.2f);
+        panelCover.color = new Color(.5f, 0, 0, 1);
+    }
+
+    void Dylay()
+    {
+        IsPanelSelect = true;
     }
 }

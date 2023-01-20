@@ -10,6 +10,8 @@ public class SaveData
 
     public float sensitivity;
 
-    public float[] ClearTime;
-    public string[] ClearRank;
+    public float ClearTime1;
+    public float ClearTime2;
+    public string ClearRank1;
+    public string ClearRank2;
 }

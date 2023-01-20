@@ -1,6 +1,7 @@
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine;
+using SoundSystem;
 
 public class SystemUIManager : MonoBehaviour
 {
@@ -79,6 +80,7 @@ public class SystemUIManager : MonoBehaviour
     {
         if (input.DecisionInput && !om.IsPanelSelect && om.IsSystemOpen)
         {
+            SoundManager.Instance.PlayOneShotSe("decision");
             switch (systemMenuNum)
             {
                 case 0:
@@ -89,7 +91,7 @@ public class SystemUIManager : MonoBehaviour
                     
                     break;
                 case 2:
-                    VolSave();
+                    om.Save();
                     break;
             }
 
@@ -106,17 +108,5 @@ public class SystemUIManager : MonoBehaviour
         {
             cameraSlider.value -= volAddition;
         }
-    }
-
-    public void VolSave()
-    {
-        cd.SensitivitySave(cameraSlider.value);
-        Invoke("Dylay",0.2f);
-        om.panelCover.color = new Color(.5f, 0, 0, 1);
-    }
-
-    void Dylay()
-    {
-        om.IsPanelSelect = true;
     }
 }

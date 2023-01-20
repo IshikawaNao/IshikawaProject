@@ -59,8 +59,8 @@ public class StageSelectManager : MonoBehaviour
             //@Œˆ’èˆ—
             if (input.DecisionInput && bm.SelectDelyTime())
             {
+                SoundManager.Instance.PlayOneShotSe("decision");
                 StageNumberSelect.Instance.StageNumber = stageNum;
-                SoundManager.Instance.StopBGMWithFadeOut("Title", 1);
                 FadeManager.Instance.LoadScene("Main", 1.0f);
             }
 

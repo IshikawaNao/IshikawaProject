@@ -97,6 +97,8 @@ public class StageManager : MonoBehaviour
     void Start()
     {
         input = KeyInput.Instance;
+        cd = CreateData.Instance;
+
 
         // スライダーの数値反映
         volumeConfigUI.SetMasterVolume(SoundManager.Instance.MasterVolume);
@@ -107,6 +109,8 @@ public class StageManager : MonoBehaviour
         volumeConfigUI.SetMasterSliderEvent(vol => SoundManager.Instance.MasterVolume = vol);
         volumeConfigUI.SetBGMSliderEvent(vol => SoundManager.Instance.BGMVolume = vol);
         volumeConfigUI.SetSeSliderEvent(vol => SoundManager.Instance.SEVolume = vol);
+
+        cd.VolSet();
 
         postVol.profile.TryGet(out liftGammaGain);
         postVol.profile.TryGet(out chromaticAberration);
@@ -156,10 +160,7 @@ public class StageManager : MonoBehaviour
         {
             isGoal = false;
             player.IsMove = false;
-            input.InputMove = Vector2.zero;
-            input.CameraPos = player.transform.forward;
             ClearRank();
-            cd = CreateData.Instance;
             cd.SaveClearData(Mathf.Floor(tm), rank, stageNum);
             FadeManager.Instance.LoadScene("Result", 1.5f);
         }

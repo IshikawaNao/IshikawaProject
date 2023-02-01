@@ -37,8 +37,6 @@ public class TitleManager : MonoBehaviour
     [SerializeField] 
     OptionUIManager optionUIManager;
 
-    CreateData cd;
-
     void Start()
     {
         // スライダーの数値反映
@@ -51,6 +49,7 @@ public class TitleManager : MonoBehaviour
         volumeConfigUI.SetBGMSliderEvent(vol => SoundManager.Instance.BGMVolume = vol);
         volumeConfigUI.SetSeSliderEvent(vol => SoundManager.Instance.SEVolume = vol);
 
+        CreateData.Instance.VolSet();
 
         bm = new ButtonMove();
         ua = new UiAddition();
@@ -97,10 +96,5 @@ public class TitleManager : MonoBehaviour
             SoundManager.Instance.PlayOneShotSe("decision");
             anim.SetBool("PanelEnd", false);
         }
-    }
-
-    void ReturnButton()
-    {
-        //if(optionUIManager.IsPanelSelect && )
     }
 }

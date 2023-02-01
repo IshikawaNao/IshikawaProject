@@ -3,8 +3,8 @@ using UnityEngine.UI;
 
 public class EndPanelManager : MonoBehaviour
 {
-    const int minQuitNum = 0;
-    const int maxQuitNum = 1;
+    const int minNum = 0;
+    const int maxNum = 1;
     int quitNum = 0;
 
     [SerializeField]
@@ -14,6 +14,7 @@ public class EndPanelManager : MonoBehaviour
     Animator anim;
 
     ButtonMove bm;
+    UiAddition ua;
 
     KeyInput input;
 
@@ -27,21 +28,25 @@ public class EndPanelManager : MonoBehaviour
     {
         input = KeyInput.Instance;
         bm = new ButtonMove();
+        ua = new UiAddition();
+        button[0].color = Color.white;
+        button[1].color = Color.blue;
     }
 
     private void Update()
     {
-        EndWindow(tm, anim, bm, input.InputMove.x, input.PressedMove, input.DecisionInput);
+        EndWindow(anim, input.InputMove.x, input.PressedMove, input.DecisionInput);
         ReturnButton();
     }
 
-    public void EndWindow(TitleManager tm , Animator anim, ButtonMove bm, float value, bool input, bool decision)
+    void EndWindow(Animator anim, float value, bool input, bool decision)
     {
         // アニメーションが再生されている間この処理に入らないようにする
         if (input && bm.SelectDelyTime())
         {
-            QuitNum(value);
-            bm.SelectTextMove(button, quitNum, maxQuitNum);
+            quitNum = ua.Addition(quitNum, minNum, maxNum, value );
+            bm.SelectTextMove(button, quitNum, maxNum);
+            print(quitNum);
         }
 
         if (decision)
@@ -68,30 +73,23 @@ public class EndPanelManager : MonoBehaviour
         {
             tm.EndPanel = true;
             anim.SetBool("PanelEnd", true);
+            quitNum = 0;
+            button[0].color = Color.white;
+            button[1].color = Color.blue;
         }
-    }
-
-    //　終了パネル表示時選択番号取得
-    public void QuitNum(float input)
-    {
-        if (input > 0)
-        {
-            quitNum--;
-        }
-        else if (input < 0)
-        {
-            quitNum++;
-        }
-        quitNum = Mathf.Clamp(quitNum, minQuitNum,maxQuitNum);
     }
 
     // 終了選択決定処理
-    public void QuitDecision(int num, Animator anim)
+    void QuitDecision(int num, Animator anim)
     {
         switch (num)
         {
             case 0:
+                tm.EndPanel = true;
                 anim.SetBool("PanelEnd",true);
+                quitNum = 0;
+                button[0].color = Color.white;
+                button[1].color = Color.blue;
                 break;
             case 1:
 #if UNITY_EDITOR

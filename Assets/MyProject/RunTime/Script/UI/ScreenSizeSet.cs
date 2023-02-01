@@ -11,6 +11,7 @@ public class ScreenSizeSet : MonoBehaviour
 
     void Start()
     {
+        toggle.isOn = true;
         SetToggle(); 
     }
 

@@ -62,6 +62,7 @@ public class PlayerController : MonoBehaviour
     private void FixedUpdate()
     {
         switchMove.SwitchMove(this.gameObject,rb, input.InputMove, anim, isPush, isClimb , gl.IsGround(), IsMove);
+
         if (isPush)
         {
             iObject.Move(iObject.Box_rb(), input.InputMove, this.gameObject, anim);

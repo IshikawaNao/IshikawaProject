@@ -163,6 +163,7 @@ public class OptionUIManager : MonoBehaviour
         }
     }
 
+    // 値をセーブする
     public void Save()
     {
         float vm = masterSlider.value,
@@ -175,10 +176,11 @@ public class OptionUIManager : MonoBehaviour
             cr2 = clearRank2;
        
         cd.Save(vm, vb, vs, sn, ct1, ct2, cr1, cr2);
-        Invoke("Dylay", 0.2f);
+        Invoke(nameof(Dylay), 0.2f);
         panelCover.color = new Color(.5f, 0, 0, 1);
     }
 
+    // 選択時のディレイ
     void Dylay()
     {
         IsPanelSelect = true;

@@ -24,58 +24,53 @@ public class KeyInput : MonoBehaviour
     }
 
     // 移送入力
-    public Vector2 InputMove { get; set; }
-    public bool PressedMove { get; set; }   
-    public bool LongPressedMove { get; set; }   
+    public Vector2 InputMove { get { return myInput.Player.Move.ReadValue<Vector2>(); } }
+    public bool PressedMove { get { return myInput.Player.Move.WasPressedThisFrame(); } }   
+    public bool LongPressedMove { get { return myInput.Player.Move.IsPressed(); } }   
     // マウスポジション
-    public Vector2 CameraPos { get; set; }
+    public Vector2 CameraPos { get { return myInput.Camera.Move.ReadValue<Vector2>(); } }
     // ジャンプ入力
-    public bool InputJump { get; set; }
+    public bool InputJump { get { return myInput.Player.Jump.triggered; } }
     // アクションボタン入力
-    public bool PushAction { get; set; }
+    public bool PushAction { get { return myInput.Player.PushAction.IsPressed(); } }
     // アクションボタン入力
-    public bool ClimbAction { get; set; }
+    public bool ClimbAction { get { return myInput.Player.ClimbAction.triggered; } }
     // ソナーギミックボタン入力
-    public bool SonarAction { get; set; }
+    public bool SonarAction { get { return myInput.Player.SonarKey.IsPressed(); } }
     // 決定ボタン入力
-    public bool DecisionInput { get; set; }
+    public bool DecisionInput { get { return myInput.UI.Decision.WasPressedThisFrame(); } }
     // Escキー入力
-    public bool EscInput { get; set; }
+    public bool EscInput { get { return myInput.UI.Return.WasPressedThisFrame(); } }
     // カメラリセットボタン
-    public bool CameraReset { get; set; }
+    public bool CameraReset { get { return myInput.Camera.CameraReset.WasPerformedThisFrame(); } }
     // スクロール入力
-    public float Scroll { get; set; }
+    public float Scroll { get { return myInput.Camera.Scroll.ReadValue<Vector2>().y; } }
     // PAD入力
-    public bool PadCurrent { get; set; }
+    public bool PadCurrent 
+    { 
+        get 
+        {
+            if (Gamepad.current == null) { return false; }
+            return true;
+        } 
+    }
 
     #region　InputAction
     MyInput myInput;
     void Awake()
     {
+        if (this != Instance)
+        {
+            Destroy(this.gameObject);
+            return;
+        }
+
         DontDestroyOnLoad(this.gameObject);
 
         myInput = new MyInput();
     }
     void OnEnable() => myInput.Enable();
-    void OnDisable() => myInput.Disable();
-    void OnDestroy() => myInput.Dispose();
+    //void OnDisable() => myInput.Disable();
     #endregion
 
-    private void Update()
-    {
-        InputMove = myInput.Player.Move.ReadValue<Vector2>();
-        CameraPos = myInput.Camera.Move.ReadValue<Vector2>();
-        PressedMove = myInput.Player.Move.WasPressedThisFrame();
-        LongPressedMove = myInput.Player.Move.IsPressed();
-        InputJump = myInput.Player.Jump.triggered;
-        PushAction = myInput.Player.PushAction.IsPressed();
-        ClimbAction = myInput.Player.ClimbAction.triggered;
-        SonarAction = myInput.Player.SonarKey.IsPressed();
-        DecisionInput = myInput.UI.Decision.WasPressedThisFrame();
-        EscInput = myInput.UI.Return.WasPressedThisFrame();
-        CameraReset = myInput.Camera.CameraReset.WasPerformedThisFrame();
-        Scroll = myInput.Camera.Scroll.ReadValue<Vector2>().y;
-        if (Gamepad.current == null) PadCurrent = false;
-        else PadCurrent = true;
-    }
 }

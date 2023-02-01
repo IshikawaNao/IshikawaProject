@@ -28,6 +28,7 @@ public class CameraRotate : MonoBehaviour
     {
         mainCM.transform.localPosition = new Vector3(0, 1, 10);
         input = KeyInput.Instance;
+        data = CreateData.Instance;
         data.LoadSensitivity(ref sensitivity);
     }
 

@@ -29,6 +29,12 @@ public class StageSelectManager : MonoBehaviour
     [SerializeField]
     Animator anim;
 
+    [SerializeField]
+    OptionUIManager optionUIManager;
+
+    [SerializeField]
+    TitleManager title;
+
     ButtonMove bm;
     UiAddition ua;
 
@@ -67,6 +73,8 @@ public class StageSelectManager : MonoBehaviour
             if (input.EscInput)
             {
                 anim.SetBool("PanelEnd", true);
+                optionUIManager.IsOptionOpen = true;
+                title.EndPanel = true;
             }
         }
         else

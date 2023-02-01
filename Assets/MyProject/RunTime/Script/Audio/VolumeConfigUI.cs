@@ -25,8 +25,6 @@ public class VolumeConfigUI : MonoBehaviour
     [Header("ÉZÅ[Éu")] 
     CreateData cd;
     [SerializeField] 
-    Animator anim;
-    [SerializeField] 
     TextMeshProUGUI masterText;
     [SerializeField] 
     TextMeshProUGUI bgmText;

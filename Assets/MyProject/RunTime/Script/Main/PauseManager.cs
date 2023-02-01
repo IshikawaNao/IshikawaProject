@@ -1,5 +1,6 @@
 using UnityEngine.UI;
 using UnityEngine;
+using SoundSystem;
 
 public class PauseManager : MonoBehaviour
 {
@@ -29,21 +30,18 @@ public class PauseManager : MonoBehaviour
     ButtonMove bm;
     UiAddition ua;
 
-    Animator anim;
-
-    KeyInput input;
-
-    IPauseSelect select;
-    
+    KeyInput input;  
 
     void Start()
     {
-        select = new PauseSelect();
         bm = new ButtonMove();
         ua = new UiAddition();
         pausePanel.SetActive(false);
         optionPanel.SetActive(false);
         input = KeyInput.Instance;
+        selectButton[0].color = Color.white;
+        selectButton[1].color = Color.clear;
+        selectButton[2].color = Color.clear;
     }
 
 
@@ -68,7 +66,7 @@ public class PauseManager : MonoBehaviour
             //Å@åàíËèàóù
             if (input.DecisionInput && om.IsOptionOpen)
             {
-                select.StageDecision(num, anim, optionPanel, pauseButton);
+                DecisionPush();
             }
 
             if (input.EscInput && om.IsOptionOpen)
@@ -93,5 +91,24 @@ public class PauseManager : MonoBehaviour
         }
     }
 
-    
+    void DecisionPush()
+    {
+        SoundManager.Instance.PlayOneShotSe("decision");
+        switch (num)
+        {
+            case 0:
+                optionPanel.SetActive(true);
+                pauseButton.SetActive(false);
+                selectButton[0].color = Color.white;
+                selectButton[1].color = Color.clear;
+                selectButton[2].color = Color.clear;
+                break;
+            case 1:
+                FadeManager.Instance.LoadScene("Main", 1.5f);
+                break;
+            case 2:
+                FadeManager.Instance.LoadScene("Title", 1.5f);
+                break;
+        }
+    }
 }

@@ -1,6 +1,7 @@
 using System.IO;
 using UnityEngine;
 using System.Runtime.Serialization.Formatters.Binary;
+using SoundSystem;
 
 // セーブデータ管理クラス
 public class CreateData : MonoBehaviour
@@ -41,6 +42,12 @@ public class CreateData : MonoBehaviour
 
     private void Awake()
     {
+        if (this != Instance)
+        {
+            Destroy(this.gameObject);
+            return;
+        }
+
         DontDestroyOnLoad(this.gameObject);
 
         filePath = Application.dataPath + FileName;
@@ -312,6 +319,31 @@ public class CreateData : MonoBehaviour
                 rank = data.ClearRank2;
             }
             
+        }
+        catch (IOException)
+        {
+            Debug.LogError("failed to open file");
+        }
+        finally
+        {
+            // FileStreamを使用したら最後にCloseする
+            if (file != null) { CloseFile(); }
+        }
+    }
+
+    public void VolSet()
+    {
+        try
+        {
+            SoundManager sound = SoundManager.Instance;
+            InitFileLoad();
+
+            // セーブデータ読み込み
+            SaveData data = bf.Deserialize(file) as SaveData;
+            sound.MasterVolume = data.masterVol;
+            sound.BGMVolume = data.bgmVol;
+            sound.SEVolume = data.seVol;
+            bf.Serialize(file, data);
         }
         catch (IOException)
         {

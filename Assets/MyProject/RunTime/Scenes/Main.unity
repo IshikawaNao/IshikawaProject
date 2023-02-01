@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.029082458, g: 0.017378572, b: 0.01952323, a: 1}
+  m_IndirectSpecularColor: {r: 0.027709289, g: 0.01666606, b: 0.01867289, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -6808,6 +6808,10 @@ PrefabInstance:
       propertyPath: masterSlider
       value: 
       objectReference: {fileID: 1207027403}
+    - target: {fileID: 8141636962341199915, guid: b944e310fc1a97b4f9429dc4fd0590d2, type: 3}
+      propertyPath: screenToggle
+      value: 
+      objectReference: {fileID: 1207027410}
     - target: {fileID: 8141636962341199915, guid: b944e310fc1a97b4f9429dc4fd0590d2, type: 3}
       propertyPath: button.Array.data[0]
       value: 

@@ -9,10 +9,12 @@ public class ScreenSizeSet : MonoBehaviour
     int width = 1280;
     int height = 720;
 
+    bool isFullScreen;
     void Start()
     {
-        toggle.isOn = true;
-        SetToggle(); 
+        CreateData.Instance.LoadScreenSize(ref isFullScreen);
+        toggle.isOn = isFullScreen;
+        SetScreenMode(isFullScreen);
     }
 
     public void SetScreen()
@@ -20,14 +22,18 @@ public class ScreenSizeSet : MonoBehaviour
         SetScreenMode(toggle.isOn);
     }
 
-    void SetToggle()
+
+    void SetScreenMode(bool fullScreen)
     {
-        toggle.isOn = Screen.fullScreen;
-        toggle.onValueChanged.AddListener((x) => SetScreenMode(x));
-    }
-    void SetScreenMode(bool isFullScreen)
-    {
-        Screen.SetResolution(width, height,isFullScreen);
+        if(!fullScreen)
+        {
+            Screen.SetResolution(width, height, fullScreen);
+        }
+        else
+        {
+            Screen.SetResolution(1920, 1080, fullScreen);
+        }
+        
     }
 
 }

@@ -14,4 +14,6 @@ public class SaveData
     public float ClearTime2;
     public string ClearRank1;
     public string ClearRank2;
+
+    public bool FullScreen;
 }

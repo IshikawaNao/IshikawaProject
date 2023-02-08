@@ -24,6 +24,9 @@ public class EndPanelManager : MonoBehaviour
     [SerializeField] 
     VolumeConfigUI volumeConfigUI;
 
+    [SerializeField]
+    OptionUIManager om;
+
     private void Start()
     {
         input = KeyInput.Instance;
@@ -63,7 +66,7 @@ public class EndPanelManager : MonoBehaviour
     // 選択ディレイ
     void Delay()
     {
-        tm.EndPanel = true;
+        om.EndPanel = true;
     }
 
     // 戻る
@@ -71,7 +74,7 @@ public class EndPanelManager : MonoBehaviour
     {
         if (input.EscInput)
         {
-            tm.EndPanel = true;
+            om.EndPanel = true;
             anim.SetBool("PanelEnd", true);
             quitNum = 0;
             button[0].color = Color.white;
@@ -85,7 +88,7 @@ public class EndPanelManager : MonoBehaviour
         switch (num)
         {
             case 0:
-                tm.EndPanel = true;
+                om.EndPanel = true;
                 anim.SetBool("PanelEnd",true);
                 quitNum = 0;
                 button[0].color = Color.white;

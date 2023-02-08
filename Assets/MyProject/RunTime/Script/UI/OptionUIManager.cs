@@ -9,15 +9,30 @@ public class OptionUIManager : MonoBehaviour
     const int maxNum = 2;
     const int minNum = 0;
 
-    public bool IsPanelSelect { get; set; } = true;
+    public bool IsPanelSelect { get; private set; } = true;
     public bool IsOptionOpen { get; set; } = true;
-    public bool IsAudioOpen { get; set; } = true;
-    public bool IsSystemOpen { get; set; } = true;
+    public bool EndPanel { get; set; } = true;
+    public bool IsAudioOpen { get; private set; } = true;
+    public bool IsSystemOpen { get; private set; } = true;
+
+    // ƒ{ƒ^ƒ“‚ª‰Ÿ‚¹‚é‚æ‚¤‚É‚È‚Á‚½‚©
+    bool SelectDown
+    {
+        get
+        {
+            if (IsPanelSelect && bm.SelectDelyTime())
+            {
+                return true;
+            }
+            return false;
+        }
+    }
 
     float clearTime1 = 0;
     float clearTime2 = 0;
     string clearRank1 = "";
     string clearRank2 = "";
+    bool isFullScreen;
 
     ButtonMove bm;
     UiAddition ua;
@@ -46,6 +61,8 @@ public class OptionUIManager : MonoBehaviour
     Slider seSllider;
     [SerializeField]
     Slider cameraSlider;
+    [SerializeField]
+    Toggle screenToggle;
 
     void Start()
     {
@@ -56,7 +73,7 @@ public class OptionUIManager : MonoBehaviour
         cd = CreateData.Instance;
 
         cd.LoadClearData(ref clearTime1, ref clearRank1, 0);
-        cd.LoadClearData(ref clearTime2, ref clearRank2, 0);
+        cd.LoadClearData(ref clearTime2, ref clearRank2, 1);
 
         button[0].color = Color.white;
         button[1].color = Color.blue;
@@ -77,14 +94,14 @@ public class OptionUIManager : MonoBehaviour
     void SelectNum()
     {
         // Y“ü—Í
-        if (input.PressedMove && IsPanelSelect && bm.SelectDelyTime())
+        if (input.PressedMove && SelectDown)
         {
             num = ua.Addition(num, minNum, maxNum, input.InputMove.y);
             bm.SelectTextMove(button, num, maxNum);
             PanelChenge();
         }
         // ’·‰Ÿ‚µ
-        else if (input.LongPressedMove && IsPanelSelect && bm.SelectDelyTime())
+        else if (input.LongPressedMove && SelectDown)
         {
             num = ua.Addition(num, minNum, maxNum, input.InputMove.y);
             bm.SelectTextMove(button, num, maxNum);
@@ -174,8 +191,9 @@ public class OptionUIManager : MonoBehaviour
             ct2 = clearTime2;
         string cr1 = clearRank1,
             cr2 = clearRank2;
+        bool fs = screenToggle.isOn;
        
-        cd.Save(vm, vb, vs, sn, ct1, ct2, cr1, cr2);
+        cd.Save(vm, vb, vs, sn, ct1, ct2, cr1, cr2, fs);
         Invoke(nameof(Dylay), 0.2f);
         panelCover.color = new Color(.5f, 0, 0, 1);
     }

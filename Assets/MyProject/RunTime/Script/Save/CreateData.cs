@@ -11,12 +11,10 @@ public class CreateData : MonoBehaviour
     const float DefaultMasterVol = 1;
     const float DefaultBGMVol = 0.5f;
     const float DefaultSEVol = 0.5f;
-
     const float DefaultSensitivity = 0.1f;
-
     const float DefaultClearTime = 0;
-
     const string DefaultRank = "";
+    const bool DefultScreenSize = true;
 
     FileStream file;
     BinaryFormatter bf;
@@ -103,7 +101,8 @@ public class CreateData : MonoBehaviour
             data.ClearTime1 = DefaultClearTime; 
             data.ClearTime2 = DefaultClearTime; 
             data.ClearRank1 = DefaultRank; 
-            data.ClearRank2 = DefaultRank; 
+            data.ClearRank2 = DefaultRank;
+            data.FullScreen = DefultScreenSize;
             bf.Serialize(file, data);
         }
         catch (IOException)
@@ -119,7 +118,7 @@ public class CreateData : MonoBehaviour
 
     // データセーブ(一括)
     // ＊データ追加するたび追記
-    public void Save(float vm, float vb, float vs, float sn, float ct1, float ct2, string cr1, string cr2)
+    public void Save(float vm, float vb, float vs, float sn, float ct1, float ct2, string cr1, string cr2, bool fs)
     {
         try
         {
@@ -135,6 +134,7 @@ public class CreateData : MonoBehaviour
             data.ClearTime2 = ct2;
             data.ClearRank1 = cr1;
             data.ClearRank2 = cr2;
+            data.FullScreen = fs;
             bf.Serialize(file, data);
         }
         catch (IOException)
@@ -331,6 +331,29 @@ public class CreateData : MonoBehaviour
         }
     }
 
+    // スクリーンサイズロード
+    public void LoadScreenSize(ref bool screenSize)
+    {
+        try
+        {
+            InitFileLoad();
+
+            // セーブデータ読み込み
+            SaveData data = bf.Deserialize(file) as SaveData;
+            screenSize = data.FullScreen;
+        }
+        catch (IOException)
+        {
+            Debug.LogError("failed to open file");
+        }
+        finally
+        {
+            // FileStreamを使用したら最後にCloseする
+            if (file != null) { CloseFile(); }
+        }
+    }
+
+    // Audio再生時呼び出し
     public void VolSet()
     {
         try

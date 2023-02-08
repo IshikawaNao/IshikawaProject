@@ -17,6 +17,19 @@ public class SystemUIManager : MonoBehaviour
 
     float sen = 0f;
 
+    // ボタンが押せるようになったか
+    bool SelectDown
+    {
+        get 
+        { 
+            if(bm.SelectDelyTime() && !om.IsPanelSelect && om.IsSystemOpen)
+            {
+                return true;
+            }
+            return false;
+        }
+    }
+
     ButtonMove bm;
     UiAddition ua;
     KeyInput input;
@@ -53,15 +66,16 @@ public class SystemUIManager : MonoBehaviour
         ButtonDecision();
     }
 
+    //  セレクトボタン入力処理
     void SystemPanelControll()
     {
-        if(input.PressedMove && bm.SelectDelyTime() && !om.IsPanelSelect && om.IsSystemOpen)
+        if(input.PressedMove && SelectDown)
         {
             systemMenuNum = ua.Addition(systemMenuNum, minNum, maxNum, input.InputMove.y);
             bm.SelectTextMove(button, systemMenuNum, maxNum);
             CameraMoveVol();
         }
-        else if (input.LongPressedMove && bm.SelectDelyTime() && !om.IsPanelSelect && om.IsSystemOpen)
+        else if (input.LongPressedMove && SelectDown)
         {
             systemMenuNum = ua.Addition(systemMenuNum, minNum, maxNum, input.InputMove.y);
             bm.SelectTextMove(button, systemMenuNum, maxNum);

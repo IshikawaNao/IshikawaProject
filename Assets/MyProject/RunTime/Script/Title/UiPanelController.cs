@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class UiPanelController 
 {
-    public void PanelSwitching(TitleManager tm, Animator anim, float num)
+    public void PanelSwitching(Animator anim, float num)
     {
         switch (num)
         {
@@ -14,7 +14,6 @@ public class UiPanelController
                 case 1:
                 anim.SetTrigger("Start");
                 anim.SetInteger("PanelInt", 2);
-                tm.isDelay = false;
                 break;
             case 2:
                 anim.SetTrigger("Start");

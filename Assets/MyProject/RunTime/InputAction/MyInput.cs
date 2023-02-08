@@ -71,6 +71,15 @@ public partial class @MyInput : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""KeyDetection"",
+                    ""type"": ""Button"",
+                    ""id"": ""fe3e44b9-b9c8-4b7b-b71f-4b72f201fc3e"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -225,6 +234,39 @@ public partial class @MyInput : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""SonarKey"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""fbcacda1-9bb9-429e-b662-c4b55ec5f97f"",
+                    ""path"": ""<Keyboard>/anyKey"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""KeyDetection"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3d576cdf-83be-4a5e-8d62-a831389cb6f5"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""KeyDetection"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0c9e5c7d-954c-4643-ab08-35efbf3c7a86"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""KeyDetection"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -411,6 +453,7 @@ public partial class @MyInput : IInputActionCollection2, IDisposable
         m_Player_PushAction = m_Player.FindAction("PushAction", throwIfNotFound: true);
         m_Player_ClimbAction = m_Player.FindAction("ClimbAction", throwIfNotFound: true);
         m_Player_SonarKey = m_Player.FindAction("SonarKey", throwIfNotFound: true);
+        m_Player_KeyDetection = m_Player.FindAction("KeyDetection", throwIfNotFound: true);
         // Camera
         m_Camera = asset.FindActionMap("Camera", throwIfNotFound: true);
         m_Camera_Move = m_Camera.FindAction("Move", throwIfNotFound: true);
@@ -484,6 +527,7 @@ public partial class @MyInput : IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_PushAction;
     private readonly InputAction m_Player_ClimbAction;
     private readonly InputAction m_Player_SonarKey;
+    private readonly InputAction m_Player_KeyDetection;
     public struct PlayerActions
     {
         private @MyInput m_Wrapper;
@@ -493,6 +537,7 @@ public partial class @MyInput : IInputActionCollection2, IDisposable
         public InputAction @PushAction => m_Wrapper.m_Player_PushAction;
         public InputAction @ClimbAction => m_Wrapper.m_Player_ClimbAction;
         public InputAction @SonarKey => m_Wrapper.m_Player_SonarKey;
+        public InputAction @KeyDetection => m_Wrapper.m_Player_KeyDetection;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -517,6 +562,9 @@ public partial class @MyInput : IInputActionCollection2, IDisposable
                 @SonarKey.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSonarKey;
                 @SonarKey.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSonarKey;
                 @SonarKey.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSonarKey;
+                @KeyDetection.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnKeyDetection;
+                @KeyDetection.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnKeyDetection;
+                @KeyDetection.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnKeyDetection;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -536,6 +584,9 @@ public partial class @MyInput : IInputActionCollection2, IDisposable
                 @SonarKey.started += instance.OnSonarKey;
                 @SonarKey.performed += instance.OnSonarKey;
                 @SonarKey.canceled += instance.OnSonarKey;
+                @KeyDetection.started += instance.OnKeyDetection;
+                @KeyDetection.performed += instance.OnKeyDetection;
+                @KeyDetection.canceled += instance.OnKeyDetection;
             }
         }
     }
@@ -637,6 +688,7 @@ public partial class @MyInput : IInputActionCollection2, IDisposable
         void OnPushAction(InputAction.CallbackContext context);
         void OnClimbAction(InputAction.CallbackContext context);
         void OnSonarKey(InputAction.CallbackContext context);
+        void OnKeyDetection(InputAction.CallbackContext context);
     }
     public interface ICameraActions
     {

@@ -9,10 +9,24 @@ public class OptionUIManager : MonoBehaviour
     const int maxNum = 2;
     const int minNum = 0;
 
-    public bool IsPanelSelect { get; set; } = true;
+    public bool IsPanelSelect { get; private set; } = true;
     public bool IsOptionOpen { get; set; } = true;
-    public bool IsAudioOpen { get; set; } = true;
-    public bool IsSystemOpen { get; set; } = true;
+    public bool EndPanel { get; set; } = true;
+    public bool IsAudioOpen { get; private set; } = true;
+    public bool IsSystemOpen { get; private set; } = true;
+
+    // ƒ{ƒ^ƒ“‚ª‰Ÿ‚¹‚é‚æ‚¤‚É‚È‚Á‚½‚©
+    bool SelectDown
+    {
+        get
+        {
+            if (IsPanelSelect && bm.SelectDelyTime())
+            {
+                return true;
+            }
+            return false;
+        }
+    }
 
     float clearTime1 = 0;
     float clearTime2 = 0;
@@ -80,14 +94,14 @@ public class OptionUIManager : MonoBehaviour
     void SelectNum()
     {
         // Y“ü—Í
-        if (input.PressedMove && IsPanelSelect && bm.SelectDelyTime())
+        if (input.PressedMove && SelectDown)
         {
             num = ua.Addition(num, minNum, maxNum, input.InputMove.y);
             bm.SelectTextMove(button, num, maxNum);
             PanelChenge();
         }
         // ’·‰Ÿ‚µ
-        else if (input.LongPressedMove && IsPanelSelect && bm.SelectDelyTime())
+        else if (input.LongPressedMove && SelectDown)
         {
             num = ua.Addition(num, minNum, maxNum, input.InputMove.y);
             bm.SelectTextMove(button, num, maxNum);

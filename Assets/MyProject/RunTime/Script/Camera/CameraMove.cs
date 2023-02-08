@@ -8,10 +8,16 @@ public class CameraMove : MonoBehaviour
     // カメラ位置
     float cmPos = 10;
     const float maxCmPos = 10;
-    const float minCmPos = 3;
+    const float minCmPos = 0;
 
-    // カメラの位置を下げる数
-    const float dis = 0.1f;
+    public float a;
+    public float b;
+    public float c;
+
+    // カメラの位置を下げる速度
+    const float dis = 0.4f;
+    // カメラ背後のRayの長さ
+    const float rayDistance = 0.5f;
 
     const float waiteTime = 1;
     float saveTime;
@@ -39,24 +45,25 @@ public class CameraMove : MonoBehaviour
     {
         // マウスのスクロールを取得 パッド調整
         var scrollvalue = input.Scroll / scrollDivisor;
-
         Avoid(scrollvalue);
         ResetCamera();
         MoveInput();
     }
 
+    // カメラの前後移動
     void Avoid(float scrollvalue)
     {
         var pushCameraPos = Vector3.up;
-        if (colliderHit)
+        print(colliderHit);
+        if (IsBackObject() && colliderHit)
         {
-            
+            cmPos -= dis;
             pushCameraPos.z = Mathf.Clamp(cmPos, minCmPos, maxCmPos);
             this.transform.localPosition = pushCameraPos;
         }
-        else if(!colliderHit)
+        else if(!IsBackObject() && !colliderHit)
         {
-            cmPos += scrollvalue;
+            cmPos = maxCmPos;
             pushCameraPos.z = Mathf.Clamp(cmPos, minCmPos, maxCmPos);
             this.transform.localPosition = pushCameraPos;
         }
@@ -79,18 +86,31 @@ public class CameraMove : MonoBehaviour
         }
     }
 
-    void ResetCamera()
+    public void ResetCamera()
     {
-        if(input.CameraReset)
-        {
-            cmPos = maxCmPos;
-        }
+        cmPos = maxCmPos;
     }
 
-    private void OnCollisionStay(Collision collision)
+    bool IsBackObject()
     {
-        cmPos -= dis;
-        colliderHit = true;
+        Vector3 orgin = this.transform.position;
+        Vector3 direction = Vector3.Scale(this.transform.forward, new Vector3(-1,0,-1) * rayDistance);
+        Ray ray = new Ray(orgin, direction);
+
+        Debug.DrawRay(orgin, direction, Color.red);
+        return !Physics.Raycast(orgin, direction);
+    }
+
+    void OnTriggerStay(Collider other)
+    {
+        if(other.gameObject.name != "Player")
+        {
+             colliderHit = true;
+        }
+        else
+        {
+            colliderHit = false;
+        }
     }
 
     private void OnCollisionExit(Collision collision)

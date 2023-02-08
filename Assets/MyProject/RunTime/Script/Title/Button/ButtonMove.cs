@@ -7,6 +7,7 @@ public class ButtonMove
 {
     const float waitTime = 0.5f;
     const int minNum = 0;
+    const int distanceX = -15;
 
     bool selectDelyTime = true;
     public bool SelectDelyTime() { return selectDelyTime; }
@@ -29,22 +30,23 @@ public class ButtonMove
         }
     }
 
-    public void SelectUIMove(GameObject obj, float moveVal, float input)
+    public void SelectUIMove(GameObject obj, float moveVal, float input, Material[] mat, int num)
     {
         if(selectDelyTime)
         {
-            if (input > 0)
+            if (input < 0)
             {
                 selectDelyTime = false;
-                obj.transform.DOLocalMove(new Vector3(obj.transform.localPosition.x,
-                    Mathf.Clamp(obj.transform.localPosition.y - moveVal, 0, 700), obj.transform.localPosition.z), waitTime).OnComplete(CallbackFunction);
+                obj.transform.DOLocalMove(new Vector3(Mathf.Clamp(obj.transform.localPosition.x - moveVal , 0, distanceX),
+                    obj.transform.localPosition.y , obj.transform.localPosition.z), waitTime).OnComplete(CallbackFunction);
             }
-            else if (input < 0)
+            else if (input > 0)
             {
                 selectDelyTime = false;
-                obj.transform.DOLocalMove(new Vector3(obj.transform.localPosition.x,
-                    Mathf.Clamp(obj.transform.localPosition.y + moveVal, 0, 700), obj.transform.localPosition.z), waitTime).OnComplete(CallbackFunction);
+                obj.transform.DOLocalMove(new Vector3(Mathf.Clamp(obj.transform.localPosition.x + moveVal, 0, distanceX),
+                   obj.transform.localPosition.y, obj.transform.localPosition.z), waitTime).OnComplete(CallbackFunction);
             }
+            mat[num].SetFloat("_Boolean", 1);
         }
     }
 

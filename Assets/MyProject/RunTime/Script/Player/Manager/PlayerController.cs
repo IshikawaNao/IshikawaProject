@@ -96,7 +96,7 @@ public class PlayerController : MonoBehaviour
     // オブジェクトを動かす
     void ObjectMove()
     {
-        if (iObject.Push(this.gameObject) && gl.IsGround())
+        if (iObject.Push(this.gameObject) && gl.IsGround() && !isClimb)
         {
             if (input.PushAction)
             {
@@ -118,7 +118,7 @@ public class PlayerController : MonoBehaviour
     // オブジェクトを登る
     void ObjectClimb()
     {
-        if (iClimb.Climb(this.gameObject))
+        if (iClimb.Climb(this.gameObject) && !isPush)
         {
             if (input.ClimbAction && gl.IsGround())
             {

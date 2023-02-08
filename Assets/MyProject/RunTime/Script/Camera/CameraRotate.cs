@@ -11,6 +11,9 @@ public class CameraRotate : MonoBehaviour
     [SerializeField]
     GameObject player;
 
+    CameraMove cm;
+    PlayerController pc;
+
     KeyInput input;
     CreateData data;
     Vector3 target = new Vector3(0,1,0);
@@ -22,21 +25,30 @@ public class CameraRotate : MonoBehaviour
     // ÉJÉÅÉâäpìx
     const float verticalMaxValue = 10f;
     const float verticalMinValue = -40f;
-    const float RestVerticalValue = -15f;
+    const float RestVerticalValue = -25f;
 
     void Start()
     {
         mainCM.transform.localPosition = new Vector3(0, 1, 10);
+        cm = mainCM.GetComponent<CameraMove>();
         input = KeyInput.Instance;
         data = CreateData.Instance;
+        pc = player.GetComponent<PlayerController>();
         data.LoadSensitivity(ref sensitivity);
     }
 
     void Update()
     {
         this.transform.position = player.transform.position;
-        Pcm();
+        SwitchingCP();
         ResetCamera();
+    }
+
+
+    void SwitchingCP()
+    {
+        if(pc.Push) { GimmickCP(); }
+        else {  Pcm(); }
     }
 
     void Pcm()
@@ -57,8 +69,17 @@ public class CameraRotate : MonoBehaviour
     {
         if (input.CameraReset)
         {
-            verticalValue = RestVerticalValue;
-            this.transform.localRotation = Quaternion.LookRotation(-player.transform.forward);
+            GimmickCP();
         }
+    }
+
+
+    void GimmickCP()
+    {
+        Vector3 rot = new Vector3 (-player.transform.forward.x, -player.transform.forward.y, -player.transform.forward.z);
+        print(rot.x);
+        verticalValue = rot.x;
+        this.transform.localRotation = Quaternion.LookRotation( rot);
+        cm.ResetCamera();
     }
 }

@@ -11,9 +11,18 @@ public class TitleManager : MonoBehaviour
 
     const int fadeTime = 1;
 
-    // 選択ディレイのためのフラグ
-    public bool isDelay { get; set; }
-    public bool EndPanel { get; set; } = true;
+    // ボタンが押せるようになったか
+    bool SelectDown
+    {
+        get
+        {
+            if ((optionUIManager.IsOptionOpen || optionUIManager.EndPanel))
+            {
+                return true;
+            }
+            return false;
+        }
+    }
 
     KeyInput input;
 
@@ -72,12 +81,12 @@ public class TitleManager : MonoBehaviour
     // 選択数字
     void SelectNum()
     {
-        if(input.PressedMove && (optionUIManager.IsOptionOpen || EndPanel) && bm.SelectDelyTime())
+        if(input.PressedMove && SelectDown && bm.SelectDelyTime())
         {
             num = ua.Addition(num, minNum, maxNum, input.InputMove.y);
             bm.SelectTextMove(button, num, maxNum);
         }
-        else if(input.LongPressedMove && (optionUIManager.IsOptionOpen || EndPanel) && bm.SelectDelyTime())
+        else if(input.LongPressedMove && SelectDown && bm.SelectDelyTime())
         {
             num = ua.Addition(num, minNum, maxNum, input.InputMove.y);
             bm.SelectTextMove(button, num, maxNum);
@@ -87,12 +96,11 @@ public class TitleManager : MonoBehaviour
     // 決定
     void DecisionButton()
     {
-        if(input.DecisionInput && (optionUIManager.IsOptionOpen || EndPanel) && 
-            !anim.GetCurrentAnimatorStateInfo(0).IsTag("Panel"))
+        if(input.DecisionInput && SelectDown && !anim.GetCurrentAnimatorStateInfo(0).IsTag("Panel"))
         {
-            uiPanelController.PanelSwitching(this, anim, num);
+            uiPanelController.PanelSwitching(anim, num);
             optionUIManager.IsOptionOpen = false;
-            EndPanel = false;
+            optionUIManager.EndPanel = false;
             SoundManager.Instance.PlayOneShotSe("decision");
             anim.SetBool("PanelEnd", false);
         }

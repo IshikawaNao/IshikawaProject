@@ -6,10 +6,15 @@ public class ScreenSizeSet : MonoBehaviour
     [SerializeField]
     Toggle toggle;
 
-    int width = 1280;
-    int height = 720;
+    // ウィンドウサイズ
+    const int windowWidth = 1280;
+    const int windowHeight = 720;
+    const int fullWidth = 1920;
+    const int fullHeight = 1080;
 
+    // スクリーンサイズを切り替える
     bool isFullScreen;
+
     void Start()
     {
         CreateData.Instance.LoadScreenSize(ref isFullScreen);
@@ -22,16 +27,16 @@ public class ScreenSizeSet : MonoBehaviour
         SetScreenMode(toggle.isOn);
     }
 
-
+    // スクリーンサイズ切り替え
     void SetScreenMode(bool fullScreen)
     {
         if(!fullScreen)
         {
-            Screen.SetResolution(width, height, fullScreen);
+            Screen.SetResolution(windowWidth, windowHeight, fullScreen);
         }
         else
         {
-            Screen.SetResolution(1920, 1080, fullScreen);
+            Screen.SetResolution(fullWidth, fullHeight, fullScreen);
         }
         
     }

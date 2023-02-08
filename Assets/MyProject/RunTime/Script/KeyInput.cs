@@ -45,16 +45,18 @@ public class KeyInput : MonoBehaviour
     public bool CameraReset { get { return myInput.Camera.CameraReset.WasPerformedThisFrame(); } }
     // スクロール入力
     public float Scroll { get { return myInput.Camera.Scroll.ReadValue<Vector2>().y; } }
-    // PAD入力
-    public bool PadCurrent 
-    { 
-        get 
-        {
-            if (Gamepad.current == null) { return false; }
-            return true;
-        } 
+    // 入力された
+    public bool Inputdetection{ get { return Pressed();} }
+    bool pressed = true;
+    bool Pressed()
+    {
+        if (myInput.Player.KeyDetection.IsPressed()) { pressed = true; }
+        else if (Gamepad.current != null)
+        { 
+            if(Gamepad.current.IsPressed()){ pressed = false; }
+        }
+        return pressed;
     }
-
     #region　InputAction
     MyInput myInput;
     void Awake()

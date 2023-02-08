@@ -130,20 +130,20 @@ public class StageManager : MonoBehaviour
 
     void SwithingOperation()
     {
-        if(input.PadCurrent)
+        if(input.Inputdetection)
         {
             for(int i = minOperationNum; i <= maxOperationNum; i++)
             {
-                keyOperation[i].SetActive(false);
-                padOperation[i].SetActive(true);
+                keyOperation[i].SetActive(true);
+                padOperation[i].SetActive(false);
             }
         }
-        else if(!input.PadCurrent)
+        else if(!input.Inputdetection)
         {
             for (int i = minOperationNum; i <= maxOperationNum; i++)
             {
-                keyOperation[i].SetActive(true);
-                padOperation[i].SetActive(false);
+                keyOperation[i].SetActive(false);
+                padOperation[i].SetActive(true);
             }
         }
     }

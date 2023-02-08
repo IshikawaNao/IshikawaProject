@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.027709289, g: 0.01666606, b: 0.01867289, a: 1}
+  m_IndirectSpecularColor: {r: 0.021688558, g: 0.0127003845, b: 0.013933628, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -3336,6 +3336,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mainCM: {fileID: 0}
   player: {fileID: 0}
+  RestVerticalValue: -25
 --- !u!114 &469325631
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5056,6 +5057,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mainCM: {fileID: 2056765399}
   player: {fileID: 405864896}
+  RestVerticalValue: -25
 --- !u!4 &1295460318
 Transform:
   m_ObjectHideFlags: 0
@@ -5089,7 +5091,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1296512706
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7127,6 +7129,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b762d25b125c5f44a2edf03a56c2ff2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  a: 0
+  b: 0
+  c: 0
 --- !u!135 &2056765408
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -7135,7 +7140,7 @@ SphereCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2056765399}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 1
@@ -7462,7 +7467,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2128441842
 RectTransform:
   m_ObjectHideFlags: 0

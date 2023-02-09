@@ -8,14 +8,10 @@ public class CameraMove : MonoBehaviour
     // カメラ位置
     float cmPos = 10;
     const float maxCmPos = 10;
-    const float minCmPos = 0;
-
-    public float a;
-    public float b;
-    public float c;
+    const float minCmPos = 2;
 
     // カメラの位置を下げる速度
-    const float dis = 0.4f;
+    const float dis = 1f;
     // カメラ背後のRayの長さ
     const float rayDistance = 0.5f;
 
@@ -26,10 +22,17 @@ public class CameraMove : MonoBehaviour
     const float radius = 5;
     const float maxDistance = 6;
 
+    float setAlpha = 0;
+    const float maxAlpha = 1;
+    const float minAlpha = 0.25f;
+
     // スクロールの除数
     const float scrollDivisor = -600;
 
     bool colliderHit = false;
+
+    [SerializeField]
+    Material mat;
 
     private void Start()
     {
@@ -46,8 +49,8 @@ public class CameraMove : MonoBehaviour
         // マウスのスクロールを取得 パッド調整
         var scrollvalue = input.Scroll / scrollDivisor;
         Avoid(scrollvalue);
-        ResetCamera();
         MoveInput();
+        SetPlayerAlpha();
     }
 
     // カメラの前後移動
@@ -58,16 +61,13 @@ public class CameraMove : MonoBehaviour
         if (IsBackObject() && colliderHit)
         {
             cmPos -= dis;
-            pushCameraPos.z = Mathf.Clamp(cmPos, minCmPos, maxCmPos);
-            this.transform.localPosition = pushCameraPos;
         }
         else if(!IsBackObject() && !colliderHit)
         {
-            cmPos = maxCmPos;
-            pushCameraPos.z = Mathf.Clamp(cmPos, minCmPos, maxCmPos);
-            this.transform.localPosition = pushCameraPos;
+            cmPos = maxCmPos;  
         }
-
+        pushCameraPos.z = Mathf.Clamp(cmPos, minCmPos, maxCmPos);
+        this.transform.localPosition = pushCameraPos;
     }
 
     void MoveInput()
@@ -101,19 +101,27 @@ public class CameraMove : MonoBehaviour
         return !Physics.Raycast(orgin, direction);
     }
 
+    void SetPlayerAlpha()
+    {
+        if(cmPos < 4) { setAlpha = minAlpha; }
+        else { setAlpha = maxAlpha; }
+        mat.SetFloat("_Alpha", setAlpha);
+
+    }
+
     void OnTriggerStay(Collider other)
     {
-        if(other.gameObject.name != "Player")
+        if(other.gameObject.name == "Player")
         {
-             colliderHit = true;
+             colliderHit = false;
         }
         else
         {
-            colliderHit = false;
+            colliderHit = true;
         }
     }
 
-    private void OnCollisionExit(Collision collision)
+    private void OnTriggerExit(Collider other)
     {
         colliderHit = false;
     }

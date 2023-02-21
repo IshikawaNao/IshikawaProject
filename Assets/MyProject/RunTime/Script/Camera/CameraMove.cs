@@ -57,7 +57,6 @@ public class CameraMove : MonoBehaviour
     void Avoid(float scrollvalue)
     {
         var pushCameraPos = Vector3.up;
-        print(colliderHit);
         if (IsBackObject() && colliderHit)
         {
             cmPos -= dis;

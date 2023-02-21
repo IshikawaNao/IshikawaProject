@@ -77,7 +77,6 @@ public class CameraRotate : MonoBehaviour
     void GimmickCP()
     {
         Vector3 rot = new Vector3 (-player.transform.forward.x, -player.transform.forward.y, -player.transform.forward.z);
-        print(rot.x);
         verticalValue = rot.x;
         this.transform.localRotation = Quaternion.LookRotation( rot);
         cm.ResetCamera();

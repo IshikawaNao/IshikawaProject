@@ -23,18 +23,6 @@ public class HouseRoom : MonoBehaviour
         input = KeyInput.Instance;
     }
 
-    private void Update()
-    {
-        if(!placed && input.SonarAction)
-        {
-            mat[0].SetFloat("_Boolean", sonarOn);
-        }
-        else
-        {
-            mat[0].SetFloat("_Boolean", sonarOff);
-        }
-    }
-
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag == "Move")

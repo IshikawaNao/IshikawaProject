@@ -40,8 +40,8 @@ public class PauseManager : MonoBehaviour
         optionPanel.SetActive(false);
         input = KeyInput.Instance;
         selectButton[0].color = Color.white;
-        selectButton[1].color = Color.clear;
-        selectButton[2].color = Color.clear;
+        selectButton[1].color = Color.blue;
+        selectButton[2].color = Color.blue;
     }
 
 
@@ -57,7 +57,12 @@ public class PauseManager : MonoBehaviour
         if (pausePanel.activeSelf == true)
         {
             // key入力orLスティック操作時
-            if (input.LongPressedMove && bm.SelectDelyTime() && om.IsOptionOpen)
+            if(input.PressedMove && bm.SelectDelyTime() && om.IsOptionOpen)
+            {
+                num = ua.Addition(num, minNum, maxNum, input.InputMove.y);
+                bm.SelectTextMove(selectButton, num, maxNum);
+            }
+            else if (input.LongPressedMove && bm.SelectDelyTime() && om.IsOptionOpen)
             {
                 num = ua.Addition(num,minNum,maxNum,input.InputMove.y);
                 bm.SelectTextMove(selectButton,num, maxNum);

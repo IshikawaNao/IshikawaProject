@@ -8,6 +8,7 @@ public class ButtonMove
     const float waitTime = 0.5f;
     const int minNum = 0;
     const int distanceX = -15;
+    const float strength = .5f;
 
     bool selectDelyTime = true;
     public bool SelectDelyTime() { return selectDelyTime; }
@@ -23,6 +24,7 @@ public class ButtonMove
             SoundManager.Instance.PlayOneShotSe("select");
             selectDelyTime = false;
 
+            img[num].transform.DOShakeScale(waitTime, strength);
             img[num].DOColor(Color.white, waitTime).OnComplete(() =>
             {
                 selectDelyTime = true;

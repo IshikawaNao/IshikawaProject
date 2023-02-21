@@ -11,15 +11,34 @@ public class PlayerController : MonoBehaviour
 
     bool isClimb = false;       // オブジェクトを登るフラグ
 
-    public bool IsMove { get; set; } = true;         // プレイヤーの移動のフラグ
+    bool isMove = true;         // プレイヤーの移動のフラグ
 
     bool isJump = false;
+
+    bool isMoveAction()
+    {
+        if(isMove && !sm.Goal && !sonar.IsOnSonar)
+        {
+            return true;
+        }
+        rb.velocity = Vector3.zero;
+        anim.SetBool("IsIdle",true);
+        anim.SetBool("IsWalk",false);
+        anim.SetBool("IsRan",false);
+        return false;
+    }
 
     [SerializeField]
     GameObject Pause;       // ポーズ画面
 
     [SerializeField]
-    OperationExplanationMove operation;
+    OperationExplanationMove operation;　//オプション
+
+    [SerializeField]
+    StageManager sm;
+
+    [SerializeField]
+    SonarEffect sonar;       // ソナーエフェクト
 
     SwitchingMove switchMove;// 移動の切り替え
     Rigidbody rb;           // rigidbody
@@ -35,10 +54,10 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
+        input = KeyInput.Instance;
         rb = GetComponent<Rigidbody>();
         col = GetComponent<CapsuleCollider>();
         gl = GetComponent<GroundRay>();
-        input = KeyInput.Instance;
         anim = GetComponent<Animator>();
 
         switchMove = new SwitchingMove();
@@ -46,26 +65,38 @@ public class PlayerController : MonoBehaviour
         iClimb = new PlayerClimb();
         iFly = new PlayerFly();
 
-        IsMove = true;
+        isMove = true;
     }
 
     void Update()
     {
-        ObjectMove();
-        ObjectClimb();
-        OperationOpen();
-        Fly();
+        limitationOfAction();
         PauseOpen();
-        Jump();
     }
 
     private void FixedUpdate()
     {
-        switchMove.SwitchMove(this.gameObject,rb, input.InputMove, anim, isPush, isClimb , gl.IsGround(), IsMove);
-
-        if (isPush)
+        if(isMoveAction())
         {
-            iObject.Move(iObject.Box_rb(), input.InputMove, this.gameObject, anim);
+            switchMove.SwitchMove(this.gameObject, rb, input.InputMove, anim, isPush, isClimb, gl.IsGround(), isMove);
+
+            if (isPush)
+            {
+                iObject.Move(iObject.Box_rb(), input.InputMove, this.gameObject, anim);
+            }
+        }
+    }
+
+    void limitationOfAction()
+    {
+        if (isMoveAction())
+        {
+            ObjectMove();
+            ObjectClimb();
+            OperationOpen();
+            Fly();
+            Jump();
+            Sonar();
         }
     }
 
@@ -123,7 +154,7 @@ public class PlayerController : MonoBehaviour
             if (input.ClimbAction && gl.IsGround())
             {
                 isClimb = true;
-                IsMove = false;
+                isMove = false;
             }
             if (isClimb)
             {
@@ -138,7 +169,7 @@ public class PlayerController : MonoBehaviour
             }
             isClimb = false;
             anim.SetBool("IsClimb", false);
-            IsMove = true;
+            isMove = true;
         }
     }
 
@@ -151,9 +182,20 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    // 修正
     void PauseOpen()
     {
-        if (Pause.activeSelf){ IsMove = false;}
-        else { IsMove = true; }
+        if (Pause.activeSelf){ isMove = false;}
+        else { isMove = true; }
+    }
+
+    // ソナー
+    void Sonar()
+    {
+        if(input.SonarAction　&& gl.IsGround())
+        {
+            sonar.Sonar();
+            sonar.SonarWaveGeneration(this.transform.position);
+        }
     }
 }

@@ -36,7 +36,7 @@ public class KeyInput : MonoBehaviour
     // アクションボタン入力
     public bool ClimbAction { get { return myInput.Player.ClimbAction.triggered; } }
     // ソナーギミックボタン入力
-    public bool SonarAction { get { return myInput.Player.SonarKey.IsPressed(); } }
+    public bool SonarAction { get { return myInput.Player.SonarKey.WasPressedThisFrame(); } }
     // 決定ボタン入力
     public bool DecisionInput { get { return myInput.UI.Decision.WasPressedThisFrame(); } }
     // Escキー入力

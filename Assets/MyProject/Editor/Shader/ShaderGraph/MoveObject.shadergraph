@@ -433,10 +433,10 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": -1419.0,
-            "y": -334.9999694824219,
-            "width": 101.0,
-            "height": 34.000030517578128
+            "x": -1400.800048828125,
+            "y": -209.60003662109376,
+            "width": 101.60009765625,
+            "height": 33.600006103515628
         }
     },
     "m_Slots": [
@@ -1116,7 +1116,7 @@
     "m_Type": "UnityEditor.ShaderGraph.Vector1MaterialSlot",
     "m_ObjectId": "4673e94afa444ee6bbdbfcb260134d31",
     "m_Id": 0,
-    "m_DisplayName": "Float",
+    "m_DisplayName": "intensity",
     "m_SlotType": 1,
     "m_Hidden": false,
     "m_ShaderOutputName": "Out",
@@ -2179,10 +2179,10 @@
     "m_Guid": {
         "m_GuidSerialized": "c1461b04-66fb-4db7-8be1-c54ef721d8dc"
     },
-    "m_Name": "Float",
+    "m_Name": "intensity",
     "m_DefaultRefNameVersion": 1,
-    "m_RefNameGeneratedByDisplayName": "Float",
-    "m_DefaultReferenceName": "_Float",
+    "m_RefNameGeneratedByDisplayName": "intensity",
+    "m_DefaultReferenceName": "_intensity",
     "m_OverrideReferenceName": "",
     "m_GeneratePropertyBlock": true,
     "m_UseCustomSlotLabel": false,

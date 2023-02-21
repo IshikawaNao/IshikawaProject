@@ -42,6 +42,8 @@ public class FadeManager : MonoBehaviour
 	/// <summary>フェード色</summary>
 	public Color fadeColor = Color.black;
 
+   // [Serializable]
+	
 
 	public void Awake ()
 	{

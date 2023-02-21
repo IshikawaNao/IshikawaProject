@@ -5,8 +5,6 @@ public class PlayerAirMobile : IPlayerMover
     float speed = 7;
     float force = 7;
 
-    bool isJump;
-
     Rigidbody rb;
     GameObject player;
 

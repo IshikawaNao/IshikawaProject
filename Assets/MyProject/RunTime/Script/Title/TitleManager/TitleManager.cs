@@ -16,7 +16,7 @@ public class TitleManager : MonoBehaviour
     {
         get
         {
-            if ((optionUIManager.IsOptionOpen || optionUIManager.EndPanel))
+            if (optionUIManager.IsOptionOpen || optionUIManager.EndPanel)
             {
                 return true;
             }

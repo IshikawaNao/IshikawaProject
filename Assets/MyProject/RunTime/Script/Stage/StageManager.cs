@@ -12,31 +12,14 @@ using TMPro;
 public class StageManager : MonoBehaviour
 {
     // ゴールフラグ
+    bool isGoal = true;
     public bool Goal { get; set; } = false;
-
-    float intensityVal = 0;
-
-    float gammmaValue = 0;
 
     float tm = 0;
     float timer;
 
     float loadTime;
     string loadrank;
-
-    Vector4 gammmaVal = Vector4.one;
-
-    const float maxGammma = 0;
-    const float minGammma = -0.4f;
-
-    const float waiteTime = 0.02f;
-
-    // 加数
-    const float gammmaAddend = 0.1f;
-    const float intensityAddend = 0.25f;
-
-    bool gammaDown = true;
-    bool gammaUp = true;
 
     const float soundFadeTime = 1f;
 
@@ -46,15 +29,11 @@ public class StageManager : MonoBehaviour
     int stageNum;
 
     bool operation;
-    bool isGoal = true;
 
     string rank = "";
 
     [SerializeField, Header("player")]
     PlayerController player;
-
-    [SerializeField,Header("Volume")]
-    Volume postVol;
 
     [SerializeField, Header("OptionPanel")] 
     VolumeConfigUI volumeConfigUI;
@@ -72,9 +51,6 @@ public class StageManager : MonoBehaviour
     TextMeshProUGUI  TaimeText;
 
     StageNumberSelect sn;
-
-    LiftGammaGain liftGammaGain;
-    ChromaticAberration chromaticAberration;
 
     private void Awake()
     {
@@ -112,9 +88,6 @@ public class StageManager : MonoBehaviour
 
         cd.VolSet();
 
-        postVol.profile.TryGet(out liftGammaGain);
-        postVol.profile.TryGet(out chromaticAberration);
-
         timer = Time.time;
 
         SoundManager.Instance.PlayBGMWithFadeIn("Main", soundFadeTime);
@@ -123,7 +96,6 @@ public class StageManager : MonoBehaviour
     void Update()
     {
         Cliar();
-        SonarEffect();
         SwithingOperation();
         TimeMeasurement();
     }
@@ -159,51 +131,10 @@ public class StageManager : MonoBehaviour
         if(Goal && isGoal)
         {
             isGoal = false;
-            player.IsMove = false;
             ClearRank();
             cd.SaveClearData(Mathf.Floor(tm), rank, stageNum);
             FadeManager.Instance.LoadScene("Result", 1.5f);
         }
-    }
-
-    void SonarEffect()
-    {
-        if(input.SonarAction && gammaDown)
-        {
-            gammaDown = false;
-            StartCoroutine(GammaDown());
-
-        }
-        else if(gammmaValue < maxGammma && gammaUp && !input.SonarAction)
-        {
-            gammaUp = false;
-            StartCoroutine(GammaUp());
-        }
-
-        //gammma値とintensityを変更
-        gammmaVal.w = gammmaValue;
-        liftGammaGain.gamma.value = gammmaVal;
-        chromaticAberration.intensity.value = intensityVal;
-    }
-
-    IEnumerator GammaDown()
-    {
-        if (gammmaValue >= minGammma)
-        {
-            yield return new WaitForSeconds(waiteTime);
-            gammmaValue -= gammmaAddend;
-            intensityVal += intensityAddend;
-            gammaDown = true;
-            gammaUp = true;
-        }
-    }
-    IEnumerator GammaUp()
-    {
-        yield return new WaitForSeconds(waiteTime);
-        gammmaValue += gammmaAddend;
-        intensityVal -= intensityAddend;
-        gammaUp = true;
-        gammaDown = true;
     }
 
     void ClearRank()

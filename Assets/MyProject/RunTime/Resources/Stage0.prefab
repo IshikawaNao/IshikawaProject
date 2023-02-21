@@ -8535,7 +8535,6 @@ GameObject:
   - component: {fileID: 1984446531271066765}
   - component: {fileID: 1984446531271066802}
   - component: {fileID: 1984446531271066803}
-  - component: {fileID: 1984446531271066766}
   - component: {fileID: 1984446531271066761}
   - component: {fileID: 1984446531271066760}
   m_Layer: 6
@@ -8854,20 +8853,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1984446531271066801}
   m_Mesh: {fileID: 0}
---- !u!114 &1984446531271066766
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1984446531271066801}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7f10b39f6ce2b6b4f96cd27b773f6000, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rend: {fileID: 1984446531271066802}
-  mate: {fileID: 2100000, guid: c6c522037751a5d4594f993be951903a, type: 2}
 --- !u!54 &1984446531271066761
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -13509,7 +13494,7 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1984446531666667695}
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
@@ -16833,7 +16818,7 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1984446531975770404}
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
@@ -26242,7 +26227,6 @@ GameObject:
   - component: {fileID: 5606033250220693473}
   - component: {fileID: 5606033250220693474}
   - component: {fileID: 5606033250220693475}
-  - component: {fileID: 5606033250220693476}
   - component: {fileID: 5606033250220693477}
   - component: {fileID: 5606033250220693478}
   m_Layer: 6
@@ -26561,20 +26545,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5606033250220693496}
   m_Mesh: {fileID: 0}
---- !u!114 &5606033250220693476
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5606033250220693496}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7f10b39f6ce2b6b4f96cd27b773f6000, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rend: {fileID: 5606033250220693474}
-  mate: {fileID: 2100000, guid: c6c522037751a5d4594f993be951903a, type: 2}
 --- !u!54 &5606033250220693477
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -26757,7 +26727,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: Floor_1A (4)
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 5449440036861040432, guid: df0b6a7566f43fd49807e9effc3865f8, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: df0b6a7566f43fd49807e9effc3865f8, type: 3}
 --- !u!4 &4692440002469421849 stripped
 Transform:

@@ -18,6 +18,8 @@ public class ResultManager : MonoBehaviour
     private void Awake()
     {
         cd = CreateData.Instance;
+        sn = StageNumberSelect.Instance;
+
         cd.LoadClearData(ref clearTime, ref rank, sn.StageNumber);
         GameObject obj = (GameObject)Resources.Load("ResultStage");
         Instantiate(obj, Vector3.zero, Quaternion.identity);
@@ -25,7 +27,6 @@ public class ResultManager : MonoBehaviour
 
     void Start()
     {
-        sn = StageNumberSelect.Instance;
         input = KeyInput.Instance;
         cd.VolSet();
     }

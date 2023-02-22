@@ -1,8 +1,5 @@
-using System.Collections;
 using UnityEngine;
-using UnityEngine.SceneManagement;
-using UnityEngine.Rendering;
-using UnityEngine.Rendering.Universal;
+using DG.Tweening;
 using SoundSystem;
 using TMPro;
 
@@ -18,8 +15,8 @@ public class StageManager : MonoBehaviour
     float tm = 0;
     float timer;
 
-    float loadTime;
-    string loadrank;
+    bool isStart = true;
+    public bool IsStart { get { return isStart; } }
 
     const float soundFadeTime = 1f;
 
@@ -27,8 +24,6 @@ public class StageManager : MonoBehaviour
     const int maxOperationNum = 3;
 
     int stageNum;
-
-    bool operation;
 
     string rank = "";
 
@@ -71,7 +66,7 @@ public class StageManager : MonoBehaviour
 
 
     void Start()
-    {
+    {     
         input = KeyInput.Instance;
         cd = CreateData.Instance;
 
@@ -87,9 +82,9 @@ public class StageManager : MonoBehaviour
         volumeConfigUI.SetSeSliderEvent(vol => SoundManager.Instance.SEVolume = vol);
 
         cd.VolSet();
-
-        timer = Time.time;
-
+        timer = 0;
+        TaimeText.text = Mathf.Floor(timer).ToString();
+        StartTime();
         SoundManager.Instance.PlayBGMWithFadeIn("Main", soundFadeTime);
     }
 
@@ -122,8 +117,11 @@ public class StageManager : MonoBehaviour
     
     void TimeMeasurement()
     {
-        tm = Time.time - timer;
-        TaimeText.text = Mathf.Floor(tm).ToString();
+        if(!IsStart)
+        {
+            tm = Time.time - timer;
+            TaimeText.text = Mathf.Floor(tm).ToString();
+        }
     }
 
     void Cliar()
@@ -143,5 +141,10 @@ public class StageManager : MonoBehaviour
         else if(tm <= 50) { rank = "A"; }
         else if(tm <= 180) { rank = "B"; }
         else { rank = "C"; }
+    }
+
+    void StartTime()
+    {
+        DOVirtual.DelayedCall(6, () => { isStart = false; timer = Time.time; });
     }
 }

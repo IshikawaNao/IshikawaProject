@@ -51,10 +51,7 @@ public class KeyInput : MonoBehaviour
     bool Pressed()
     {
         if (myInput.Player.KeyDetection.IsPressed()) { pressed = true; }
-        else if (Gamepad.current != null)
-        { 
-            if(Gamepad.current.IsPressed()){ pressed = false; }
-        }
+        else if (Gamepad.current != null && Gamepad.current.IsPressed()) { pressed = false;  }
         return pressed;
     }
     #region@InputAction

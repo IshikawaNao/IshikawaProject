@@ -11,12 +11,14 @@ public class CameraRotate : MonoBehaviour
     [SerializeField]
     GameObject player;
 
+    [SerializeField]
+    StageManager sm;
+
     CameraMove cm;
     PlayerController pc;
 
     KeyInput input;
     CreateData data;
-    Vector3 target = new Vector3(0,1,0);
 
     float sensitivity = 0.1f;
 
@@ -25,7 +27,7 @@ public class CameraRotate : MonoBehaviour
     // ÉJÉÅÉâäpìx
     const float verticalMaxValue = 10f;
     const float verticalMinValue = -40f;
-    const float RestVerticalValue = -25f;
+
 
     void Start()
     {
@@ -47,7 +49,7 @@ public class CameraRotate : MonoBehaviour
 
     void SwitchingCP()
     {
-        if(pc.Push) { GimmickCP(); }
+        if(pc.Push || sm.IsStart) { GimmickCP(); }
         else {  Pcm(); }
     }
 

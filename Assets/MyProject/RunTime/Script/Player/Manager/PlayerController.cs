@@ -17,7 +17,7 @@ public class PlayerController : MonoBehaviour
 
     bool isMoveAction()
     {
-        if(isMove && !sm.Goal && !sonar.IsOnSonar)
+        if(isMove && !sm.Goal && !sm.IsStart && !sonar.IsOnSonar )
         {
             return true;
         }

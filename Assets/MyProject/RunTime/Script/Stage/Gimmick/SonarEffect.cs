@@ -43,6 +43,7 @@ public class SonarEffect : MonoBehaviour
 
     public void Sonar()
     {
+        // gammmaの加算減算
         DOTween.To
         (
             () => gammmaValue,
@@ -56,21 +57,27 @@ public class SonarEffect : MonoBehaviour
             //gammma値とintensityを変更
             gammmaVal.w = gammmaValue;
             liftGammaGain.gamma.value = gammmaVal;
-            chromaticAberration.intensity.value = intensityVal;
-            sonarTime = Time.time;
-            mat.SetFloat("_SonarTime", sonarTime);
+            chromaticAberration.intensity.value = intensityVal;            
         })
         .OnStart(() =>{ isOnSonar = true;})
-        .OnComplete(() =>{ 
-            isOnSonar = false; 
-            Destroy(sonarObj);
-            sonarTime = 0;
-            mat.SetFloat("_SonarTime", 0);
-        });
-        
-        // オブジェクトのソナー切り替え
-        //sonarObject.ObjectEffect(isOnSonar);
-        sonarObject.SonarIntensity();
+        .OnComplete(() =>{ isOnSonar = false;  });
+
+        // ソナーウェーブの発生時間と半径の加算
+        DOTween.To(
+            () => sonarTime,
+            (x) => sonarTime = x,
+            1,
+            1.5f
+           ).OnUpdate(() => { mat.SetFloat("_SonarTime", sonarTime); })
+           .OnComplete(() =>
+           {
+               sonarTime = 0;
+               mat.SetFloat("_SonarTime", sonarTime);
+               Destroy(sonarObj);
+           });
+
+           // オブジェクトのソナー切り替え
+           sonarObject.SonarIntensity();
     }
 
     public void SonarWaveGeneration(Vector3 pos)

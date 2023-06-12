@@ -10,8 +10,6 @@ public class PauseManager : MonoBehaviour
     const int maxNum = 2;
     const int minNum = 0;
 
-    const int inputZero = 0;
-
     [SerializeField]
     GameObject pausePanel;
 
@@ -26,6 +24,8 @@ public class PauseManager : MonoBehaviour
 
     [SerializeField]
     OptionUIManager om;
+    [SerializeField]
+    TutorialStageDisplay tutorial;
 
     ButtonMove bm;
     UiAddition ua;
@@ -89,7 +89,7 @@ public class PauseManager : MonoBehaviour
         }
         else
         {
-            if (input.EscInput)
+            if (input.EscInput && !tutorial.IsTutoria)
             {
                 pausePanel.SetActive(true);
             }

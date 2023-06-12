@@ -5,16 +5,21 @@ using UnityEngine;
 public class PlayerFly : IFly
 {
     RaycastHit hit;
-
+    // ジャンプする力
+    private const float jumpPower = 20;
+    /// <summary>
+    /// 
+    /// </summary>
     public void Fly(Rigidbody _rb, bool isFly, Animator anim)
     {
         if(isFly)
         {
-            //anim.SetBool("IsJump", true);
-            _rb.AddForce(0, 20, 0,ForceMode.Impulse);
+            _rb.AddForce(0, jumpPower, 0,ForceMode.Impulse);
         }
     }
-
+    /// <summary>
+    /// ジャンプ出来るか
+    /// </summary>
     public bool FlyFrag(GameObject _plyer)
     {
         Vector3 rayPosition = _plyer.transform.position;

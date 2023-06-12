@@ -9,8 +9,12 @@ public class ResultManager : MonoBehaviour
 
     [SerializeField]
     TextMeshProUGUI crearTimeText;
+    [SerializeField]
+    TextMeshProUGUI crearRankText;
 
     CreateData cd;
+    [SerializeField]
+    ClearRankData clearRankData;
 
     KeyInput input;
     StageNumberSelect sn;
@@ -29,6 +33,7 @@ public class ResultManager : MonoBehaviour
     {
         input = KeyInput.Instance;
         cd.VolSet();
+        crearRankText.text = clearRankData.Ranks[sn.StageNumber].ClearRank(clearTime);
     }
 
     void Update()

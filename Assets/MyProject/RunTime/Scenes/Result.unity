@@ -1135,6 +1135,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   crearTimeText: {fileID: 2123054874}
+  crearRankText: {fileID: 1510991840}
+  clearRankData: {fileID: 11400000, guid: fb46da31a4adcd1408ca1937592a9688, type: 2}
 --- !u!4 &1616113405
 Transform:
   m_ObjectHideFlags: 0

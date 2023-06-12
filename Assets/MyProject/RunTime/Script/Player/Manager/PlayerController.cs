@@ -13,20 +13,7 @@ public class PlayerController : MonoBehaviour
 
     bool isMove = true;         // プレイヤーの移動のフラグ
 
-    bool isJump = false;
-
-    bool isMoveAction()
-    {
-        if(isMove && !sm.Goal && !sm.IsStart && !sonar.IsOnSonar )
-        {
-            return true;
-        }
-        rb.velocity = Vector3.zero;
-        anim.SetBool("IsIdle",true);
-        anim.SetBool("IsWalk",false);
-        anim.SetBool("IsRan",false);
-        return false;
-    }
+    bool isJump = false;        // ジャンプのフラグ
 
     [SerializeField]
     GameObject Pause;       // ポーズ画面
@@ -36,18 +23,23 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField]
     StageManager sm;
+    [SerializeField]
+    TutorialStageDisplay tutorial;
 
     [SerializeField]
     SonarEffect sonar;       // ソナーエフェクト
 
     SwitchingMove switchMove;// 移動の切り替え
+    [SerializeField]
     Rigidbody rb;           // rigidbody
+    [SerializeField]
     CapsuleCollider col;    // コライダー
+    [SerializeField]
     GroundRay gl;         // 接地判定
-    KeyInput input;         // 入力受け取り
-
+    [SerializeField]
     Animator anim;          // animator
 
+    KeyInput input;         // 入力受け取り
     IMoveObject iObject;
     IClimb iClimb;
     IFly iFly;
@@ -55,10 +47,6 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         input = KeyInput.Instance;
-        rb = GetComponent<Rigidbody>();
-        col = GetComponent<CapsuleCollider>();
-        gl = GetComponent<GroundRay>();
-        anim = GetComponent<Animator>();
 
         switchMove = new SwitchingMove();
         iObject = new PushObject();
@@ -78,8 +66,10 @@ public class PlayerController : MonoBehaviour
     {
         if(isMoveAction())
         {
-            switchMove.SwitchMove(this.gameObject, rb, input.InputMove, anim, isPush, isClimb, gl.IsGround(), isMove);
-
+            // プレイヤーの移動切り替え
+            var _playerMover = switchMove.SwitchMove(this.gameObject, rb, input.InputMove, isPush, isClimb, gl.IsGround());
+            // 移動
+            _playerMover.Move(input.InputMove, anim);
             if (isPush)
             {
                 iObject.Move(iObject.Box_rb(), input.InputMove, this.gameObject, anim);
@@ -99,13 +89,26 @@ public class PlayerController : MonoBehaviour
             Sonar();
         }
     }
-
     void OperationOpen()
     {
         operation.ClimbCheck(iClimb.Climb(this.gameObject));
         operation.PushCheck(iObject.Push(this.gameObject));
         operation.JumpCheck(iFly.FlyFrag(this.gameObject));
     }
+    // 移動できるか
+    bool isMoveAction()
+    {
+        if (isMove && !sm.Goal && !sm.IsStart && !sonar.IsOnSonar && !tutorial.IsTutoria)
+        {
+            return true;
+        }
+        rb.velocity = Vector3.zero;
+        anim.SetBool("IsIdle", true);
+        anim.SetBool("IsWalk", false);
+        anim.SetBool("IsRan", false);
+        return false;
+    }
+
 
     // ジャンプ
     void Jump()

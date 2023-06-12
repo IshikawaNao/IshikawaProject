@@ -5,38 +5,36 @@ using UnityEngine;
 /// </summary>
 public class SwitchingMove 
 {
-    PlayerMove playerMove;  // プレイヤーの移動
+    // プレイヤーの移動
+    private IPlayerMover _playerMover;
 
     Vector2 range = new Vector2(0.5f, -0.5f);
 
-    public void SwitchMove(GameObject player,Rigidbody rb, Vector2 input, Animator anim, bool isPush, bool isClimb,bool isGround ,bool isMove)
+    public IPlayerMover SwitchMove(GameObject player,Rigidbody rb, Vector2 input, bool isPush, bool isClimb,bool isGround)
     {
+        if(_playerMover == null)
+        {
+            ChangeMove(new PlayerNormalMove(rb, player));
+        }
         // 移動の切り替え
         if (!isPush && !IsRan(input,range) && isGround)
         {
-            playerMove = new PlayerMove(new PlayerNormalMove(rb, player));
+            ChangeMove(new PlayerNormalMove(rb, player));
         }
         else if(!isPush && IsRan(input, range) && isGround)
         {
-            playerMove.ChangeMove(new PlayerRan(rb, player));
+           ChangeMove(new PlayerRan(rb, player));
         }
         else if (isPush)
         {
-            playerMove.ChangeMove(new PlayerPushMove(rb, player));
+            ChangeMove(new PlayerPushMove(rb, player));
         }
         else if(!isGround && !isClimb)
         {
-            playerMove.ChangeMove(new PlayerAirMobile(rb, player));
+            ChangeMove(new PlayerAirMobile(rb, player));
         }
 
-        // 移動
-        if (isMove)
-        {
-            playerMove.ExcuteMove(input, anim);
-        }
-        else if(!isMove)
-        {
-        }
+        return _playerMover;
     }
     // 歩きと走りを切り替える
     bool IsRan(Vector2 input, Vector2 range)
@@ -50,5 +48,10 @@ public class SwitchingMove
             return false;
         }
         return true;
+    }
+
+    void ChangeMove(IPlayerMover playerMover)
+    {
+        _playerMover = playerMover;
     }
 }

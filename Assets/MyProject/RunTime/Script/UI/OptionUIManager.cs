@@ -6,6 +6,7 @@ public class OptionUIManager : MonoBehaviour
 {
     // ボタン選択数字
     int num = 0;
+    public int Num { get { return num; } }
     const int maxNum = 2;
     const int minNum = 0;
 
@@ -112,6 +113,11 @@ public class OptionUIManager : MonoBehaviour
     // パネル切り替え
     void PanelChenge()
     {
+        if(!IsSystemOpen)
+        {
+            return;
+        }
+
         if (num == 0)
         {
             panels[0].SetActive(true);

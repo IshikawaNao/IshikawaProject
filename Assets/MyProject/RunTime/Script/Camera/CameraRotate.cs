@@ -19,7 +19,6 @@ public class CameraRotate : MonoBehaviour
     CameraMove cm;
 
     KeyInput input;
-    CreateData data;
 
     // Š´“x
     float sensitivity = 0.1f;
@@ -34,8 +33,6 @@ public class CameraRotate : MonoBehaviour
     {
         mainCM.transform.localPosition = new Vector3(0, 1, 10);
         input = KeyInput.Instance;
-        data = CreateData.Instance;
-        data.LoadSensitivity(ref sensitivity);
     }
 
     private void LateUpdate()

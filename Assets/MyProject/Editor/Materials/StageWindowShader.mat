@@ -51,10 +51,10 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Boolean: 0
-    - _Emission: 1
-    - _Float: 1
-    - _OutLine: 0.99
+    - _Boolean: 1
+    - _Emission: 1.63
+    - _Float: 2.6
+    - _OutLine: 0.984
     - _QueueControl: 0
     - _QueueOffset: 0
     - _size: 0

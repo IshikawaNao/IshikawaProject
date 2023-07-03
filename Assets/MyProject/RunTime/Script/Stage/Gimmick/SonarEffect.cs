@@ -13,8 +13,6 @@ public class SonarEffect : MonoBehaviour
     float gammmaValue = 0;
     const float minGammma = -0.4f;
 
-    float intensityVal = 0.5f;
-
     const float waiteTime = 1f;
 
     float sonarTime;

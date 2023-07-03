@@ -48,7 +48,6 @@ public class StageManager : MonoBehaviour
 
     // Instance
     KeyInput input;
-    CreateData cd;
     StageNumberSelect sn;
 
     private void Awake()
@@ -73,8 +72,6 @@ public class StageManager : MonoBehaviour
     void Start()
     {     
         input = KeyInput.Instance;
-        cd = CreateData.Instance;
-
 
         // スライダーの数値反映
         volumeConfigUI.SetMasterVolume(SoundManager.Instance.MasterVolume);
@@ -86,8 +83,6 @@ public class StageManager : MonoBehaviour
         volumeConfigUI.SetBGMSliderEvent(vol => SoundManager.Instance.BGMVolume = vol);
         volumeConfigUI.SetSeSliderEvent(vol => SoundManager.Instance.SEVolume = vol);
 
-        // セーブデータ呼び出し
-        cd.VolSet();
         timer = 0;
         TaimeText.text = Mathf.Floor(timer).ToString();
 
@@ -139,19 +134,22 @@ public class StageManager : MonoBehaviour
         if(Goal && isGoal)
         {
             isGoal = false;
-            ClearRank();
-            cd.SaveClearData(Mathf.Floor(tm), rank, stageNum);
+            SaveDataManager.Instance.Load();
+            switch(stageNum)
+            {
+                case 0:
+                    SaveDataManager.Instance.ClearTime1Save(Mathf.Floor(tm));
+                    break;
+                case 1:
+                    SaveDataManager.Instance.ClearTime2Save(Mathf.Floor(tm));
+                    break;
+
+
+            }
+            
+            SaveDataManager.Instance.Save();
             FadeManager.Instance.LoadScene("Result", 1.5f);
         }
-    }
-
-    // クリアランクを設定する
-    void ClearRank()
-    {
-        if(tm <= 30) { rank = "S"; }
-        else if(tm <= 50) { rank = "A"; }
-        else if(tm <= 180) { rank = "B"; }
-        else { rank = "C"; }
     }
 
     // スタートアニメーションが動いている間プレイヤーとタイマーを止める

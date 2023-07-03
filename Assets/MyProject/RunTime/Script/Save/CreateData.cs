@@ -8,6 +8,7 @@ public class CreateData : MonoBehaviour
 {
     const string FileName = "/savedata.dat";
 
+    // セーブデータデフォルト
     const float DefaultMasterVol = 1;
     const float DefaultBGMVol = 0.5f;
     const float DefaultSEVol = 0.5f;
@@ -40,6 +41,7 @@ public class CreateData : MonoBehaviour
 
     private void Awake()
     {
+        filePath = Application.dataPath + FileName;
         if (this != Instance)
         {
             Destroy(this.gameObject);
@@ -48,7 +50,6 @@ public class CreateData : MonoBehaviour
 
         DontDestroyOnLoad(this.gameObject);
 
-        filePath = Application.dataPath + FileName;
 
         if(!SaveDataCheck())
         {
@@ -196,6 +197,70 @@ public class CreateData : MonoBehaviour
             if (file != null) { CloseFile(); }
         }
     }
+    // マスターボリュームのセーブ
+    public void MasterVolSave(float vm)
+    {
+        try
+        {
+            InitFileSave();
+
+            // セーブ
+            SaveData data = new SaveData();
+            data.masterVol = vm;
+        }
+        catch (IOException)
+        {
+            Debug.LogError("failed to open file");
+        }
+        finally
+        {
+            // FileStreamを使用したら最後にCloseする
+            if (file != null) { CloseFile(); }
+        }
+    }
+    // BGMボリュームのセーブ
+    public void BGMVolSave(float vb)
+    {
+        try
+        {
+            InitFileSave();
+
+            // セーブ
+            SaveData data = new SaveData();
+            data.bgmVol = vb;
+        }
+        catch (IOException)
+        {
+            Debug.LogError("failed to open file");
+        }
+        finally
+        {
+            // FileStreamを使用したら最後にCloseする
+            if (file != null) { CloseFile(); }
+        }
+    }
+
+    // SEボリュームのセーブ
+    public void SEVolSave(float vs)
+    {
+        try
+        {
+            InitFileSave();
+
+            // セーブ
+            SaveData data = new SaveData();
+            data.seVol = vs;
+        }
+        catch (IOException)
+        {
+            Debug.LogError("failed to open file");
+        }
+        finally
+        {
+            // FileStreamを使用したら最後にCloseする
+            if (file != null) { CloseFile(); }
+        }
+    }
 
     // カメラ感度セーブ
     public void SensitivitySave(float sen)
@@ -208,6 +273,27 @@ public class CreateData : MonoBehaviour
             SaveData data = new SaveData();
             data.sensitivity = sen;
             bf.Serialize(file, data);
+        }
+        catch (IOException)
+        {
+            Debug.LogError("failed to open file");
+        }
+        finally
+        {
+            // FileStreamを使用したら最後にCloseする
+            if (file != null) { CloseFile(); }
+        }
+    }
+    // スクリーンサイズのセーブ
+    public void ScreenSize(bool screenSize)
+    {
+        try
+        {
+            InitFileSave();
+
+            // セーブ
+            SaveData data = new SaveData();
+            data.FullScreen = screenSize;
         }
         catch (IOException)
         {

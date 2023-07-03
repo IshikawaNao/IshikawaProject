@@ -1,10 +1,10 @@
 using UnityEngine;
 using TMPro;
+using SoundSystem;
 
 public class ResultManager : MonoBehaviour
 {
     float clearTime = 0;
-    string rank = "";
     bool toTitle = false;
 
     [SerializeField]
@@ -12,7 +12,6 @@ public class ResultManager : MonoBehaviour
     [SerializeField]
     TextMeshProUGUI crearRankText;
 
-    CreateData cd;
     [SerializeField]
     ClearRankData clearRankData;
 
@@ -21,10 +20,21 @@ public class ResultManager : MonoBehaviour
 
     private void Awake()
     {
-        cd = CreateData.Instance;
         sn = StageNumberSelect.Instance;
+        SaveDataManager.Instance.Load();
+        switch(sn.StageNumber)
+        {
+            case 0:
+                clearTime = SaveDataManager.Instance.ClearTime1;
+                SaveDataManager.Instance.Rank1Save(clearRankData.Ranks[0].ClearRank(clearTime));
+                break;
+            case 1:
+                clearTime = SaveDataManager.Instance.ClearTime2;
+                SaveDataManager.Instance.Rank2Save(clearRankData.Ranks[1].ClearRank(clearTime));
+                break;
 
-        cd.LoadClearData(ref clearTime, ref rank, sn.StageNumber);
+        }
+        
         GameObject obj = (GameObject)Resources.Load("ResultStage");
         Instantiate(obj, Vector3.zero, Quaternion.identity);
     }
@@ -32,7 +42,6 @@ public class ResultManager : MonoBehaviour
     void Start()
     {
         input = KeyInput.Instance;
-        cd.VolSet();
         crearRankText.text = clearRankData.Ranks[sn.StageNumber].ClearRank(clearTime);
     }
 
@@ -43,7 +52,7 @@ public class ResultManager : MonoBehaviour
         if(input.DecisionInput && !toTitle)
         {
             toTitle = true;
-            FadeManager.Instance.LoadScene("Title", 1.0f);
+            FadeManager.Instance.LoadScene("Title", 1f);
         }
     }
 }

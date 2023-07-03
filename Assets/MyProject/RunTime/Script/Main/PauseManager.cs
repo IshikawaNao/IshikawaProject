@@ -23,8 +23,6 @@ public class PauseManager : MonoBehaviour
     Image[] selectButton;
 
     [SerializeField]
-    OptionUIManager om;
-    [SerializeField]
     TutorialStageDisplay tutorial;
 
     ButtonMove bm;
@@ -57,24 +55,24 @@ public class PauseManager : MonoBehaviour
         if (pausePanel.activeSelf == true)
         {
             // key入力orLスティック操作時
-            if(input.PressedMove && bm.SelectDelyTime() && om.IsOptionOpen)
+            if(input.PressedMove && bm.SelectDelyTime() )
             {
                 num = ua.Addition(num, minNum, maxNum, input.InputMove.y);
                 bm.SelectTextMove(selectButton, num, maxNum);
             }
-            else if (input.LongPressedMove && bm.SelectDelyTime() && om.IsOptionOpen)
+            else if (input.LongPressedMove && bm.SelectDelyTime() )
             {
                 num = ua.Addition(num,minNum,maxNum,input.InputMove.y);
                 bm.SelectTextMove(selectButton,num, maxNum);
             }
 
             //　決定処理
-            if (input.DecisionInput && om.IsOptionOpen)
+            if (input.DecisionInput )
             {
                 DecisionPush();
             }
 
-            if (input.EscInput && om.IsOptionOpen)
+            if (input.EscInput)
             {
                 if (optionPanel.activeSelf == true)
                 {

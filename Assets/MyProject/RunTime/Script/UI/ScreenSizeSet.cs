@@ -17,13 +17,23 @@ public class ScreenSizeSet : MonoBehaviour
 
     void Start()
     {
-        CreateData.Instance.LoadScreenSize(ref isFullScreen);
+        SaveDataManager.Instance.Load();
+        isFullScreen = SaveDataManager.Instance.ScreenSize;
         toggle.isOn = isFullScreen;
         SetScreenMode(isFullScreen);
     }
 
     public void SetScreen()
     {
+        if(toggle.isOn) 
+        {
+            toggle.isOn = false;
+        }
+        else
+        {
+            toggle.isOn = true;
+        }
+
         SetScreenMode(toggle.isOn);
     }
 
@@ -38,7 +48,7 @@ public class ScreenSizeSet : MonoBehaviour
         {
             Screen.SetResolution(fullWidth, fullHeight, fullScreen);
         }
-        
+        SaveDataManager.Instance.ScreenSize2Save(fullScreen);
     }
 
 }

@@ -12,39 +12,42 @@ public class StageManager : MonoBehaviour
     bool isGoal = true;
     public bool Goal { get; set; } = false;
 
+    // スタート時のアニメーションフラグ
+    bool isStart = true;
+    public bool IsStart { get { return isStart; } }
+    
+    // タイム
     float tm = 0;
     float timer;
 
-    bool isStart = true;
-    public bool IsStart { get { return isStart; } }
-
+    //　サウンドフェード
     const float soundFadeTime = 1f;
 
+    // オプションナンバー
     const int minOperationNum = 0; 
     const int maxOperationNum = 3;
 
+    // ステージ情報
     int stageNum;
-
+    public int StageNum { get { return stageNum; } }
     string rank = "";
 
-    [SerializeField, Header("player")]
+    [SerializeField, Header("プレイヤー")]
     PlayerController player;
 
-    [SerializeField, Header("OptionPanel")] 
+    [SerializeField, Header("オプションパネル")] 
     VolumeConfigUI volumeConfigUI;
 
-    [SerializeField]
+    [SerializeField,Header("キーボード表示")]
     GameObject[] keyOperation;
-    [SerializeField]
+    [SerializeField, Header("Pad表示")]
     GameObject[] padOperation;
 
-    KeyInput input;
-
-    CreateData cd;
-
-    [SerializeField]
+    [SerializeField,Header("タイマーテキスト")]
     TextMeshProUGUI  TaimeText;
 
+    // Instance
+    KeyInput input;
     StageNumberSelect sn;
 
     private void Awake()
@@ -58,6 +61,7 @@ public class StageManager : MonoBehaviour
         }
         else
         {
+            // 選択されたステージを生成する
             GameObject obj = (GameObject)Resources.Load("Stage" + sn.StageNumber);
             Instantiate(obj, Vector3.zero, Quaternion.identity);
         }
@@ -68,8 +72,6 @@ public class StageManager : MonoBehaviour
     void Start()
     {     
         input = KeyInput.Instance;
-        cd = CreateData.Instance;
-
 
         // スライダーの数値反映
         volumeConfigUI.SetMasterVolume(SoundManager.Instance.MasterVolume);
@@ -81,10 +83,10 @@ public class StageManager : MonoBehaviour
         volumeConfigUI.SetBGMSliderEvent(vol => SoundManager.Instance.BGMVolume = vol);
         volumeConfigUI.SetSeSliderEvent(vol => SoundManager.Instance.SEVolume = vol);
 
-        cd.VolSet();
         timer = 0;
         TaimeText.text = Mathf.Floor(timer).ToString();
-        StartTime();
+
+        StartAnimationTime();
         SoundManager.Instance.PlayBGMWithFadeIn("Main", soundFadeTime);
     }
 
@@ -95,6 +97,7 @@ public class StageManager : MonoBehaviour
         TimeMeasurement();
     }
 
+    // 操作説明のPadとキーボードの表示を切り替える
     void SwithingOperation()
     {
         if(input.Inputdetection)
@@ -115,6 +118,7 @@ public class StageManager : MonoBehaviour
         }
     }
     
+    // タイマー処理
     void TimeMeasurement()
     {
         if(!IsStart)
@@ -124,27 +128,33 @@ public class StageManager : MonoBehaviour
         }
     }
 
+    // クリアした際に呼ばれる
     void Cliar()
     {
         if(Goal && isGoal)
         {
             isGoal = false;
-            ClearRank();
-            cd.SaveClearData(Mathf.Floor(tm), rank, stageNum);
+            SaveDataManager.Instance.Load();
+            switch(stageNum)
+            {
+                case 0:
+                    SaveDataManager.Instance.ClearTime1Save(Mathf.Floor(tm));
+                    break;
+                case 1:
+                    SaveDataManager.Instance.ClearTime2Save(Mathf.Floor(tm));
+                    break;
+
+
+            }
+            
+            SaveDataManager.Instance.Save();
             FadeManager.Instance.LoadScene("Result", 1.5f);
         }
     }
 
-    void ClearRank()
+    // スタートアニメーションが動いている間プレイヤーとタイマーを止める
+    void StartAnimationTime()
     {
-        if(tm <= 30) { rank = "S"; }
-        else if(tm <= 50) { rank = "A"; }
-        else if(tm <= 180) { rank = "B"; }
-        else { rank = "C"; }
-    }
-
-    void StartTime()
-    {
-        DOVirtual.DelayedCall(6, () => { isStart = false; timer = Time.time; });
+        DOVirtual.DelayedCall(8, () => { isStart = false; timer = Time.time; });
     }
 }

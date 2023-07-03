@@ -13,8 +13,6 @@ public class SonarEffect : MonoBehaviour
     float gammmaValue = 0;
     const float minGammma = -0.4f;
 
-    float intensityVal = 0;
-
     const float waiteTime = 1f;
 
     float sonarTime;
@@ -54,10 +52,10 @@ public class SonarEffect : MonoBehaviour
         .SetLoops(2, LoopType.Yoyo)
         .OnUpdate(() =>
         {
-            //gammma値とintensityを変更
+            //gammma値変更
             gammmaVal.w = gammmaValue;
             liftGammaGain.gamma.value = gammmaVal;
-            chromaticAberration.intensity.value = intensityVal;            
+                 
         })
         .OnStart(() =>{ isOnSonar = true;})
         .OnComplete(() =>{ isOnSonar = false;  });

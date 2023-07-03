@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0475f863caecea4899a918fe324763a, type: 3}
+  m_Name: Clear_Rank_Data
+  m_EditorClassIdentifier: 
+  Ranks:
+  - STime: 30
+    ATime: 60
+    BTime: 90
+    CTime: 120
+  - STime: 50
+    ATime: 100
+    BTime: 150
+    CTime: 200
+  - STime: 90
+    ATime: 180
+    BTime: 270
+    CTime: 360

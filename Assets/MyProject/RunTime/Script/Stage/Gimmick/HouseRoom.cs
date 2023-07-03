@@ -25,7 +25,7 @@ public class HouseRoom : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "Move")
+        if (other.gameObject.tag == "Move" || other.gameObject.tag == "Player")
         {
             placed = true;
             m_Renderer.material = mat[1];
@@ -34,7 +34,7 @@ public class HouseRoom : MonoBehaviour
     
     private void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.tag == "Move")
+        if (other.gameObject.tag == "Move" || other.gameObject.tag == "Player")
         {
             placed = false;
             m_Renderer.material = mat[0];

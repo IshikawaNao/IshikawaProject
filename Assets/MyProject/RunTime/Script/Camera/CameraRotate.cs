@@ -5,26 +5,26 @@ using UnityEngine;
 /// </summary>
 public class CameraRotate : MonoBehaviour
 {
-    [SerializeField]
+    [SerializeField,Header("メインカメラ")]
     GameObject mainCM;
 
-    [SerializeField]
+    [SerializeField, Header("プレイヤー")]
     GameObject player;
-
     [SerializeField]
-    StageManager sm;
-
-    CameraMove cm;
     PlayerController pc;
 
+    [SerializeField, Header("ステージマネージャー")]
+    StageManager sm;
+    [SerializeField]
+    CameraMove cm;
+
     KeyInput input;
-    CreateData data;
 
+    // 感度
     float sensitivity = 0.1f;
-
-    float verticalValue = -30;
-
+    
     // カメラ角度
+    float verticalValue = -30;
     const float verticalMaxValue = 10f;
     const float verticalMinValue = -40f;
 
@@ -32,20 +32,15 @@ public class CameraRotate : MonoBehaviour
     void Start()
     {
         mainCM.transform.localPosition = new Vector3(0, 1, 10);
-        cm = mainCM.GetComponent<CameraMove>();
         input = KeyInput.Instance;
-        data = CreateData.Instance;
-        pc = player.GetComponent<PlayerController>();
-        data.LoadSensitivity(ref sensitivity);
     }
 
-    void Update()
+    private void LateUpdate()
     {
         this.transform.position = player.transform.position;
         SwitchingCP();
         ResetCamera();
     }
-
 
     void SwitchingCP()
     {

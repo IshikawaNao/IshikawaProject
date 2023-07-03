@@ -10,8 +10,6 @@ public class PauseManager : MonoBehaviour
     const int maxNum = 2;
     const int minNum = 0;
 
-    const int inputZero = 0;
-
     [SerializeField]
     GameObject pausePanel;
 
@@ -25,7 +23,7 @@ public class PauseManager : MonoBehaviour
     Image[] selectButton;
 
     [SerializeField]
-    OptionUIManager om;
+    TutorialStageDisplay tutorial;
 
     ButtonMove bm;
     UiAddition ua;
@@ -57,24 +55,24 @@ public class PauseManager : MonoBehaviour
         if (pausePanel.activeSelf == true)
         {
             // key入力orLスティック操作時
-            if(input.PressedMove && bm.SelectDelyTime() && om.IsOptionOpen)
+            if(input.PressedMove && bm.SelectDelyTime() )
             {
                 num = ua.Addition(num, minNum, maxNum, input.InputMove.y);
                 bm.SelectTextMove(selectButton, num, maxNum);
             }
-            else if (input.LongPressedMove && bm.SelectDelyTime() && om.IsOptionOpen)
+            else if (input.LongPressedMove && bm.SelectDelyTime() )
             {
                 num = ua.Addition(num,minNum,maxNum,input.InputMove.y);
                 bm.SelectTextMove(selectButton,num, maxNum);
             }
 
             //　決定処理
-            if (input.DecisionInput && om.IsOptionOpen)
+            if (input.DecisionInput )
             {
                 DecisionPush();
             }
 
-            if (input.EscInput && om.IsOptionOpen)
+            if (input.EscInput)
             {
                 if (optionPanel.activeSelf == true)
                 {
@@ -89,7 +87,7 @@ public class PauseManager : MonoBehaviour
         }
         else
         {
-            if (input.EscInput)
+            if (input.EscInput && !tutorial.IsTutoria)
             {
                 pausePanel.SetActive(true);
             }

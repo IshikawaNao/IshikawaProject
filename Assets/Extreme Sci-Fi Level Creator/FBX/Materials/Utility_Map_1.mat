@@ -8,17 +8,17 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Utility_Map_1
-  m_Shader: {fileID: 4800000, guid: 933532a4fcc9baf4fa0491de14d08ed7, type: 3}
+  m_Shader: {fileID: -6465566751694194690, guid: 4848b2a09a1d879499b66c3727f5d66f, type: 3}
   m_ValidKeywords:
+  - _RECEIVE_SHADOWS_OFF
+  m_InvalidKeywords:
   - _EMISSION
   - _NORMALMAP
   - _OCCLUSIONMAP
-  - _RECEIVE_SHADOWS_OFF
-  m_InvalidKeywords: []
   m_LightmapFlags: 1
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
+  m_CustomRenderQueue: 2000
   stringTagMap:
     RenderType: Opaque
   disabledShaderPasses: []
@@ -73,6 +73,18 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _SampleTexture2D_97f49637429a402f8143453f65addac7_Texture_1:
+        m_Texture: {fileID: 2800000, guid: 450eea50892b1464aa51ccceb8fa5aeb, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SampleTexture2D_9a8fb5a93ccf49eeb09dcc946ba6d170_Texture_1:
+        m_Texture: {fileID: 2800000, guid: 2b24e38692ff43e4db151115fc4ebdb2, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SampleTexture2D_f59e2589b6464bddb142ae43dd736657_Texture_1:
+        m_Texture: {fileID: 2800000, guid: a14a60eabd73d8f41a7deb84fc49228a, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _ShadowTexture:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -97,7 +109,9 @@ Material:
     m_Floats:
     - _AlphaClip: 0
     - _Blend: 0
+    - _Boolean: 1
     - _BumpScale: 1
+    - _CastShadows: 1
     - _ClearCoatMask: 0
     - _ClearCoatSmoothness: 0
     - _Cull: 2
@@ -117,6 +131,7 @@ Material:
     - _OutlineWeight: 0.02
     - _OutlineWidth: 0.03
     - _Parallax: 0.005
+    - _QueueControl: 0
     - _QueueOffset: 0
     - _ReceiveShadows: 0
     - _ShadowStrength: 0.5
@@ -128,7 +143,9 @@ Material:
     - _UVSec: 0
     - _UseVertexExpansion: 0
     - _WorkflowMode: 1
+    - _ZTest: 4
     - _ZWrite: 1
+    - _ZWriteControl: 0
     m_Colors:
     - _BaseColor: {r: 0.5471698, g: 0.4465112, b: 0.4465112, a: 1}
     - _Color: {r: 0.5471698, g: 0.4465112, b: 0.4465112, a: 1}
@@ -136,6 +153,7 @@ Material:
     - _EmissionColorUI: {r: 1, g: 1, b: 1, a: 1}
     - _OutlineColor: {r: 1, g: 0, b: 0, a: 1}
     - _SpecColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
+    - _Vector3: {r: 0, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []
 --- !u!114 &2998346505511882053
 MonoBehaviour:

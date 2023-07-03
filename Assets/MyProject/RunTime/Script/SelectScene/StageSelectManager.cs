@@ -13,24 +13,18 @@ public class StageSelectManager : MonoBehaviour
     const float moveVal = 15;
     const float waiteTime = 2;
     
-    
-
     [SerializeField]
     GameObject stageOpen;
 
     [SerializeField]
     Material[] stage;
 
-    [SerializeField]
-    GameObject startButton;
 
     KeyInput input;
 
     [SerializeField]
     Animator anim;
 
-    [SerializeField]
-    OptionUIManager optionUIManager;
 
     [SerializeField]
     TitleManager title;
@@ -53,7 +47,6 @@ public class StageSelectManager : MonoBehaviour
     {
         if(stageOpen.activeSelf == true)
         {
-            startButton.SetActive(true);
             // key入力orLスティック操作時
             if (input.PressedMove && bm.SelectDelyTime())
             {
@@ -65,7 +58,7 @@ public class StageSelectManager : MonoBehaviour
                     maxStageNum, -input.InputMove.x);
 
                 bm.SelectUIMove(stageOpen, moveVal,  input.InputMove.x, stage, stageNum);
-                print(stageNum);
+
             }
 
             //　決定処理
@@ -75,17 +68,9 @@ public class StageSelectManager : MonoBehaviour
                 StageNumberSelect.Instance.StageNumber = stageNum;
                 FadeManager.Instance.LoadScene("Main", 1.0f);
             }
-
-            if (input.EscInput)
-            {
-                anim.SetBool("PanelEnd", true);
-                optionUIManager.IsOptionOpen = true;
-                optionUIManager.EndPanel = true;
-            }
         }
         else
         {
-            startButton.SetActive(false);
         }
         
     }

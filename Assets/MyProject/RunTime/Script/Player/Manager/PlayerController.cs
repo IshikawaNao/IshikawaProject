@@ -6,9 +6,6 @@ using DG.Tweening;
 /// </summary>
 public class PlayerController : MonoBehaviour
 {
-    bool isPush = false;        // オブジェクトが動くフラグ
-    public bool Push { get { return isPush; } }
-
     bool isClimb = false;       // オブジェクトを登るフラグ
 
     bool isMove = true;         // プレイヤーの移動のフラグ
@@ -35,12 +32,12 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     CapsuleCollider col;    // コライダー
     [SerializeField]
-    GroundRay gl;         // 接地判定
-    [SerializeField]
     Animator anim;          // animator
 
     KeyInput input;         // 入力受け取り
-    IMoveObject iObject;
+    GroundRay gr;         // 接地判定
+    PushObject push;    // Pushオブジェクト受け取り
+    public PushObject PushMoveObject { get { return push; } }
     IClimb iClimb;
     IFly iFly;
 
@@ -49,7 +46,8 @@ public class PlayerController : MonoBehaviour
         input = KeyInput.Instance;
 
         switchMove = new SwitchingMove();
-        iObject = new PushObject();
+        gr = new GroundRay(this.gameObject);
+        push = new PushObject(this.gameObject,anim);
         iClimb = new PlayerClimb();
         iFly = new PlayerFly();
 
@@ -58,30 +56,28 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        limitationOfAction();
+        LimitationOfAction();
         PauseOpen();
     }
 
     private void FixedUpdate()
     {
-        if(isMoveAction())
+        if(IsMoveAction())
         {
             // プレイヤーの移動切り替え
-            var _playerMover = switchMove.SwitchMove(this.gameObject, rb, input.InputMove, isPush, isClimb, gl.IsGround());
+            var _playerMover = switchMove.SwitchMove(this.gameObject, rb, input.InputMove, push.IsPush, isClimb, gr.IsGround());
             // 移動
             _playerMover.Move(input.InputMove, anim);
-            if (isPush)
-            {
-                iObject.Move(iObject.Box_rb(), input.InputMove, this.gameObject, anim);
-            }
+            // プッシュオブジェクト移動
+            push.Move(input.InputMove);
         }
     }
 
-    void limitationOfAction()
+    void LimitationOfAction()
     {
-        if (isMoveAction())
+        if (IsMoveAction())
         {
-            ObjectMove();
+            push.PushAnimationChange(gr.IsGround(), isClimb, input.PushAction);
             ObjectClimb();
             OperationOpen();
             Fly();
@@ -92,11 +88,11 @@ public class PlayerController : MonoBehaviour
     void OperationOpen()
     {
         operation.ClimbCheck(iClimb.Climb(this.gameObject));
-        operation.PushCheck(iObject.Push(this.gameObject));
+        operation.PushCheck(push.CanPush());
         operation.JumpCheck(iFly.FlyFrag(this.gameObject));
     }
     // 移動できるか
-    bool isMoveAction()
+    bool IsMoveAction()
     {
         if (isMove && !sm.Goal && !sm.IsStart && !sonar.IsOnSonar && !tutorial.IsTutoria)
         {
@@ -109,17 +105,25 @@ public class PlayerController : MonoBehaviour
         return false;
     }
 
-
     // ジャンプ
     void Jump()
     {
-        if (gl.IsGround() && isJump)
+        if (gr.IsGround() && isJump)
         {
             isJump = false;
             anim.SetBool("IsJump", false);
             anim.SetBool("IsIanding",true);
         }
-        else if(!gl.IsGround() && !isClimb && !isJump)
+        else if(!gr.IsGround() && !isClimb && !isJump)
+        {
+            DOVirtual.DelayedCall(1, () => JumpStart());
+            
+        }
+    }
+
+    void JumpStart()
+    {
+        if (!gr.IsGround() && !isClimb && !isJump)
         {
             isJump = true;
             anim.SetBool("IsIanding", false);
@@ -127,34 +131,12 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    // オブジェクトを動かす
-    void ObjectMove()
-    {
-        if (iObject.Push(this.gameObject) && gl.IsGround() && !isClimb)
-        {
-            if (input.PushAction)
-            {
-                isPush = true;
-            }
-            else
-            {
-                anim.SetBool("IsObjectMove", false);
-                isPush = false;
-            }
-        }
-        else
-        {
-            anim.SetBool("IsObjectMove", false);
-            isPush = false;
-        }
-    }
-
     // オブジェクトを登る
     void ObjectClimb()
     {
-        if (iClimb.Climb(this.gameObject) && !isPush)
+        if (iClimb.Climb(this.gameObject) && !push.IsPush)
         {
-            if (input.ClimbAction && gl.IsGround())
+            if (input.ClimbAction && gr.IsGround())
             {
                 isClimb = true;
                 isMove = false;
@@ -185,7 +167,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    // 修正
+    // ポーズ実行時動きを止める
     void PauseOpen()
     {
         if (Pause.activeSelf){ isMove = false;}
@@ -195,7 +177,7 @@ public class PlayerController : MonoBehaviour
     // ソナー
     void Sonar()
     {
-        if(input.SonarAction　&& gl.IsGround())
+        if(input.SonarAction　&& gr.IsGround())
         {
             sonar.Sonar();
             sonar.SonarWaveGeneration(this.transform.position);

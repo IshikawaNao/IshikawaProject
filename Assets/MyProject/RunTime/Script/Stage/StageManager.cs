@@ -30,7 +30,6 @@ public class StageManager : MonoBehaviour
     // ステージ情報
     int stageNum;
     public int StageNum { get { return stageNum; } }
-    string rank = "";
 
     [SerializeField, Header("プレイヤー")]
     PlayerController player;
@@ -72,6 +71,9 @@ public class StageManager : MonoBehaviour
     void Start()
     {     
         input = KeyInput.Instance;
+        // マウスカーソルを非表示
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = true;
 
         // スライダーの数値反映
         volumeConfigUI.SetMasterVolume(SoundManager.Instance.MasterVolume);

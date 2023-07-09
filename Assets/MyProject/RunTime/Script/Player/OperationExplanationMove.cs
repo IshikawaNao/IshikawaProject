@@ -12,17 +12,6 @@ public class OperationExplanationMove : MonoBehaviour
     [SerializeField]
     GameObject jump;
 
-    private RectTransform myRectTfm;
-
-    void Start()
-    {
-        myRectTfm = GetComponent<RectTransform>();
-    }
-
-    private void Update()
-    {
-        myRectTfm.position = RectTransformUtility.WorldToScreenPoint(Camera.main ,plyer.transform.position + Vector3.up);
-    }
 
     public void ClimbCheck(bool check)
     {

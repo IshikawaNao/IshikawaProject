@@ -1,87 +1,94 @@
 using UnityEngine;
+using UnityEngine.Windows;
 
 /// <summary>
 /// オブジェクトを押す
 /// </summary>
-public class PushObject : IMoveObject
+public class PushObject 
 {
     // 要調整
     const float speed = 2.95f;
 
     const float rayLength = 1f;
-    const float rayHeight = 0.3f;
-
-    const float layerNum = 6;
-    const float clmbSpeed = 4;
-    Vector2 climbVelocity = Vector2.up;
+    bool isPush = false;        // オブジェクトが動くフラグ
+    public bool IsPush { get { return isPush; } }
 
     Vector3 checkVec = new(1, 0, 1);
     
     RaycastHit hit;
     Ray ray;
 
-    public void Move(Rigidbody rb, Vector2 move, GameObject _player, Animator anim) 
+    // Pushオブジェクト
+    GameObject pushObj = null;
+    public GameObject PushObj { get {return pushObj; } }
+    // プレイヤー
+    GameObject player = null;
+    // プレイヤーアニメーション
+    Animator anim;
+
+    Rigidbody rb = null;
+    public Rigidbody PushRb { get { return rb; } }
+
+    public PushObject(GameObject _player, Animator _anim)
     {
-        if(move != Vector2.zero)
+        player = _player;
+        anim = _anim;
+    }
+
+    // プッシュオブジェクト移動
+    public void Move(Vector2 move) 
+    {
+        if(move != Vector2.zero && isPush)
         {
-            Vector3 playerForward = Vector3.Scale(_player.transform.forward, checkVec);
-            Vector3 moveForward = playerForward * move.y + _player.transform.right * move.x;
+            Vector3 playerForward = Vector3.Scale(player.transform.forward, checkVec);
+            Vector3 moveForward = playerForward * move.y + player.transform.right * move.x;
             Vector3 moveVector = moveForward.normalized * speed;   //移動速度
             rb.velocity = moveVector;
         }
     }
 
 
-    public void ClimbPlayer(Rigidbody _rb, GameObject _player)
-    {
-        _rb.velocity = clmbSpeed * climbVelocity;
-    }
-
     // playerの正面に動かせるオブジェクトがあるか
-    public bool Push(GameObject _player)
+    public bool CanPush()
     {
-        Vector3 orgin = _player.transform.position;
-        Vector3 direction = Vector3.Scale(_player.transform.forward, checkVec);
+        Vector3 orgin = player.transform.position;
+        Vector3 direction = Vector3.Scale(player.transform.forward, checkVec);
         ray = new Ray(orgin, direction);
 
         if (Physics.Raycast(ray, out hit, rayLength))
         {
+            // 動かせるオブジェクトの場合そのオブジェクトの情報を取得
             if (hit.collider.gameObject.tag.Contains("Move"))
             {
+                pushObj = hit.collider.gameObject;
+                rb = hit.rigidbody;
                 return true;
             }
         }
+        pushObj = null;
+        rb = null;
         return false;
     }
 
-    // playerの正面に登れるオブジェクトがあるか
-    public bool Climb(GameObject _player)
+    // プッシュが選択された時の処理
+    public void PushAnimationChange(bool ground, bool isClimb, bool isPushAction)
     {
-        Vector3 orgin = new Vector3(_player.transform.position.x, _player.transform.position .y - rayHeight, _player.transform.position.z);
-        Vector3 direction = Vector3.Scale(_player.transform.forward, checkVec);
-        ray = new Ray(orgin, direction);
-
-        if (Physics.Raycast(ray, out hit, rayLength))
+        if (CanPush() && ground && !isClimb)
         {
-            if (hit.collider.gameObject.layer == layerNum)
+            if (isPushAction)
             {
-                return true;
+                isPush = true;
+            }
+            else
+            {
+                anim.SetBool("IsObjectMove", false);
+                isPush = false;
             }
         }
-       
-        return false;
-    }
-
-    //　RayhitObjectのRigidbody
-    public Rigidbody Box_rb()
-    {
-        if (Physics.Raycast(ray, out hit, rayLength))
+        else
         {
-            if (hit.collider.gameObject.tag.Contains("Move"))
-            {
-                return hit.rigidbody;
-            }
+            anim.SetBool("IsObjectMove", false);
+            isPush = false;
         }
-        return null;
     }
 }

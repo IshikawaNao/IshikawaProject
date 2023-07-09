@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 5449440036858025097}
   - component: {fileID: 5449440036856935089}
   - component: {fileID: 5449440036861040433}
-  - component: {fileID: 5449440036861040432}
   m_Layer: 0
   m_Name: Floor_1A (4) 1
   m_TagString: Untagged
@@ -28,7 +27,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5449440036854738165}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1.7269735, y: 44.53, z: -149.40814}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 4.1558}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -99,17 +98,3 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300014, guid: 97493593593083c4a957cbce84165d42, type: 3}
---- !u!114 &5449440036861040432
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5449440036854738165}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7f10b39f6ce2b6b4f96cd27b773f6000, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rend: {fileID: 5449440036856935089}
-  mate: {fileID: 2100000, guid: 10f04b3fae787ca44a9cec60d70b30ae, type: 2}

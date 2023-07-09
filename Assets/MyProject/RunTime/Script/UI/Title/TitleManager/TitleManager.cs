@@ -20,19 +20,15 @@ public class TitleManager : MonoBehaviour
     int stateNum = 0;
     public int StateNum { get { return stateNum; } }
     public bool IsTitleUI { get { return title.IsTitleUI; } }
-    
-    // ステートナンバー
-    enum State_Type
-    {
-        titleState,
-        titleOptionState,
-        stageState,
-        endState
-    }
 
     private void Start()
     {
         input = KeyInput.Instance;
+
+        // マウスカーソルを非表示
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = true;
+
         // スライダーの数値反映
         volumeConfigUI.SetMasterVolume(SoundManager.Instance.MasterVolume);
         volumeConfigUI.SetBGMVolume(SoundManager.Instance.BGMVolume);

@@ -86,7 +86,6 @@ public class SaveDataManager : MonoBehaviour
     public void Save()
     {
         string path = Application.dataPath + "/save.txt";
-        print(path);
         string data = $"{MasterVol},{BGMVol},{SEVol},{Sensitivity},{ClearTime1},{ClearTime2},{Rank1},{Rank2},{ScreenSize}";
         File.WriteAllText(path, data);
     }

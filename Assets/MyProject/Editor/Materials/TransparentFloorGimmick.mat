@@ -60,7 +60,7 @@ Material:
     - _Float: 7
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _intensity: 4.2120852
+    - _intensity: 4.002352
     m_Colors:
     - _Color: {r: 0.6886792, g: 0.21115166, b: 0.21115166, a: 0}
   m_BuildTextureStacks: []

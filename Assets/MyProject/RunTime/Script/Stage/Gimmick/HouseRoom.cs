@@ -23,7 +23,7 @@ public class HouseRoom : MonoBehaviour
         input = KeyInput.Instance;
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerStay(Collider other)
     {
         if (other.gameObject.tag == "Move" || other.gameObject.tag == "Player")
         {

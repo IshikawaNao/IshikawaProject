@@ -7,9 +7,9 @@ public class UpperandLowerObject : MonoBehaviour
     HouseRoom hr;
 
     [SerializeField]
-    bool a;
+    bool upflag;
     [SerializeField]
-    int upMax = 10;
+    float upMax = 10;
     const int downMin = 1;
 
     const float waiteTime = 5;
@@ -28,14 +28,14 @@ public class UpperandLowerObject : MonoBehaviour
 
     void StartUpDown()
     {
-        if(hr.Placed || a)
+        if(hr.Placed || upflag)
         {
             transform.DOMove(
                 new Vector3(pos.x,pos.y + upMax,pos.z),
                 waiteTime
                 );
         }
-        else if(!hr.Placed || !a)
+        else if(!hr.Placed || !upflag)
         {
             transform.DOMove(
                 pos,

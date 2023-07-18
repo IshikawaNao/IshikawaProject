@@ -9,7 +9,7 @@ public class CameraMove
     const float playerAlpha = 0.5f;
 
     /// <summary>　カメラへ向かってRayを飛ばす </summary>
-    public void CameraForwardMove(GameObject cameraParent, GameObject target, LayerMask wall_layerMask)
+    public void CameraForwardMove(GameObject cameraParent, GameObject target, LayerMask wall_layerMask, Camera main)
     {
         // 親オブジェクトの位置を取得
         Vector3 orgin = cameraParent.transform.position;
@@ -24,13 +24,13 @@ public class CameraMove
         }
         // Local座標に変換する
         cameraPos = cameraParent.transform.InverseTransformPoint(cameraPos);
-        Camera.main.transform.localPosition = cameraPos;
+        main.transform.localPosition = cameraPos;
     }
 
     /// <summary> カメラがプレイヤーに近づいた時プレイヤーを半透明にする </summary>
-    public void SetPlayerAlpha(GameObject cameraParent,Material mat)
+    public void SetPlayerAlpha(GameObject cameraParent,Material mat,Camera main)
     {
-        var dis = Vector3.Distance(cameraParent.transform.position, Camera.main.transform.position);
+        var dis = Vector3.Distance(cameraParent.transform.position, main.transform.position);
         if(dis < playerVisibilityCheck) 
         {
             mat.SetFloat("_Alpha", playerAlpha); 

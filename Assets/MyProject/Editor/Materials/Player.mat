@@ -22,15 +22,15 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: Player
   m_Shader: {fileID: -6465566751694194690, guid: bf998f377f531de4a87ed30cbff1dec4, type: 3}
-  m_ValidKeywords: []
-  m_InvalidKeywords:
-  - _ALPHAPREMULTIPLY_ON
-  - _SURFACE_TYPE_TRANSPARENT
+  m_ValidKeywords:
+  - _ALPHATEST_ON
+  m_InvalidKeywords: []
   m_LightmapFlags: 2
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
-  stringTagMap: {}
+  m_CustomRenderQueue: 2450
+  stringTagMap:
+    RenderType: TransparentCutout
   disabledShaderPasses: []
   m_SavedProperties:
     serializedVersion: 3
@@ -131,14 +131,14 @@ Material:
     m_Floats:
     - Vector1_461ba97195cd4057bbb0720a7394a4a6: 1
     - _Alpha: 1
-    - _AlphaClip: 0
-    - _Blend: 1
+    - _AlphaClip: 1
+    - _Blend: 0
     - _Boolean: 1
     - _CastShadows: 1
     - _Cull: 2
     - _Delay: 0.1
     - _Dissolve_Time: 0
-    - _DstBlend: 10
+    - _DstBlend: 0
     - _Float: 1
     - _Float_1: 1
     - _Gradient_Range: 0.3
@@ -149,12 +149,12 @@ Material:
     - _Smooth: 0.3
     - _SrcBlend: 1
     - _StartAlpha: 0.649
-    - _Surface: 1
+    - _Surface: 0
     - _UseMetallicTexture: 0
     - _WorkflowMode: 1
     - _ZTest: 4
-    - _ZWrite: 0
-    - _ZWriteControl: 2
+    - _ZWrite: 1
+    - _ZWriteControl: 0
     m_Colors:
     - BaseColor_: {r: 0, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []

@@ -2,23 +2,27 @@ using UnityEngine;
 using DG.Tweening;
 using SoundSystem;
 using TMPro;
+using UnityEngine.Playables;
+using UniRx;
 
 /// <summary>
 /// ステージマネージャー
 /// </summary>
 public class StageManager : MonoBehaviour
 {
-    // ゴールフラグ
-    bool isGoal = true;
-    public bool Goal { get; set; } = false;
-
     // スタート時のアニメーションフラグ
     bool isStart = true;
     public bool IsStart { get { return isStart; } }
+
+    public bool Goal { get { return isGoal.Goal; } }
+    bool stageCliar = false;
+
+    public bool Fall { get { return isFall.IsFalling; } }
     
     // タイム
     float tm = 0;
     float timer;
+    bool isTimer = false;
 
     //　サウンドフェード
     const float soundFadeTime = 1f;
@@ -36,17 +40,23 @@ public class StageManager : MonoBehaviour
 
     [SerializeField, Header("オプションパネル")] 
     VolumeConfigUI volumeConfigUI;
-
     [SerializeField,Header("キーボード表示")]
     GameObject[] keyOperation;
     [SerializeField, Header("Pad表示")]
     GameObject[] padOperation;
-
     [SerializeField,Header("タイマーテキスト")]
     TextMeshProUGUI  TaimeText;
+    [SerializeField, Header("タイムライン")]
+    GameObject StartTimeLine;
+    [SerializeField, Header("タイムラインアニメーション")]
+    PlayableDirector playableDirector;
+
+    GoalCheck isGoal;
+    FallingGameOver isFall;
 
     // Instance
     KeyInput input;
+    SaveDataManager saveData;
     StageNumberSelect sn;
 
     private void Awake()
@@ -55,7 +65,7 @@ public class StageManager : MonoBehaviour
 
         if (sn == null)
         {
-            GameObject obj = (GameObject)Resources.Load("Stage" + 0);
+            GameObject obj = (GameObject)Resources.Load("Stage" + 1);
             Instantiate(obj, Vector3.zero, Quaternion.identity);
         }
         else
@@ -71,6 +81,8 @@ public class StageManager : MonoBehaviour
     void Start()
     {     
         input = KeyInput.Instance;
+        saveData = SaveDataManager.Instance;
+        saveData.Load();
         // マウスカーソルを非表示
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = true;
@@ -88,8 +100,13 @@ public class StageManager : MonoBehaviour
         timer = 0;
         TaimeText.text = Mathf.Floor(timer).ToString();
 
-        StartAnimationTime();
         SoundManager.Instance.PlayBGMWithFadeIn("Main", soundFadeTime);
+
+        isGoal = GameObject.Find("MagicCircuitGoal").GetComponent<GoalCheck>();
+        isFall = GameObject.Find("FallingGameOver").GetComponent<FallingGameOver>();
+
+        isFall.Count.Subscribe(value => ReStartAnimationTime());
+        StartAnimationTime();
     }
 
     void Update()
@@ -123,7 +140,7 @@ public class StageManager : MonoBehaviour
     // タイマー処理
     void TimeMeasurement()
     {
-        if(!IsStart)
+        if(isTimer)
         {
             tm = Time.time - timer;
             TaimeText.text = Mathf.Floor(tm).ToString();
@@ -133,23 +150,19 @@ public class StageManager : MonoBehaviour
     // クリアした際に呼ばれる
     void Cliar()
     {
-        if(Goal && isGoal)
+        if(isGoal.Goal && !stageCliar)
         {
-            isGoal = false;
-            SaveDataManager.Instance.Load();
-            switch(stageNum)
+            stageCliar = true;
+            switch (stageNum)
             {
                 case 0:
-                    SaveDataManager.Instance.ClearTime1Save(Mathf.Floor(tm));
+                    saveData.ClearTime1Save(Mathf.Floor(tm));
                     break;
                 case 1:
-                    SaveDataManager.Instance.ClearTime2Save(Mathf.Floor(tm));
+                    saveData.ClearTime2Save(Mathf.Floor(tm));
                     break;
-
-
             }
-            
-            SaveDataManager.Instance.Save();
+            saveData.Save();
             FadeManager.Instance.LoadScene("Result", 1.5f);
         }
     }
@@ -157,6 +170,16 @@ public class StageManager : MonoBehaviour
     // スタートアニメーションが動いている間プレイヤーとタイマーを止める
     void StartAnimationTime()
     {
-        DOVirtual.DelayedCall(8, () => { isStart = false; timer = Time.time; });
+        StartTimeLine.transform.position = new Vector3(player.transform.position.x, player.transform.position.y+0.12f, player.transform.position.z);
+        DOVirtual.DelayedCall(7.5f, () => { isStart = false; timer = Time.time; isTimer = true; });
+    }
+
+    // スタートアニメーションが動いている間プレイヤーを止める
+    void ReStartAnimationTime()
+    {
+        isStart = true;
+        StartTimeLine.transform.position = new Vector3(isFall.ResetPosition.x, isFall.ResetPosition.y + 0.15f, isFall.ResetPosition.z);
+        playableDirector.Play();
+        DOVirtual.DelayedCall(7.5f, () => { isStart = false;});
     }
 }

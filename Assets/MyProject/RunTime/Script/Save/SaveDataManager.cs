@@ -65,7 +65,7 @@ public class SaveDataManager : MonoBehaviour
     /// <summary> クリアタイム値変更</summary>
     public void ClearTime2Save(float _clearTime2)
     {
-        clearTime1 = _clearTime2;
+        clearTime2 = _clearTime2;
     }
     /// <summary> クリアランク値変更</summary>
     public void Rank1Save(string _rank1)
@@ -75,7 +75,7 @@ public class SaveDataManager : MonoBehaviour
     /// <summary> クリアランク値変更</summary>
     public void Rank2Save(string _rank2)
     {
-        rank1 = _rank2;
+        rank2 = _rank2;
     }
     /// <summary> スクリーンサイズ変更</summary>
     public void ScreenSize2Save(bool _screenSize)

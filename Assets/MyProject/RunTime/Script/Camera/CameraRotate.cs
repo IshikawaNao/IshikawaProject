@@ -7,8 +7,8 @@ public class CameraRotate
 { 
     // カメラ角度
     float verticalValue = -30;
-    const float verticalMaxValue = 10f;
-    const float verticalMinValue = -40f;
+    const float verticalMaxValue = 50f;
+    const float verticalMinValue = -80f;
 
     /// <summary> カメラの回転 </summary>
    　public Quaternion RotateCameraBy(Vector2 _cameraInput, GameObject _controller, float _sensitivity)
@@ -35,5 +35,10 @@ public class CameraRotate
         Vector3 rot = new Vector3(-_lookon.transform.forward.x, -_lookon.transform.forward.y, -_lookon.transform.forward.z);
         verticalValue = rot.x;
         _controller.transform.localRotation = Quaternion.LookRotation(rot);
+    }
+
+    public void DropCamera()
+    {
+        verticalValue = verticalMinValue;
     }
 }

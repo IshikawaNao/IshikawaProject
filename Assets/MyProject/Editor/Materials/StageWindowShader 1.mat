@@ -51,7 +51,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Boolean: 1
+    - _Boolean: 0
     - _Emission: 1
     - _Float: 1
     - _OutLine: 0.99

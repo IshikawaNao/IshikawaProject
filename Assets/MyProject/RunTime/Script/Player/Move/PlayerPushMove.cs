@@ -32,7 +32,7 @@ public class PlayerPushMove : IPlayerMover
         anim.SetBool("IsWalk", false);
         anim.SetBool("IsRan", false);
         anim.SetBool("IsObjectMove", true);
-        
+
         // 移動アニメーション切り替え
         if(move == Vector2.zero){ num = 0; }
         else if(move.y > 0){ num = 4; }

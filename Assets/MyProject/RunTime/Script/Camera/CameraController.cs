@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
+    [SerializeField, Header("カメラ")]
+    Camera mainCam;
     [SerializeField, Header("プレイヤーコントローラー")]
     PlayerController pc;
     [SerializeField, Header("ステージマネージャー")]
@@ -29,7 +31,7 @@ public class CameraController : MonoBehaviour
     void Update()
     {
         this.transform.position = Look.transform.position;
-        cm.SetPlayerAlpha(this.gameObject,mat);
+        cm.SetPlayerAlpha(this.gameObject,mat, mainCam);
         if (input.CameraReset)
         {
             cr.GimmickCP(this.gameObject, Look);
@@ -38,15 +40,17 @@ public class CameraController : MonoBehaviour
 
     private void LateUpdate()
     {
-        cm.CameraForwardMove(this.gameObject, target, wall_layerMask);
+        cm.CameraForwardMove(this.gameObject, target, wall_layerMask, mainCam);
         // オブジェクトを押している最中とスタート時はカメラが動かないようにする
         if (pc.PushMoveObject.IsPush || sm.IsStart) 
         {
-            cr.GimmickCP(this.gameObject, Look); 
+            cr.GimmickCP(this.gameObject, Look);
+            return;
         }
-        else 
+        else if(sm.Fall)
         {
-            this.transform.localRotation = cr.RotateCameraBy(input.CameraPos,this.gameObject, saveDataManager.Sensitivity); 
+            cr.DropCamera();
         }
+        this.transform.localRotation = cr.RotateCameraBy(input.CameraPos, this.gameObject, saveDataManager.Sensitivity);
     }
 }

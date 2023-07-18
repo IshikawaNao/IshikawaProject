@@ -10,36 +10,30 @@ public class PlayerController : MonoBehaviour
 
     bool isMove = true;         // プレイヤーの移動のフラグ
 
-    bool isJump = false;        // ジャンプのフラグ
-
-    [SerializeField]
-    GameObject Pause;       // ポーズ画面
-
-    [SerializeField]
-    OperationExplanationMove operation;　//オプション
-
-    [SerializeField]
+    [SerializeField,Header("ポーズ画面")]
+    GameObject Pause;       
+    [SerializeField,Header("オプション")]
+    OperationExplanationMove operation;
+    [SerializeField,Header("ステージマネージャー")]
     StageManager sm;
-    [SerializeField]
+    [SerializeField,Header("チュートリアル")]
     TutorialStageDisplay tutorial;
-
-    [SerializeField]
-    SonarEffect sonar;       // ソナーエフェクト
+    [SerializeField,Header("ソナーエフェクト")]
+    SonarEffect sonar;       
+    [SerializeField,Header("Rigidbody")]
+    Rigidbody rb;           
+    [SerializeField,Header("コライダー")]
+    CapsuleCollider col;
+    [SerializeField, Header("animator")]
+    Animator anim; 
 
     SwitchingMove switchMove;// 移動の切り替え
-    [SerializeField]
-    Rigidbody rb;           // rigidbody
-    [SerializeField]
-    CapsuleCollider col;    // コライダー
-    [SerializeField]
-    Animator anim;          // animator
-
     KeyInput input;         // 入力受け取り
     GroundRay gr;         // 接地判定
     PushObject push;    // Pushオブジェクト受け取り
     public PushObject PushMoveObject { get { return push; } }
     IClimb iClimb;
-    IFly iFly;
+    PlayerJump jump;
 
     void Start()
     {
@@ -49,7 +43,7 @@ public class PlayerController : MonoBehaviour
         gr = new GroundRay(this.gameObject);
         push = new PushObject(this.gameObject,anim);
         iClimb = new PlayerClimb();
-        iFly = new PlayerFly();
+        jump = new PlayerJump(rb,anim,this.gameObject);
 
         isMove = true;
     }
@@ -81,15 +75,15 @@ public class PlayerController : MonoBehaviour
             ObjectClimb();
             OperationOpen();
             Fly();
-            Jump();
             Sonar();
         }
+        jump.Jump(gr.IsGround(),isClimb);
     }
     void OperationOpen()
     {
         operation.ClimbCheck(iClimb.Climb(this.gameObject));
         operation.PushCheck(push.CanPush());
-        operation.JumpCheck(iFly.FlyFrag(this.gameObject));
+        operation.JumpCheck(jump.FlyFrag());
     }
     // 移動できるか
     bool IsMoveAction()
@@ -105,31 +99,7 @@ public class PlayerController : MonoBehaviour
         return false;
     }
 
-    // ジャンプ
-    void Jump()
-    {
-        if (gr.IsGround() && isJump)
-        {
-            isJump = false;
-            anim.SetBool("IsJump", false);
-            anim.SetBool("IsIanding",true);
-        }
-        else if(!gr.IsGround() && !isClimb && !isJump)
-        {
-            DOVirtual.DelayedCall(1, () => JumpStart());
-            
-        }
-    }
-
-    void JumpStart()
-    {
-        if (!gr.IsGround() && !isClimb && !isJump)
-        {
-            isJump = true;
-            anim.SetBool("IsIanding", false);
-            anim.SetBool("IsJump", true);
-        }
-    }
+    
 
     // オブジェクトを登る
     void ObjectClimb()
@@ -163,7 +133,7 @@ public class PlayerController : MonoBehaviour
     {
         if(input.InputJump)
         {
-            iFly.Fly(rb, iFly.FlyFrag(this.gameObject), anim);
+            jump.Fly(jump.FlyFrag());
         }
     }
 

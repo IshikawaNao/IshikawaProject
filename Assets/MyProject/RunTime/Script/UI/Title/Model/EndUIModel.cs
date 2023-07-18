@@ -38,7 +38,6 @@ public class EndUIModel
 
         // Å‘å’l‚ğ’´‚¦‚È‚¢‚æ‚¤•â³
         num = Math.Clamp(num, MinNum, MaxNum);
-        Debug.Log(num);
     }
 
     /// <summary> Œˆ’è‰Ÿ‰º </summary>

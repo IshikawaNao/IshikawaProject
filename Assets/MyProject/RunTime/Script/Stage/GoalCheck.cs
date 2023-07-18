@@ -5,18 +5,16 @@ using UnityEngine;
 /// </summary>
 public class GoalCheck : MonoBehaviour
 {
-    [Header("ステージマネージャー")]
-    StageManager sm;
-    private void Start()
-    {
-        sm = GameObject.Find("StageManager").GetComponent<StageManager>();
-    }
+    // ゴールフラグ
+    bool isGoal = false;
+    public bool Goal { get { return isGoal; } }
 
+   
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.name.Contains("Player"))
         {
-            sm.Goal = true;
+            isGoal = true;
         }
     }
 }

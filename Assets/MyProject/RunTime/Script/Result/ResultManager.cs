@@ -19,22 +19,7 @@ public class ResultManager : MonoBehaviour
     StageNumberSelect sn;
 
     private void Awake()
-    {
-        sn = StageNumberSelect.Instance;
-        SaveDataManager.Instance.Load();
-        switch(sn.StageNumber)
-        {
-            case 0:
-                clearTime = SaveDataManager.Instance.ClearTime1;
-                SaveDataManager.Instance.Rank1Save(clearRankData.Ranks[0].ClearRank(clearTime));
-                break;
-            case 1:
-                clearTime = SaveDataManager.Instance.ClearTime2;
-                SaveDataManager.Instance.Rank2Save(clearRankData.Ranks[1].ClearRank(clearTime));
-                break;
-
-        }
-        
+    {        
         GameObject obj = (GameObject)Resources.Load("ResultStage");
         Instantiate(obj, Vector3.zero, Quaternion.identity);
     }
@@ -42,6 +27,21 @@ public class ResultManager : MonoBehaviour
     void Start()
     {
         input = KeyInput.Instance;
+        sn = StageNumberSelect.Instance;
+        var save = SaveDataManager.Instance;
+        switch (sn.StageNumber)
+        {
+            case 0:
+                clearTime = save.ClearTime1;
+                save.Rank1Save(clearRankData.Ranks[0].ClearRank(clearTime));
+                break;
+            case 1:
+                clearTime = save.ClearTime2;
+                save.Rank2Save(clearRankData.Ranks[1].ClearRank(clearTime));
+                break;
+
+        }
+        save.Save();
         crearRankText.text = clearRankData.Ranks[sn.StageNumber].ClearRank(clearTime);
     }
 

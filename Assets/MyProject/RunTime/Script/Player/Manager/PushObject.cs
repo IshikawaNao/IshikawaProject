@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.Windows;
 
 /// <summary>
 /// オブジェクトを押す
@@ -38,7 +37,7 @@ public class PushObject
     // プッシュオブジェクト移動
     public void Move(Vector2 move) 
     {
-        if(move != Vector2.zero && isPush)
+        if(isPush)
         {
             Vector3 playerForward = Vector3.Scale(player.transform.forward, checkVec);
             Vector3 moveForward = playerForward * move.y + player.transform.right * move.x;
@@ -73,11 +72,13 @@ public class PushObject
     // プッシュが選択された時の処理
     public void PushAnimationChange(bool ground, bool isClimb, bool isPushAction)
     {
+
         if (CanPush() && ground && !isClimb)
         {
             if (isPushAction)
             {
                 isPush = true;
+                anim.SetBool("IsObjectMove", true);
             }
             else
             {

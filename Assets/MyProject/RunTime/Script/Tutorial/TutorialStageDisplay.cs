@@ -31,7 +31,7 @@ public class TutorialStageDisplay : MonoBehaviour
     // チュートリアルパネルを表示する
     void TutorialPanelDisplay()
     {
-        if(!stageManager.IsStart && !isTutoria)
+        if(!stageManager.IsTimeLine && !isTutoria)
         {
             isTutoria = true;
             tutorialPanel.SetActive(true);

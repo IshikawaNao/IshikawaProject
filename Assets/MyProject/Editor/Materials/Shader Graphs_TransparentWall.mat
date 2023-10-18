@@ -9,15 +9,18 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: Shader Graphs_TransparentWall
   m_Shader: {fileID: -6465566751694194690, guid: d278bf26feab62f4684bbe9373956dd4, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
   m_InvalidKeywords:
   - _SURFACE_TYPE_TRANSPARENT
   m_LightmapFlags: 2
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: 2450
+  m_CustomRenderQueue: 2000
   stringTagMap: {}
   disabledShaderPasses: []
+  m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
@@ -25,11 +28,23 @@ Material:
         m_Texture: {fileID: 2800000, guid: a14a60eabd73d8f41a7deb84fc49228a, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _SampleTexture2D_03f5ad93716e4908a274cf0694120a8e_Texture_1_Texture2D:
+        m_Texture: {fileID: 2800000, guid: a14a60eabd73d8f41a7deb84fc49228a, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _SampleTexture2D_166c4a0bd5a74da8a912d6ad54c6d3b8_Texture_1:
         m_Texture: {fileID: 2800000, guid: 450eea50892b1464aa51ccceb8fa5aeb, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _SampleTexture2D_166c4a0bd5a74da8a912d6ad54c6d3b8_Texture_1_Texture2D:
+        m_Texture: {fileID: 2800000, guid: 450eea50892b1464aa51ccceb8fa5aeb, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _SampleTexture2D_76adc2243f6441359fb3443671d5a42b_Texture_1:
+        m_Texture: {fileID: 2800000, guid: dc856d5e9a785e8498435130548ae8a5, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SampleTexture2D_76adc2243f6441359fb3443671d5a42b_Texture_1_Texture2D:
         m_Texture: {fileID: 2800000, guid: dc856d5e9a785e8498435130548ae8a5, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -70,7 +85,7 @@ Material:
     - _ZTest: 4
     - _ZWrite: 0
     - _ZWriteControl: 0
-    - _intensity: 4.4919987
+    - _intensity: 4.3563194
     m_Colors: []
   m_BuildTextureStacks: []
 --- !u!114 &1381230326809729250
@@ -85,4 +100,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  version: 5
+  version: 7

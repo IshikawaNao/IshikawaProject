@@ -11,8 +11,8 @@ using UniRx;
 public class StageManager : MonoBehaviour
 {
     // スタート時のアニメーションフラグ
-    bool isStart = true;
-    public bool IsStart { get { return isStart; } }
+    //bool isTimeLine = true;
+    public bool IsTimeLine { get; set; }
 
     public bool Goal { get { return isGoal.Goal; } }
     bool stageCliar = false;
@@ -83,9 +83,10 @@ public class StageManager : MonoBehaviour
         input = KeyInput.Instance;
         saveData = SaveDataManager.Instance;
         saveData.Load();
+
         // マウスカーソルを非表示
         Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = true;
+        Cursor.visible = false;
 
         // スライダーの数値反映
         volumeConfigUI.SetMasterVolume(SoundManager.Instance.MasterVolume);
@@ -114,6 +115,7 @@ public class StageManager : MonoBehaviour
         Cliar();
         SwithingOperation();
         TimeMeasurement();
+        print(IsTimeLine);
     }
 
     // 操作説明のPadとキーボードの表示を切り替える
@@ -171,15 +173,15 @@ public class StageManager : MonoBehaviour
     void StartAnimationTime()
     {
         StartTimeLine.transform.position = new Vector3(player.transform.position.x, player.transform.position.y+0.12f, player.transform.position.z);
-        DOVirtual.DelayedCall(7.5f, () => { isStart = false; timer = Time.time; isTimer = true; });
+        DOVirtual.DelayedCall(6f, () => {  timer = Time.time; isTimer = true; });
     }
 
     // スタートアニメーションが動いている間プレイヤーを止める
     void ReStartAnimationTime()
     {
-        isStart = true;
+        //isStart = true;
         StartTimeLine.transform.position = new Vector3(isFall.ResetPosition.x, isFall.ResetPosition.y + 0.15f, isFall.ResetPosition.z);
         playableDirector.Play();
-        DOVirtual.DelayedCall(7.5f, () => { isStart = false;});
+        //DOVirtual.DelayedCall(7.5f, () => { isStart = false;});
     }
 }

@@ -9,6 +9,8 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: PushObjectGimmick
   m_Shader: {fileID: -6465566751694194690, guid: 13c71191cbeee594194be029e8315dd2, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
   m_InvalidKeywords: []
   m_LightmapFlags: 2
@@ -17,6 +19,7 @@ Material:
   m_CustomRenderQueue: -1
   stringTagMap: {}
   disabledShaderPasses: []
+  m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
@@ -40,6 +43,10 @@ Material:
         m_Texture: {fileID: 2800000, guid: e92c394bb84c29a408b9a3a3556391f9, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _SampleTexture2D_2f534fcb50d4454ea036d0bcdcec26cf_Texture_1_Texture2D:
+        m_Texture: {fileID: 2800000, guid: e92c394bb84c29a408b9a3a3556391f9, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _SampleTexture2D_33f15dbb47a4435888cf9baf91fbc992_Texture_1:
         m_Texture: {fileID: 2800000, guid: 450eea50892b1464aa51ccceb8fa5aeb, type: 3}
         m_Scale: {x: 1, y: 1}
@@ -53,6 +60,10 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SampleTexture2D_74599be91c87404c91a7d6d127ae65b5_Texture_1:
+        m_Texture: {fileID: 2800000, guid: 450eea50892b1464aa51ccceb8fa5aeb, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SampleTexture2D_74599be91c87404c91a7d6d127ae65b5_Texture_1_Texture2D:
         m_Texture: {fileID: 2800000, guid: 450eea50892b1464aa51ccceb8fa5aeb, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -121,7 +132,7 @@ Material:
     - _ZTest: 4
     - _ZWrite: 1
     - _ZWriteControl: 0
-    - _intensity: 4.4919987
+    - _intensity: 4.3563194
     m_Colors:
     - _Color: {r: 0.6886792, g: 0.62695795, b: 0.62695795, a: 0.49019608}
   m_BuildTextureStacks: []
@@ -137,7 +148,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  version: 5
+  version: 7
 --- !u!114 &4641581254414231374
 MonoBehaviour:
   m_ObjectHideFlags: 11

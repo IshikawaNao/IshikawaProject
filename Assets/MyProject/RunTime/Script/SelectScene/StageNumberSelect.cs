@@ -21,7 +21,7 @@ public class StageNumberSelect : MonoBehaviour
     }
 
     // ステージナンバー
-    public int StageNumber { get; set; } = 1;
+    public int StageNumber { get; set; } = 0;
 
     private void Awake()
     {

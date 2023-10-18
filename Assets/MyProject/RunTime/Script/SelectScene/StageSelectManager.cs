@@ -12,6 +12,7 @@ public class StageSelectManager : MonoBehaviour
 
     const float moveVal = 15;
     const float waiteTime = 2;
+    bool IsSceneChange = false;
     
     [SerializeField]
     GameObject stageOpen;
@@ -40,6 +41,7 @@ public class StageSelectManager : MonoBehaviour
         ua = new UiAddition();
         stage[0].SetFloat("_Boolean", 1);
         stage[1].SetFloat("_Boolean", 0);
+        IsSceneChange = false;
     }
 
     
@@ -62,16 +64,13 @@ public class StageSelectManager : MonoBehaviour
             }
 
             //Å@åàíËèàóù
-            if (input.DecisionInput && bm.SelectDelyTime())
+            if (input.DecisionInput && bm.SelectDelyTime() && !IsSceneChange)
             {
                 SoundManager.Instance.PlayOneShotSe("decision");
                 StageNumberSelect.Instance.StageNumber = stageNum;
-                FadeManager.Instance.LoadScene("Main", 1.0f);
+                FadeManager.Instance.LoadScene("Main", waiteTime);
+                IsSceneChange = true;
             }
         }
-        else
-        {
-        }
-        
     }
 }

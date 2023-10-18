@@ -27,7 +27,7 @@ public class TitleManager : MonoBehaviour
 
         // マウスカーソルを非表示
         Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = true;
+        Cursor.visible = false;
 
         // スライダーの数値反映
         volumeConfigUI.SetMasterVolume(SoundManager.Instance.MasterVolume);

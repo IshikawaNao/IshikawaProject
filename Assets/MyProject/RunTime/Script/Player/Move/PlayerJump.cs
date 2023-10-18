@@ -2,14 +2,19 @@ using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.ProBuilder.AutoUnwrapSettings;
 
 public class PlayerJump
 {
     RaycastHit hit;
+    // rayの距離,高さ
+    const float fallCheckDistance = 0.7f;
     // ジャンプする力
     private const float jumpPower = 20;
     private bool isJump;
     public bool IsJump { get { return isJump; } }
+    bool isFall;
+    public bool IsForwardWall { get { return isFall; } }
     Rigidbody rb;
     Animator anim;
     GameObject player;
@@ -25,31 +30,26 @@ public class PlayerJump
     {
         if(isFly)
         {
-            rb.AddForce(0, jumpPower, 0,ForceMode.Impulse);
+            
         }
     }
+    
     /// <summary>
-    /// ジャンプ出来るか
+    /// 落下中か否か
     /// </summary>
-    public bool FlyFrag()
+    public bool IsFall()
     {
-        Vector3 rayPosition = player.transform.position;
-        Ray ray = new Ray(rayPosition, Vector3.down);
-        if(Physics.Raycast(ray, out hit, 0.7f))
-        {
-            if(hit.collider.gameObject.tag.Contains("Fly"))
-            {
-                return true;
-            }
-        }
-        Debug.DrawRay(rayPosition, Vector3.down * 0.7f, Color.red,1f);
-        return false;
+        //  落下判定に使用する変数
+        Ray fallCheckRay = new Ray(player.transform.position , Vector3.down);
+        //  壁判定を格納
+        isFall = Physics.Raycast(fallCheckRay, fallCheckDistance);
+        return isFall;
     }
 
     // ジャンプ
     public void Jump(bool isground,bool isclimb)
     {
-        if(isground)
+        /*if(isground && !isJump)
         {
             isJump = false;
             anim.SetBool("IsJump", false);
@@ -58,7 +58,7 @@ public class PlayerJump
         else if (!isground && !isclimb && !isJump)
         {
             DOVirtual.DelayedCall(1, () => JumpStart(isground,isclimb));
-        }
+        }*/
     }
 
     void JumpStart(bool isground, bool isclimb)

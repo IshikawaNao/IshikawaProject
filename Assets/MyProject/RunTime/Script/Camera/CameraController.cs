@@ -24,13 +24,13 @@ public class CameraController : MonoBehaviour
 
     void Start()
     {
+        this.transform.position = Look.transform.position;
         input = KeyInput.Instance;
         saveDataManager = SaveDataManager.Instance;
     }
 
     void Update()
     {
-        this.transform.position = Look.transform.position;
         cm.SetPlayerAlpha(this.gameObject,mat, mainCam);
         if (input.CameraReset)
         {
@@ -40,9 +40,10 @@ public class CameraController : MonoBehaviour
 
     private void LateUpdate()
     {
+        this.transform.position = Look.transform.position;
         cm.CameraForwardMove(this.gameObject, target, wall_layerMask, mainCam);
         // オブジェクトを押している最中とスタート時はカメラが動かないようにする
-        if (pc.PushMoveObject.IsPush || sm.IsStart) 
+        if (pc.PushMoveObject.IsPush || !sm.IsTimeLine) 
         {
             cr.GimmickCP(this.gameObject, Look);
             return;

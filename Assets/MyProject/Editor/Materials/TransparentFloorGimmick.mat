@@ -9,6 +9,8 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: TransparentFloorGimmick
   m_Shader: {fileID: -6465566751694194690, guid: a683b6ca7a27cab40a33faa23254f11a, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
   m_InvalidKeywords: []
   m_LightmapFlags: 4
@@ -17,6 +19,7 @@ Material:
   m_CustomRenderQueue: -1
   stringTagMap: {}
   disabledShaderPasses: []
+  m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
@@ -33,6 +36,10 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SampleTexture2D_aaad0b63c7ce4fb5ad5356c9ff73b3c4_Texture_1:
+        m_Texture: {fileID: 2800000, guid: 2881e771c2beebc42a9132bd9a5a3cb9, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SampleTexture2D_aaad0b63c7ce4fb5ad5356c9ff73b3c4_Texture_1_Texture2D:
         m_Texture: {fileID: 2800000, guid: 2881e771c2beebc42a9132bd9a5a3cb9, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -60,7 +67,7 @@ Material:
     - _Float: 7
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _intensity: 4.4919987
+    - _intensity: 4.3563194
     m_Colors:
     - _Color: {r: 0.6886792, g: 0.21115166, b: 0.21115166, a: 0}
   m_BuildTextureStacks: []
@@ -89,4 +96,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  version: 5
+  version: 7

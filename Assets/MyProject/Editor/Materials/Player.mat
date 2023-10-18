@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  version: 5
+  version: 7
 --- !u!21 &2100000
 Material:
   serializedVersion: 8
@@ -22,6 +22,8 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: Player
   m_Shader: {fileID: -6465566751694194690, guid: bf998f377f531de4a87ed30cbff1dec4, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
   - _ALPHATEST_ON
   m_InvalidKeywords: []
@@ -32,11 +34,24 @@ Material:
   stringTagMap:
     RenderType: TransparentCutout
   disabledShaderPasses: []
+  m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
     - _MetallicTexture:
         m_Texture: {fileID: 2800000, guid: bdada8115381ede48a341634fac6a809, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SampleTexture2DLOD_44a624a6f6204797b23ca27b3c462949_Texture_1:
+        m_Texture: {fileID: 2800000, guid: a1409273f39f63f488179d1f331010c4, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SampleTexture2DLOD_44a624a6f6204797b23ca27b3c462949_Texture_1_Texture2D:
+        m_Texture: {fileID: 2800000, guid: a1409273f39f63f488179d1f331010c4, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SampleTexture2DLOD_af6e29abde6e49e590d181ed245edf11_Texture_1:
+        m_Texture: {fileID: 2800000, guid: 7721611a1054da449a4d98f6e08e3fd3, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SampleTexture2D_047d43f8c6cb459b94efb667305ca273_Texture_1:
@@ -51,7 +66,15 @@ Material:
         m_Texture: {fileID: 2800000, guid: 1d2d062215b3713448b79f5be5312d8c, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _SampleTexture2D_0cca7cb2cc9b4a8294e1fdb79a2b8538_Texture_1_Texture2D:
+        m_Texture: {fileID: 2800000, guid: 1d2d062215b3713448b79f5be5312d8c, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _SampleTexture2D_10d4a9c5cbd740c58b18ef581b67ca1f_Texture_1:
+        m_Texture: {fileID: 2800000, guid: df003d4ef0b84e04e85082d35f7dc3ec, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SampleTexture2D_10d4a9c5cbd740c58b18ef581b67ca1f_Texture_1_Texture2D:
         m_Texture: {fileID: 2800000, guid: df003d4ef0b84e04e85082d35f7dc3ec, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -91,6 +114,10 @@ Material:
         m_Texture: {fileID: 2800000, guid: 6f0476958afb9ab4cbb9f7546733363b, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _SampleTexture2D_b478ab53648b40408ea9a5c5a7a2579a_Texture_1_Texture2D:
+        m_Texture: {fileID: 2800000, guid: 6f0476958afb9ab4cbb9f7546733363b, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _SampleTexture2D_c422bcdba3b340fc959a36ff77ae6102_Texture_1:
         m_Texture: {fileID: 2800000, guid: 6f0476958afb9ab4cbb9f7546733363b, type: 3}
         m_Scale: {x: 1, y: 1}
@@ -104,6 +131,10 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SampleTexture2D_dd3c895ba94d4eee81ad9baf38bdfb95_Texture_1:
+        m_Texture: {fileID: 2800000, guid: 48586fbeb4dc8f94192f664fcca6227e, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SampleTexture2D_dd3c895ba94d4eee81ad9baf38bdfb95_Texture_1_Texture2D:
         m_Texture: {fileID: 2800000, guid: 48586fbeb4dc8f94192f664fcca6227e, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -132,23 +163,25 @@ Material:
     - Vector1_461ba97195cd4057bbb0720a7394a4a6: 1
     - _Alpha: 1
     - _AlphaClip: 1
+    - _AlphaToMask: 1
     - _Blend: 0
+    - _BlendModePreserveSpecular: 0
     - _Boolean: 1
     - _CastShadows: 1
     - _Cull: 2
-    - _Delay: 0.1
+    - _Delay: 0
     - _Dissolve_Time: 0
     - _DstBlend: 0
     - _Float: 1
-    - _Float_1: 1
+    - _Float_1: 0
     - _Gradient_Range: 0.3
     - _Metallic: 1
     - _QueueControl: 0
     - _QueueOffset: 0
     - _ReceiveShadows: 1
-    - _Smooth: 0.3
+    - _Smooth: 0.282
     - _SrcBlend: 1
-    - _StartAlpha: 0.649
+    - _StartAlpha: 0
     - _Surface: 0
     - _UseMetallicTexture: 0
     - _WorkflowMode: 1

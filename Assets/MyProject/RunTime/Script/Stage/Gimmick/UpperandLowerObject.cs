@@ -1,18 +1,20 @@
 using DG.Tweening;
+using SoundSystem;
 using UnityEngine;
 
 public class UpperandLowerObject : MonoBehaviour
 {
-    [SerializeField]
-    HouseRoom hr;
-
-    [SerializeField]
-    bool upflag;
-    [SerializeField]
+    [SerializeField,Header("起動オブジェクト")]
+    DetectionObject hr;
+    [SerializeField, Header("到達位置")]
     float upMax = 10;
-    const int downMin = 1;
 
-    const float waiteTime = 5;
+    Tween tween;
+    bool isAbove;
+    // 到達時間
+    const float ArrivalTime = 8;
+    // 起動するまでの時間
+    const float DelayTime = 2;
 
     Vector3 pos;
 
@@ -28,19 +30,34 @@ public class UpperandLowerObject : MonoBehaviour
 
     void StartUpDown()
     {
-        if(hr.Placed || upflag)
+        if(hr.Placed && !isAbove)
         {
-            transform.DOMove(
+            isAbove = true;
+            tween =  transform.DOMove(
                 new Vector3(pos.x,pos.y + upMax,pos.z),
-                waiteTime
-                );
+                ArrivalTime
+                )
+                .SetDelay(DelayTime)
+                .OnComplete(() => isAbove = false);
+            SoundManager.Instance.PlayOneShotSe((int)SEList.Up);
         }
-        else if(!hr.Placed || !upflag)
+        else if(!hr.Placed)
         {
-            transform.DOMove(
+            tween = transform.DOMove(
                 pos,
-                waiteTime
-                );
+                ArrivalTime
+                )
+                .SetDelay(DelayTime);
         }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        collision.transform.SetParent(transform);
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        collision.transform.SetParent(null);
     }
 }

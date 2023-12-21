@@ -2,10 +2,8 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
-    [SerializeField, Header("カメラ")]
-    Camera mainCam;
     [SerializeField, Header("プレイヤーコントローラー")]
-    PlayerController pc;
+    PlayerController playerCon;
     [SerializeField, Header("ステージマネージャー")]
     StageManager sm;
     [SerializeField, Header("ロックオンオブジェクト")]
@@ -17,8 +15,9 @@ public class CameraController : MonoBehaviour
     [SerializeField, Header("レイヤーマスク")]
     LayerMask wall_layerMask;
 
-    CameraMove cm = new CameraMove();
-    CameraRotate cr = new CameraRotate();
+    Camera mainCam;
+    CameraMove cameraMove;
+    CameraRotate cameraRotate;
     KeyInput input;
     SaveDataManager saveDataManager;
 
@@ -27,31 +26,40 @@ public class CameraController : MonoBehaviour
         this.transform.position = Look.transform.position;
         input = KeyInput.Instance;
         saveDataManager = SaveDataManager.Instance;
+        mainCam = Camera.main;
+        cameraMove = new CameraMove();
+        cameraRotate = new CameraRotate();
     }
 
     void Update()
     {
-        cm.SetPlayerAlpha(this.gameObject,mat, mainCam);
+        cameraMove.SetPlayerAlpha(this.gameObject,mat, mainCam);
         if (input.CameraReset)
         {
-            cr.GimmickCP(this.gameObject, Look);
+            cameraRotate.GimmickCP(this.gameObject, Look);
         }
     }
 
     private void LateUpdate()
     {
         this.transform.position = Look.transform.position;
-        cm.CameraForwardMove(this.gameObject, target, wall_layerMask, mainCam);
+        cameraMove.CameraForwardMove(this.gameObject, target, wall_layerMask, mainCam);
         // オブジェクトを押している最中とスタート時はカメラが動かないようにする
-        if (pc.PushMoveObject.IsPush || !sm.IsTimeLine) 
+        if (playerCon.CurrentState.State == PlayerState.Push || !sm.IsTimeLine) 
         {
-            cr.GimmickCP(this.gameObject, Look);
+            cameraRotate.GimmickCP(this.gameObject, Look);
             return;
         }
+        // 落下時にカメラを下向きにする
         else if(sm.Fall)
         {
-            cr.DropCamera();
+            cameraRotate.DropCamera();
         }
-        this.transform.localRotation = cr.RotateCameraBy(input.CameraPos, this.gameObject, saveDataManager.Sensitivity);
+        // ポーズ時はカメラを止める
+        else if(playerCon.CurrentState.State == PlayerState.Pause) 
+        {
+            return; 
+        }
+        this.transform.localRotation = cameraRotate.RotateCameraBy(input.CameraPos, this.gameObject, saveDataManager.Sensitivity);
     }
 }

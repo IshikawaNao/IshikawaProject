@@ -37,7 +37,7 @@ public partial class @MyInput: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""Jump"",
+                    ""name"": ""Teleport"",
                     ""type"": ""Button"",
                     ""id"": ""d7acb597-769e-424a-a880-0711caeb2b64"",
                     ""expectedControlType"": ""Button"",
@@ -76,6 +76,15 @@ public partial class @MyInput: IInputActionCollection2, IDisposable
                     ""name"": ""KeyDetection"",
                     ""type"": ""Button"",
                     ""id"": ""fe3e44b9-b9c8-4b7b-b71f-4b72f201fc3e"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""BeamRotate"",
+                    ""type"": ""Button"",
+                    ""id"": ""0e408b56-9d2f-45b2-9582-c8938710175e"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -156,7 +165,7 @@ public partial class @MyInput: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Jump"",
+                    ""action"": ""Teleport"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -167,7 +176,7 @@ public partial class @MyInput: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Jump"",
+                    ""action"": ""Teleport"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -185,7 +194,7 @@ public partial class @MyInput: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""6e43b932-1c2d-4714-a6fe-c2cea38d13b9"",
-                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""path"": ""<Gamepad>/buttonEast"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -207,7 +216,7 @@ public partial class @MyInput: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""a8da3bd7-31e1-457b-a519-cd804ea4d7a6"",
-                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""path"": ""<Gamepad>/buttonNorth"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -269,6 +278,28 @@ public partial class @MyInput: IInputActionCollection2, IDisposable
                     ""action"": ""KeyDetection"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3ce4450d-10b9-420f-9b99-65a65408f5b9"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""BeamRotate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6f73249f-8c86-4d81-8a57-667428de8de0"",
+                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""BeamRotate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -321,7 +352,7 @@ public partial class @MyInput: IInputActionCollection2, IDisposable
                     ""id"": ""87e3755f-0548-4b0e-903f-df4fd2ba191a"",
                     ""path"": ""<Gamepad>/rightStick"",
                     ""interactions"": """",
-                    ""processors"": ""ScaleVector2(x=5,y=5)"",
+                    ""processors"": ""ScaleVector2"",
                     ""groups"": """",
                     ""action"": ""Move"",
                     ""isComposite"": false,
@@ -449,11 +480,12 @@ public partial class @MyInput: IInputActionCollection2, IDisposable
         // Player
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
         m_Player_Move = m_Player.FindAction("Move", throwIfNotFound: true);
-        m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
+        m_Player_Teleport = m_Player.FindAction("Teleport", throwIfNotFound: true);
         m_Player_PushAction = m_Player.FindAction("PushAction", throwIfNotFound: true);
         m_Player_ClimbAction = m_Player.FindAction("ClimbAction", throwIfNotFound: true);
         m_Player_SonarKey = m_Player.FindAction("SonarKey", throwIfNotFound: true);
         m_Player_KeyDetection = m_Player.FindAction("KeyDetection", throwIfNotFound: true);
+        m_Player_BeamRotate = m_Player.FindAction("BeamRotate", throwIfNotFound: true);
         // Camera
         m_Camera = asset.FindActionMap("Camera", throwIfNotFound: true);
         m_Camera_Move = m_Camera.FindAction("Move", throwIfNotFound: true);
@@ -525,21 +557,23 @@ public partial class @MyInput: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_Player;
     private List<IPlayerActions> m_PlayerActionsCallbackInterfaces = new List<IPlayerActions>();
     private readonly InputAction m_Player_Move;
-    private readonly InputAction m_Player_Jump;
+    private readonly InputAction m_Player_Teleport;
     private readonly InputAction m_Player_PushAction;
     private readonly InputAction m_Player_ClimbAction;
     private readonly InputAction m_Player_SonarKey;
     private readonly InputAction m_Player_KeyDetection;
+    private readonly InputAction m_Player_BeamRotate;
     public struct PlayerActions
     {
         private @MyInput m_Wrapper;
         public PlayerActions(@MyInput wrapper) { m_Wrapper = wrapper; }
         public InputAction @Move => m_Wrapper.m_Player_Move;
-        public InputAction @Jump => m_Wrapper.m_Player_Jump;
+        public InputAction @Teleport => m_Wrapper.m_Player_Teleport;
         public InputAction @PushAction => m_Wrapper.m_Player_PushAction;
         public InputAction @ClimbAction => m_Wrapper.m_Player_ClimbAction;
         public InputAction @SonarKey => m_Wrapper.m_Player_SonarKey;
         public InputAction @KeyDetection => m_Wrapper.m_Player_KeyDetection;
+        public InputAction @BeamRotate => m_Wrapper.m_Player_BeamRotate;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -552,9 +586,9 @@ public partial class @MyInput: IInputActionCollection2, IDisposable
             @Move.started += instance.OnMove;
             @Move.performed += instance.OnMove;
             @Move.canceled += instance.OnMove;
-            @Jump.started += instance.OnJump;
-            @Jump.performed += instance.OnJump;
-            @Jump.canceled += instance.OnJump;
+            @Teleport.started += instance.OnTeleport;
+            @Teleport.performed += instance.OnTeleport;
+            @Teleport.canceled += instance.OnTeleport;
             @PushAction.started += instance.OnPushAction;
             @PushAction.performed += instance.OnPushAction;
             @PushAction.canceled += instance.OnPushAction;
@@ -567,6 +601,9 @@ public partial class @MyInput: IInputActionCollection2, IDisposable
             @KeyDetection.started += instance.OnKeyDetection;
             @KeyDetection.performed += instance.OnKeyDetection;
             @KeyDetection.canceled += instance.OnKeyDetection;
+            @BeamRotate.started += instance.OnBeamRotate;
+            @BeamRotate.performed += instance.OnBeamRotate;
+            @BeamRotate.canceled += instance.OnBeamRotate;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -574,9 +611,9 @@ public partial class @MyInput: IInputActionCollection2, IDisposable
             @Move.started -= instance.OnMove;
             @Move.performed -= instance.OnMove;
             @Move.canceled -= instance.OnMove;
-            @Jump.started -= instance.OnJump;
-            @Jump.performed -= instance.OnJump;
-            @Jump.canceled -= instance.OnJump;
+            @Teleport.started -= instance.OnTeleport;
+            @Teleport.performed -= instance.OnTeleport;
+            @Teleport.canceled -= instance.OnTeleport;
             @PushAction.started -= instance.OnPushAction;
             @PushAction.performed -= instance.OnPushAction;
             @PushAction.canceled -= instance.OnPushAction;
@@ -589,6 +626,9 @@ public partial class @MyInput: IInputActionCollection2, IDisposable
             @KeyDetection.started -= instance.OnKeyDetection;
             @KeyDetection.performed -= instance.OnKeyDetection;
             @KeyDetection.canceled -= instance.OnKeyDetection;
+            @BeamRotate.started -= instance.OnBeamRotate;
+            @BeamRotate.performed -= instance.OnBeamRotate;
+            @BeamRotate.canceled -= instance.OnBeamRotate;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -725,11 +765,12 @@ public partial class @MyInput: IInputActionCollection2, IDisposable
     public interface IPlayerActions
     {
         void OnMove(InputAction.CallbackContext context);
-        void OnJump(InputAction.CallbackContext context);
+        void OnTeleport(InputAction.CallbackContext context);
         void OnPushAction(InputAction.CallbackContext context);
         void OnClimbAction(InputAction.CallbackContext context);
         void OnSonarKey(InputAction.CallbackContext context);
         void OnKeyDetection(InputAction.CallbackContext context);
+        void OnBeamRotate(InputAction.CallbackContext context);
     }
     public interface ICameraActions
     {

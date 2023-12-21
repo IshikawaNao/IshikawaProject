@@ -42,9 +42,6 @@ public class FadeManager : MonoBehaviour
 	/// <summary>フェード色</summary>
 	public Color fadeColor = Color.black;
 
-   // [Serializable]
-	
-
 	public void Awake ()
 	{
 		if (this != Instance) {
@@ -57,7 +54,6 @@ public class FadeManager : MonoBehaviour
 
 	public void OnGUI ()
 	{
-	
 		// Fade .
 		if (this.isFading) {
 			//色と透明度を更新して白テクスチャを描画 .
@@ -72,9 +68,6 @@ public class FadeManager : MonoBehaviour
 				//(UnityEditor名前空間を使わないと自動取得できなかったので決めうちで作成) .
 				List<string> scenes = new List<string> ();
 				scenes.Add ("SampleScene");
-				//scenes.Add ("SomeScene1");
-				//scenes.Add ("SomeScene2");
-
 
 				//Sceneが一つもない .
 				if (scenes.Count == 0) {
@@ -102,27 +95,21 @@ public class FadeManager : MonoBehaviour
 		
 	}
 
-	/// <summary>
-	/// 画面遷移 .
-	/// </summary>
-	/// <param name='scene'>シーン名</param>
-	/// <param name='interval'>暗転にかかる時間(秒)</param>
+	/// <summary> 画面遷移</summary>
 	public void LoadScene (string scene, float interval)
 	{
-		StartCoroutine (TransScene (scene, interval));
+		if(isFading) { return; }
+        isFading = true;
+        StartCoroutine (TransScene (scene, interval));
 	}
 
-	/// <summary>
-	/// シーン遷移用コルーチン .
-	/// </summary>
-	/// <param name='scene'>シーン名</param>
-	/// <param name='interval'>暗転にかかる時間(秒)</param>
+	/// <summary> シーン遷移用コルーチン </summary>
 	private IEnumerator TransScene (string scene, float interval)
 	{
 		//だんだん暗く .
-		this.isFading = true;
 		float time = 0;
-		while (time <= interval) {
+		while (time <= interval) 
+		{
 			this.fadeAlpha = Mathf.Lerp (0f, 1f, time / interval);      
 			time += Time.deltaTime;
 			yield return 0;
@@ -133,15 +120,13 @@ public class FadeManager : MonoBehaviour
 
 		//だんだん明るく .
 		time = 0;
-		while (time <= interval) {
+		while (time <= interval) 
+		{
 			this.fadeAlpha = Mathf.Lerp (1f, 0f, time / interval);
 			time += Time.deltaTime;
 			yield return 0;
 		}
-		
 		this.isFading = false;
 	}
-
-
 }
 

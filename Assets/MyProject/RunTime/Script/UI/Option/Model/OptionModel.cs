@@ -1,22 +1,24 @@
-using UnityEngine;
-using DG.Tweening;
 using System;
+using UniRx;
+using UnityEngine;
 
 public class OptionModel
-{ 
+{
     private const int MinNum = 0;
     // 最大値
-    private  int[] MaxNum;
-    private int StateMaxNum; 
+    private int[] MaxNum;
+    private int StateMaxNum;
     // 選択時のディレイのためのフラグ
     private bool isSelect = true;
     public bool IsSelect { get => isSelect; }
     // Xステート番号　Yボタン番号
-    Vector2 selectvalue;
-    public Vector2 SelectValue { get { return selectvalue; } }
+    Vector2 selectNum;
+
+    private readonly ReactiveProperty<Vector2> selectValue = new ReactiveProperty<Vector2>();
+    public IReadOnlyReactiveProperty<Vector2> SelectValue => selectValue;
 
     // ディレイタイム
-    private const float DelayTime = 0.4f;
+    private const float DelayTime = 0.2f;
 
     // ステートとボタンの最大数を代入
     public OptionModel(int _statemaxnum, int[] _maxnum)
@@ -24,59 +26,57 @@ public class OptionModel
         StateMaxNum = _statemaxnum;
         MaxNum = _maxnum;
     }
-    
+
     // 選択ボタンの切り替え
-    private void SelectNum(Vector2 value)
+    private void SelectNumbar(Vector2 value)
     {
-        var num = selectvalue.y;
-        if (value.y > 0)
-        {
-            num--;
-        }
-        else if (value.y < 0)
-        {
-            num++;
-        }
+        // DelayTimeが終わるまで処理に入らないようにする
+        if (!isSelect) { return; }
+
+        isSelect = false;
+        Observable.Timer(TimeSpan.FromSeconds(DelayTime))
+            .Subscribe(_ => isSelect = true);
+
+        var num = selectNum.y;
+        if (value.y > 0) { num--; }
+        else if (value.y < 0) { num++; }
         // 最大値を超えないよう補正
-        selectvalue.y = Math.Clamp(num, MinNum, MaxNum[(int)selectvalue.x]);
+        selectNum.y = Math.Clamp(num, MinNum, MaxNum[(int)selectNum.x]);
+        selectValue.Value = selectNum;
     }
     // 選択ステートの切り替え
-    private void StateNum(Vector2 value)
+    private void StateNumbar(Vector2 value)
     {
-        var num = selectvalue;
-        if (num.y == 0)
-        {
-            if (value.x > 0)
-            {
-                num.x++;
-            }
-            else if (value.x < 0)
-            {
-                num.x--;
-            }
-            // 最大値を超えないよう補正
-            selectvalue.x = Math.Clamp(num.x, 0, StateMaxNum);
-        }
+        // DelayTimeが終わるまで処理に入らないようにする
+        if (!isSelect || selectNum.y != 0) { return; }
+        isSelect = false;
+        Observable.Timer(TimeSpan.FromSeconds(DelayTime))
+            .Subscribe(_ => isSelect = true);
+        var num = selectNum;
+
+        if (value.x > 0){ num.x++; }
+        else if (value.x < 0) {  num.x--; }
+        // 最大値を超えないよう補正
+        selectNum.x = Math.Clamp(num.x, 0, StateMaxNum);
+        selectValue.Value = selectNum;
     }
     /// <summary> 入力による切り替え</summary>
     public void SelectCahge(Vector2 value)
     {
-        if (!isSelect)
+        if(value.x != 0) 
         {
-            return;
+            StateNumbar(value); 
         }
-        isSelect = false;
-        // DelayTime待ってディレイ解除
-        DOVirtual.DelayedCall(DelayTime, () => isSelect = true);
-
-        SelectNum(value);
-        StateNum(value);
+        else if(value.y != 0) { }
+        {
+            SelectNumbar(value);
+        }
     }
 
     // 初期化
-    public void ReturnOption()
+    public void InitializationNum()
     {
-        selectvalue = Vector2.zero;
+        selectNum = Vector2.zero;
+        selectValue.Value = selectNum;
     }
 }
-

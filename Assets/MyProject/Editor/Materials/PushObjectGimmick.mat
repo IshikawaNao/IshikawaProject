@@ -132,7 +132,7 @@ Material:
     - _ZTest: 4
     - _ZWrite: 1
     - _ZWriteControl: 0
-    - _intensity: 4.3563194
+    - _intensity: 4.4456005
     m_Colors:
     - _Color: {r: 0.6886792, g: 0.62695795, b: 0.62695795, a: 0.49019608}
   m_BuildTextureStacks: []

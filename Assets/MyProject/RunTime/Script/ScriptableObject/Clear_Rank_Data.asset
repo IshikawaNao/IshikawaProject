@@ -21,7 +21,3 @@ MonoBehaviour:
     ATime: 100
     BTime: 150
     CTime: 200
-  - STime: 90
-    ATime: 180
-    BTime: 270
-    CTime: 360

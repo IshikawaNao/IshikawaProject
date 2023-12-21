@@ -5,8 +5,8 @@ using UnityEngine;
 /// </summary>
 public class CameraMove 
 {
-    const float playerVisibilityCheck = 2;
-    const float playerAlpha = 0.5f;
+    const float PlayerVisibilityCheck = 2;
+    const float PlayerAlpha = 0.5f;
 
     /// <summary>@ƒJƒƒ‰‚ÖŒü‚©‚Á‚ÄRay‚ğ”ò‚Î‚· </summary>
     public void CameraForwardMove(GameObject cameraParent, GameObject target, LayerMask wall_layerMask, Camera main)
@@ -31,9 +31,9 @@ public class CameraMove
     public void SetPlayerAlpha(GameObject cameraParent,Material mat,Camera main)
     {
         var dis = Vector3.Distance(cameraParent.transform.position, main.transform.position);
-        if(dis < playerVisibilityCheck) 
+        if(dis < PlayerVisibilityCheck) 
         {
-            mat.SetFloat("_Alpha", playerAlpha); 
+            mat.SetFloat("_Alpha", PlayerAlpha); 
         }
         else
         { 

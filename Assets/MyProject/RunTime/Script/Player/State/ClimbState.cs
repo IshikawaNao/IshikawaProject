@@ -1,6 +1,5 @@
 using DG.Tweening;
 using UnityEngine;
-using UnityEngine.U2D.IK;
 
 public class ClimbState : IPlayerState
 {
@@ -8,10 +7,11 @@ public class ClimbState : IPlayerState
     GameObject PlayerObj;
     Animator anim;
     CapsuleCollider col;
-    PlayerClimb climb;
+    RayHitDetection rayHitDetection;
 
-    const float climbDis = 5;
-    const float climbTime = 0.8f;
+    const float ClimbDis = 5;
+    const float RlimbTime = 0.8f;
+    const float DlayTime = 1.3f;
 
     bool isFrontMove = false;
     Tweener tweener;
@@ -22,28 +22,28 @@ public class ClimbState : IPlayerState
     public void FixedUpdate(){  }
     public void Exit() { ClimbEnd(); }
 
-    public ClimbState(PlayerStatecontroller _state , Animator _anim, GameObject _playerObj, CapsuleCollider _col, PlayerClimb _climb)
+    public ClimbState(PlayerStatecontroller _state , Animator _anim, GameObject _playerObj, CapsuleCollider _col, RayHitDetection _rayHitDetection)
     {
         state = _state;
         anim = _anim;
         PlayerObj = _playerObj;
         col = _col;
-        climb = _climb;
+        rayHitDetection = _rayHitDetection;
     }
 
     void ClimbStart()
     {
-        tweener = PlayerObj.transform.DOMove(new Vector3(PlayerObj.transform.position.x, PlayerObj.transform.position.y + climbDis, PlayerObj.transform.position.z) , climbTime, false);
+        tweener = PlayerObj.transform.DOMove(new Vector3(PlayerObj.transform.position.x, PlayerObj.transform.position.y + ClimbDis, PlayerObj.transform.position.z) , RlimbTime, false);
         tweener.Play();
         //anim.applyRootMotion = true;
-        anim.SetBool("IsClimb", true);
-        DOVirtual.DelayedCall(1.3f, () => state.Idle(), false);
+        anim.SetInteger("MovementState", 2);
+        DOVirtual.DelayedCall(DlayTime, () => state.Idle(), false);
     }
 
     void ClimbMove()
     {
-        climb.ClimbCheck();
-        if(!climb.IsForwardWall && !isFrontMove)
+        rayHitDetection.ClimbCheck();
+        if(!rayHitDetection.IsForwardWall && !isFrontMove)
         {
             tweener.Pause();
             isFrontMove = true;
@@ -54,7 +54,6 @@ public class ClimbState : IPlayerState
 
     void ClimbEnd()
     {
-        anim.SetBool("IsClimb",false);
         isFrontMove = false;
         anim.applyRootMotion = false;
     }

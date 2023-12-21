@@ -4,82 +4,86 @@ using SoundSystem;
 using TMPro;
 using UnityEngine.Playables;
 using UniRx;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
 
 /// <summary>
 /// ステージマネージャー
 /// </summary>
 public class StageManager : MonoBehaviour
 {
-    // スタート時のアニメーションフラグ
-    //bool isTimeLine = true;
-    public bool IsTimeLine { get; set; }
-
-    public bool Goal { get { return isGoal.Goal; } }
-    bool stageCliar = false;
-
-    public bool Fall { get { return isFall.IsFalling; } }
-    
-    // タイム
-    float tm = 0;
-    float timer;
-    bool isTimer = false;
-
-    //　サウンドフェード
-    const float soundFadeTime = 1f;
-
-    // オプションナンバー
-    const int minOperationNum = 0; 
-    const int maxOperationNum = 3;
-
-    // ステージ情報
-    int stageNum;
-    public int StageNum { get { return stageNum; } }
-
     [SerializeField, Header("プレイヤー")]
-    PlayerController player;
-
-    [SerializeField, Header("オプションパネル")] 
-    VolumeConfigUI volumeConfigUI;
-    [SerializeField,Header("キーボード表示")]
-    GameObject[] keyOperation;
-    [SerializeField, Header("Pad表示")]
-    GameObject[] padOperation;
-    [SerializeField,Header("タイマーテキスト")]
-    TextMeshProUGUI  TaimeText;
+    PlayerController playerCon;
     [SerializeField, Header("タイムライン")]
-    GameObject StartTimeLine;
-    [SerializeField, Header("タイムラインアニメーション")]
-    PlayableDirector playableDirector;
+    GameObject teleportTimeLine;
+    [SerializeField, Header("UIManager")]
+    MainUIManager mainUIManager;
 
-    GoalCheck isGoal;
-    FallingGameOver isFall;
+    PlayableDirector timeLine;
+    GoalCheck goalCheck;
+    FallingGameOver fallCheck;
 
     // Instance
     KeyInput input;
     SaveDataManager saveData;
     StageNumberSelect sn;
 
-    private void Awake()
-    {
-        sn = StageNumberSelect.Instance;
+    AsyncOperationHandle<GameObject> handle;
 
-        if (sn == null)
+    // スタート時のアニメーションフラグ
+    bool isTimeLine = true;
+    public bool IsTimeLine { get{ return isTimeLine; } }
+
+    bool stageCliar = false;
+    bool falling;
+    public bool Fall { get { return falling; } }
+
+    // タイム
+    float stageTime = 0;
+    public float StageTime { get { return stageTime; } }  
+    float timer;
+    bool isTimer = false;
+
+    // ステージ情報
+    int stageNum;
+    public int StageNum { get { return stageNum; } }
+
+    //　サウンドフェード
+    const float SoundFadeTime = 1f;
+    const float SceneLoadFadeTime = 1.5f;
+
+    // タイムライン秒数
+    const float TimeLinePlaybackTime = 6f;
+    const float TimeLineTeleportPlaybackTime = 3f;
+
+    // StagePass
+    private const string Stage0InstancePas = "Assets/MyProject/RunTime/AssetData/Stage0.prefab";
+    private const string Stage1InstancePas = "Assets/MyProject/RunTime/AssetData/Stage1.prefab";
+
+    async void Awake()
+    {
+        var pas = "";
+
+        // 生成するステージの選択
+        switch (StageNumberSelect.Instance.StageNumber)
         {
-            GameObject obj = (GameObject)Resources.Load("Stage" + 1);
-            Instantiate(obj, Vector3.zero, Quaternion.identity);
+            case 0:
+                pas = Stage0InstancePas;
+                break;
+            case 1:
+                pas = Stage1InstancePas;
+                break;
         }
-        else
-        {
-            // 選択されたステージを生成する
-            GameObject obj = (GameObject)Resources.Load("Stage" + sn.StageNumber);
-            Instantiate(obj, Vector3.zero, Quaternion.identity);
-        }
-        stageNum = sn.StageNumber;
+
+        handle = Addressables.InstantiateAsync(pas);
+        // .Taskでインスタンス化完了までawaitできる
+        await handle.Task;
     }
 
+    async void Start()
+    {
+        await handle.Task;
 
-    void Start()
-    {     
         input = KeyInput.Instance;
         saveData = SaveDataManager.Instance;
         saveData.Load();
@@ -88,55 +92,25 @@ public class StageManager : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
-        // スライダーの数値反映
-        volumeConfigUI.SetMasterVolume(SoundManager.Instance.MasterVolume);
-        volumeConfigUI.SetBGMVolume(SoundManager.Instance.BGMVolume);
-        volumeConfigUI.SetSeVolume(SoundManager.Instance.SEVolume);
+        sn = StageNumberSelect.Instance;
+        
+        stageNum = sn.StageNumber;
 
-        // ボリュームの設定
-        volumeConfigUI.SetMasterSliderEvent(vol => SoundManager.Instance.MasterVolume = vol);
-        volumeConfigUI.SetBGMSliderEvent(vol => SoundManager.Instance.BGMVolume = vol);
-        volumeConfigUI.SetSeSliderEvent(vol => SoundManager.Instance.SEVolume = vol);
+        SoundManager.Instance.PlayBGMWithFadeIn((int)BGMList.Main, SoundFadeTime);
 
-        timer = 0;
-        TaimeText.text = Mathf.Floor(timer).ToString();
+        timeLine = teleportTimeLine.GetComponent<PlayableDirector>();
 
-        SoundManager.Instance.PlayBGMWithFadeIn("Main", soundFadeTime);
-
-        isGoal = GameObject.Find("MagicCircuitGoal").GetComponent<GoalCheck>();
-        isFall = GameObject.Find("FallingGameOver").GetComponent<FallingGameOver>();
-
-        isFall.Count.Subscribe(value => ReStartAnimationTime());
         StartAnimationTime();
+
+        goalCheck = FindObjectOfType<GoalCheck>();
+        fallCheck = FindObjectOfType<FallingGameOver>();
+        fallCheck.Count.Subscribe(value => ReStartAnimationTime());
     }
 
     void Update()
     {
         Cliar();
-        SwithingOperation();
         TimeMeasurement();
-        print(IsTimeLine);
-    }
-
-    // 操作説明のPadとキーボードの表示を切り替える
-    void SwithingOperation()
-    {
-        if(input.Inputdetection)
-        {
-            for(int i = minOperationNum; i <= maxOperationNum; i++)
-            {
-                keyOperation[i].SetActive(true);
-                padOperation[i].SetActive(false);
-            }
-        }
-        else if(!input.Inputdetection)
-        {
-            for (int i = minOperationNum; i <= maxOperationNum; i++)
-            {
-                keyOperation[i].SetActive(false);
-                padOperation[i].SetActive(true);
-            }
-        }
     }
     
     // タイマー処理
@@ -144,44 +118,59 @@ public class StageManager : MonoBehaviour
     {
         if(isTimer)
         {
-            tm = Time.time - timer;
-            TaimeText.text = Mathf.Floor(tm).ToString();
+            stageTime = Time.time - timer;
+            mainUIManager.TimeUpdate(stageTime);
         }
     }
 
     // クリアした際に呼ばれる
     void Cliar()
     {
-        if(isGoal.Goal && !stageCliar)
+        // ステージが生成されていないなら返す
+        if(goalCheck == null) { return; }
+
+        if (goalCheck.Goal && !stageCliar)
         {
             stageCliar = true;
             switch (stageNum)
             {
                 case 0:
-                    saveData.ClearTime1Save(Mathf.Floor(tm));
+                    saveData.ClearTime1Save(Mathf.Floor(stageTime));
+                    teleportTimeLine.SetActive(true);
+                    timeLine.Play();
                     break;
                 case 1:
-                    saveData.ClearTime2Save(Mathf.Floor(tm));
+                    saveData.ClearTime2Save(Mathf.Floor(stageTime));
+                    teleportTimeLine.SetActive(true);
+                    timeLine.Play();
+
                     break;
             }
-            saveData.Save();
-            FadeManager.Instance.LoadScene("Result", 1.5f);
+            mainUIManager.ResultsDisplay(stageTime);
+            DOVirtual.DelayedCall(TimeLineTeleportPlaybackTime / 2, () => { playerCon.gameObject.SetActive(false); });
+        }
+
+        if (input.DecisionInput && mainUIManager.IsResultOpen)
+        {
+            FadeManager.Instance.LoadScene("Title", SceneLoadFadeTime);
         }
     }
 
     // スタートアニメーションが動いている間プレイヤーとタイマーを止める
     void StartAnimationTime()
     {
-        StartTimeLine.transform.position = new Vector3(player.transform.position.x, player.transform.position.y+0.12f, player.transform.position.z);
-        DOVirtual.DelayedCall(6f, () => {  timer = Time.time; isTimer = true; });
+        isTimeLine = false;
+        DOVirtual.DelayedCall(TimeLinePlaybackTime, () => { isTimeLine = true; timer = Time.time; isTimer = true; });
     }
 
-    // スタートアニメーションが動いている間プレイヤーを止める
+    // 落下時
     void ReStartAnimationTime()
     {
-        //isStart = true;
-        StartTimeLine.transform.position = new Vector3(isFall.ResetPosition.x, isFall.ResetPosition.y + 0.15f, isFall.ResetPosition.z);
-        playableDirector.Play();
-        //DOVirtual.DelayedCall(7.5f, () => { isStart = false;});
+        if (!fallCheck.IsFalling) { return; }
+        falling = true;
+        isTimeLine = false;
+        teleportTimeLine.SetActive(true);
+        timeLine.Play();
+        DOVirtual.DelayedCall(TimeLineTeleportPlaybackTime, () => { isTimeLine = true; falling = false; });
     }
 }

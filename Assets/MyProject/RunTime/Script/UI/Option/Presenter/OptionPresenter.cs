@@ -1,92 +1,51 @@
+using UniRx;
 using UnityEngine;
-using UnityEngine.UI;
 
-public class OptionPresenter : MonoBehaviour
+public class OptionPresenter
 {
-    [SerializeField,Header("スクリーンマネージャー")]
-    ScreenSizeSet screenSize;
-    [SerializeField, Header("ビューパネル")]
-    GameObject[] viewPanel;
+    OptionModel model;
+    // 選択番号
+    Vector2 selectionNumbar;
+    Vector2 screenSizeNum = new Vector2(1, 1);
 
-    [SerializeField, Header("Aoudioボタン")]
-    Image[] AoudioButton;
+    private readonly ReactiveProperty<bool> inputValue = new ReactiveProperty<bool>();
 
-    [SerializeField, Header("Systemボタン")]
-    Image[] SystemButton;
-
-    KeyInput input;
-
-    // View
-    OptionView optionView = new OptionView();
-
-    OptionModel optionModel;
-
-    public Vector2 SelectNum { get { return optionModel.SelectValue; } }
-
-    private void Start()
+    public OptionPresenter(OptionView _view, int _stateNum , int[] _buttonsNum, ScreenSizeSet screenSize)
     {
-        input = KeyInput.Instance;
-        // オプションステートごとの最大数
-        var num = new int[] { AoudioButton.Length - 1, SystemButton.Length - 1 };
-        optionModel = new OptionModel(viewPanel.Length - 1, num);
+        model = new OptionModel(_stateNum,_buttonsNum);
 
-        optionView.ChangeState(0, viewPanel);
-        optionView.UIMove(AoudioButton[0]);
-    }
-
-    void Update()
-    {
-        StateChange();
-        Decision();
-    }
-
-    // ステートが切り替り
-    private void StateChange()
-    {
-        var value = input.InputMove;
-       
-        if(optionModel.IsSelect && value != Vector2.zero)
-        {
-            var num = optionModel.SelectValue;
-            optionModel.SelectCahge(value);
-            // 変更前と変化がなかった場合返す
-            if (num == optionModel.SelectValue)
+        // 選択ボタンの切り変わりを検知
+        model.SelectValue
+            .Where(x => x != selectionNumbar)
+            .Subscribe(x =>
             {
-                return;
-            }
-            // 選択中のボタンを初期化
-            optionView.UIExit();
-            // ステートを変更
-            switch (optionModel.SelectValue.x)
+                _view.ExitUIAnimation(selectionNumbar);
+                _view.EnterUIAnimation(x);
+                selectionNumbar = x;
+            }).AddTo(_view);
+
+        // 選択ボタン押下を検知
+        inputValue
+            .Subscribe(x => model.SelectCahge(KeyInput.Instance.InputMove))
+            .AddTo(_view);
+
+        // 決定ボタン押下を検知
+        KeyInput.Instance.DecisionInputDetection
+            .Where(x => selectionNumbar == screenSizeNum && x)
+            .Subscribe(x =>
             {
-                case 0:
-                    //optionModels = aoudioModel;
-                    optionView.UIMove(AoudioButton[(int)optionModel.SelectValue.y]);
-                    break;
-                case 1:
-                    optionView.UIMove(SystemButton[(int)optionModel.SelectValue.y]);
-                    break;
-
-            }
-            optionView.ChangeState((int)optionModel.SelectValue.x, viewPanel);
-        }
+                screenSize.SetScreen();
+            }).AddTo(_view);
     }
 
-    private void Decision()
+    // ボタン選択
+    public void HandleInput()
     {
-        if(input.DecisionInput && optionModel.SelectValue == new Vector2(1,1))
-        {
-            // スクリーンサイズを切り替え
-            screenSize.SetScreen();
-        }
+        inputValue.Value = KeyInput.Instance.PressedMove;
     }
 
-    private void OnDisable()
+    public void Initialization()
     {
-        optionModel.ReturnOption();
-        optionView.UIExit();
-        optionView.ChangeState(0, viewPanel);
-        optionView.UIMove(AoudioButton[0]);
-        SaveDataManager.Instance.Save();
+        model.InitializationNum();
     }
 }

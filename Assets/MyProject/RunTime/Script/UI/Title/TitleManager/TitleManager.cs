@@ -1,25 +1,32 @@
 using UnityEngine;
 using SoundSystem;
 using UniRx;
+using Cysharp.Threading.Tasks;
+using System;
 
 public class TitleManager : MonoBehaviour
 {
-    KeyInput input;
-
-    [SerializeField]
-    TitleUIPresenter title;
+    [SerializeField, Header("タイトルセレクト")]
+    GameObject titleObj;
     [SerializeField, Header("オプションパネル")]
     VolumeConfigUI volumeConfigUI;
     [SerializeField, Header("各ステート")]
-    GameObject[] StateObj;
-    int num = 0;
+    GameObject[] stateObject;
 
-    TitleStateView titleStateView = new TitleStateView();
+    KeyInput input;
+    TitleView title;
+    IUIView titleUIView;
 
-    public int ModelNum { get { return title.ModelNum; } }
-    int stateNum = 0;
-    public int StateNum { get { return stateNum; } }
-    public bool IsTitleUI { get { return title.IsTitleUI; } }
+    bool isStartAnimation = true;
+
+    const float FadeArrivalTime = 1.5f;
+
+    enum State
+    {
+        Stage,
+        Option,
+        End,
+    }
 
     private void Start()
     {
@@ -38,35 +45,64 @@ public class TitleManager : MonoBehaviour
         volumeConfigUI.SetBGMSliderEvent(vol => SoundManager.Instance.BGMVolume = vol);
         volumeConfigUI.SetSeSliderEvent(vol => SoundManager.Instance.SEVolume = vol);
 
+        title = titleObj.GetComponent<TitleView>();
 
-        title.StateObservable.Subscribe(state => titleStateView.ChangeState(StateObj, state));
-        // タイトルUI切り替え
-        titleStateView.ChangeState(StateObj, stateNum);
+        // 決定ボタン押下を検知
+        input.DecisionInputDetection
+            .Where(x => !isStartAnimation && x)
+            .Subscribe(x =>
+            {
+                if (stateObject[(int)State.Stage].activeSelf)
+                {
+                    SceneChange();
+                }
+                else if(stateObject[(int)State.End].activeSelf)
+                {
+                    Back();
+                }
+                else
+                {
+                    StateChange();
+                }
+            }).AddTo(this);
+        // 戻るボタン押下を検知
+        input.BackInput
+            .Where(x => !titleObj.activeSelf && !isStartAnimation && !x)
+            .Subscribe(x =>
+            {
+                Back();
+            }).AddTo(this);
 
-        SoundManager.Instance.PlayBGMWithFadeIn("Title");
+        isStartAnimation = false;
+        titleObj.SetActive(true);
+        SoundManager.Instance.PlayBGMWithFadeIn((int)BGMList.Title);
     }
 
-    private void Update()
+    public async void SceneChange()
     {
-        StateNumChange();
-        Back();
+        FadeManager.Instance.LoadScene("Main", FadeArrivalTime);
+        await UniTask.Delay(TimeSpan.FromSeconds(FadeArrivalTime));
     }
 
-    void StateNumChange()
+    // 選択ステート変更
+    private async void StateChange()
     {
-        if(stateNum　!= num)
-        {
-            num = stateNum;
-            
-        }
+        
+        // アニメーションが終わるまで処理を止める
+        await title.DisableAnimation();
+        var state = stateObject[title.SelectionNumbar];
+        // 選択されたステートを表示する
+        state.SetActive(true);
+        // 選択されたObjectのアニメーションのViewを取得
+        titleUIView = state.GetComponent<IUIView>();
     }
-
-    private void Back()
+    // タイトルセレクトへ戻る
+    private async void Back()
     {
-        if (!input.EscInput)
-        {
-            return;
-        }
-        titleStateView.ChangeState(StateObj, 0);
+        SoundManager.Instance.PlayOneShotSe((int)SEList.Cancel);
+        // 選択されていたステートのアニメーション
+        await titleUIView.DisableAnimation();
+        // タイトルを表示する
+        titleObj.SetActive(true);
     }
 }

@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 public class PanelManager : MonoBehaviour {
 
-	public Animator initiallyOpen;
+	public Animator anim;
 
 	private int m_OpenParameterId;
 	private Animator m_Open;
@@ -19,10 +19,10 @@ public class PanelManager : MonoBehaviour {
 	{
 		m_OpenParameterId = Animator.StringToHash (k_OpenTransitionName);
 
-		if (initiallyOpen == null)
+		if (anim == null)
 			return;
 
-		OpenPanel(initiallyOpen);
+		OpenPanel(anim);
 	}
 
 	public void OpenPanel (Animator anim)

@@ -1,67 +1,116 @@
-using UnityEngine;
+using Cysharp.Threading.Tasks;
 using DG.Tweening;
+using SoundSystem;
+using System;
+using UnityEngine;
 using UnityEngine.UI;
-using System.Data;
 
-public class OptionView 
+public class OptionView : MonoBehaviour, IUIView
 {
-    Sequence tween = null;
-    // スケールサイズ
-    private const float ScaleNum = 0.3f;
+    [SerializeField, Header("RectTransform")]
+    RectTransform rectTransform;
+    [SerializeField, Header("CanvasGroup")]
+    CanvasGroup canvasGroup;
+    [SerializeField, Header("スクリーンマネージャー")]
+    ScreenSizeSet screenSize;
+    [SerializeField, Header("ビューパネル")]
+    GameObject[] viewPanel;
+    [SerializeField, Header("Aoudioボタン")]
+    Image[] AoudioButton;
+    [SerializeField, Header("Systemボタン")]
+    Image[] SystemButton;
+
+
+    Vector2 optionSelectButton;
+    public Vector2 OptionSelectButton { get { return optionSelectButton; } }
+
+    // Fillサイズ
+    private const float EnterFillValue = 1f;
+    private const float ExitFillValue = 0;
     // 到達時間
-    private const float ArrivalTime = 0.1f;
-    // アニメーションが再開できるか
-    private bool isPlay = false;
+    private const float ArrivalTime = 0.25f;
+    private const float MoveArrivalTime = 0.5f;
 
-    Image img;
+    OptionPresenter presenter;
 
-    // ボタンアニメーション
-    public void UIMove(Image Button)
+    void Start()
     {
-        img = Button;
-        if (tween == null)
-        {
-            tween = DOTween.Sequence()
-                .Append(img.transform.DOScale(
-                 new Vector3(ScaleNum, ScaleNum, ScaleNum),
-                 ArrivalTime
-                 )).SetLoops(2, LoopType.Yoyo)
-                 .Insert(0, img.DOColor(Color.black, ArrivalTime))
-                 .OnComplete(() => img.color = Color.red);
-            return;
-        }
-        if (isPlay)
-        {
-            isPlay = false;
-
-            tween = DOTween.Sequence()
-                .Append(img.transform.DOScale(
-                 new Vector3(ScaleNum, ScaleNum, ScaleNum),
-                 ArrivalTime
-                 )).SetLoops(2, LoopType.Yoyo)
-                 .Insert(0, img.DOColor(Color.black, ArrivalTime))
-                 .OnComplete(() => img.color = Color.red);
-            tween.Play();
-        }
-    }
-    // ボタンが選択されてない状態
-    public void UIExit()
-    {
-        img.color = Color.white;
-        tween.Restart();
-        tween.Pause();
-        isPlay = true;
+        int[] i = new int[] { AoudioButton.Length - 1, SystemButton.Length - 1 };
+        presenter = new OptionPresenter(this, viewPanel.Length - 1, i, screenSize);
+        EnterUIAnimation(Vector2.zero);
     }
 
-    public void ChangeState(int num,GameObject[] obj)
+    void Update()
     {
-        for (int i = 0; i < obj.Length; i++)
+        presenter.HandleInput();
+    }
+
+    private void OnEnable()
+    {
+        EnabldUIAnimation();
+    }
+
+    // ステートに変更があった場合新たなアニメーションを開始する
+    public void EnterUIAnimation(Vector2 _imageNum)
+    {
+        optionSelectButton = _imageNum;
+        switch (_imageNum.x)
         {
-            obj[i].SetActive(false);
-            if (i == num)
-            {
-                obj[num].SetActive(true);
-            }
+            case 0:
+                viewPanel[0].SetActive(true);
+                viewPanel[1].SetActive(false);
+                AoudioButton[(int)_imageNum.y].DOFillAmount(EnterFillValue, ArrivalTime)
+                            .SetEase(Ease.OutCubic)
+                            .Play();
+                break;
+            case 1:
+                viewPanel[0].SetActive(false);
+                viewPanel[1].SetActive(true);
+                SystemButton[(int)_imageNum.y].DOFillAmount(EnterFillValue, ArrivalTime)
+                            .SetEase(Ease.OutCubic)
+                            .Play();
+                break;
         }
+        SoundManager.Instance.PlayOneShotSe((int)SEList.Select);
+    }
+    // ステートに変更があった場合前のFillを元に戻す
+    public void ExitUIAnimation(Vector2 _imageNum)
+    {
+        switch (_imageNum.x)
+        {
+            case 0:
+                AoudioButton[(int)_imageNum.y].DOFillAmount(ExitFillValue, ArrivalTime)
+                            .SetEase(Ease.OutCubic)
+                            .Play();
+                break;
+            case 1:
+                SystemButton[(int)_imageNum.y].DOFillAmount(ExitFillValue, ArrivalTime)
+                            .SetEase(Ease.OutCubic)
+                            .Play();
+                break;
+        }
+    }
+
+    public void EnabldUIAnimation()
+    {
+        viewPanel[0].SetActive(true);
+        viewPanel[1].SetActive(false);
+        rectTransform.DOScale(1, MoveArrivalTime)
+            .SetEase(Ease.OutBack);
+    }
+
+    // 無効時のアニメーション
+    public async UniTask DisableAnimation()
+    {
+        rectTransform.DOScale(0, MoveArrivalTime)
+            .SetEase(Ease.OutBack)
+            .OnComplete(() =>
+                {
+                    viewPanel[0].SetActive(false);
+                    viewPanel[1].SetActive(false);
+                    this.gameObject.SetActive(false);
+                    presenter.Initialization();
+                });
+        await UniTask.Delay(TimeSpan.FromSeconds(MoveArrivalTime));
     }
 }

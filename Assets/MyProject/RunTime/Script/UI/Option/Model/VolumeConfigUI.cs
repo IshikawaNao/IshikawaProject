@@ -5,26 +5,38 @@ using UnityEngine.Events;
 /// <summary> サウンド変更</summary>
 public class VolumeConfigUI : MonoBehaviour
 {
-    const float volAddition = 0.005f;
-    const float deadZone = 0.3f;
-
-    KeyInput input;
+    
 
     [SerializeField, Header("オプションパネル")]
     GameObject optionPanel;
     [SerializeField,Header("サウンドパネル")] 
     GameObject volumePanel;
+    [SerializeField, Header("システムパネル")]
+    GameObject systemPanel;
     [SerializeField, Header("オプション")]
-    OptionPresenter option;
+    OptionView option;
     [SerializeField,Header("masterスライダー")] 
     Slider masterSlider;
     [SerializeField, Header("BGMスライダー")] 
     Slider bgmSlider;
     [SerializeField, Header("SEスライダー")] 
     Slider seSlider;
+    [SerializeField, Header("カメラ感度スライダー")]
+    Slider sensitivitySlider;
+
+    KeyInput input;
 
     Vector2 inputValue;                 // 操作インプットの向き
+    const float VolAddition = 0.005f;
+    const float DeadZone = 0.3f;
 
+    // サウンド
+    enum SoundVolue 
+    {
+        Master = 1,
+        Bgm, 
+        Se,
+    }
 
     private void Start()
     {
@@ -33,12 +45,14 @@ public class VolumeConfigUI : MonoBehaviour
         masterSlider.value = SaveDataManager.Instance.MasterVol;
         bgmSlider.value = SaveDataManager.Instance.BGMVol;
         seSlider.value = SaveDataManager.Instance.SEVol;
+        sensitivitySlider.value = SaveDataManager.Instance.Sensitivity;
     }
 
     private void Update()
     {
         inputValue = input.InputMove;
         AudioPanelControll();
+        CameraSensitivity();
     }
 
     private void AudioPanelControll()        // サウンドの調整
@@ -50,13 +64,32 @@ public class VolumeConfigUI : MonoBehaviour
         // keybord入力Lスティック操作
         if (input.PressedMove)
         {
-            if (inputValue.x > deadZone) { AudioVolumeChange(option.SelectNum, volAddition); }
-            else if (inputValue.x < -deadZone) { AudioVolumeChange(option.SelectNum, -volAddition); }
+            if (inputValue.x > DeadZone) { AudioVolumeChange(option.OptionSelectButton, VolAddition); }
+            else if (inputValue.x < -DeadZone) { AudioVolumeChange(option.OptionSelectButton, -VolAddition); }
         }
         else if (input.LongPressedMove)
         {
-            if (inputValue.x > deadZone) { AudioVolumeChange(option.SelectNum, volAddition); }
-            else if (inputValue.x < -deadZone) { AudioVolumeChange(option.SelectNum, -volAddition); }
+            if (inputValue.x > DeadZone) { AudioVolumeChange(option.OptionSelectButton, VolAddition); }
+            else if (inputValue.x < -DeadZone) { AudioVolumeChange(option.OptionSelectButton, -VolAddition); }
+        }
+    }
+
+    private void CameraSensitivity()
+    {
+        if (!systemPanel.activeSelf || !optionPanel.activeSelf)
+        {
+            return;
+        }
+        // keybord入力Lスティック操作
+        if (input.PressedMove)
+        {
+            if (inputValue.x > DeadZone) { CameraSensitivityChange(option.OptionSelectButton, VolAddition); }
+            else if (inputValue.x < -DeadZone) { CameraSensitivityChange(option.OptionSelectButton, -VolAddition); }
+        }
+        else if (input.LongPressedMove)
+        {
+            if (inputValue.x > DeadZone) { CameraSensitivityChange(option.OptionSelectButton, VolAddition); }
+            else if (inputValue.x < -DeadZone) { CameraSensitivityChange(option.OptionSelectButton, -VolAddition); }
         }
     }
 
@@ -69,18 +102,31 @@ public class VolumeConfigUI : MonoBehaviour
 
         switch (soundMenuNum.y)
         {
-            case 1:
+            case (int)SoundVolue.Master:
                 masterSlider.value += volume;
                 SaveDataManager.Instance.MasterVolSave(masterSlider.value);
                 break;
-            case 2:
+            case (int)SoundVolue.Bgm:
                 bgmSlider.value += volume;
                 SaveDataManager.Instance.BGMVolSave(bgmSlider.value);
                 break;
-            case 3:
+            case (int)SoundVolue.Se:
                 seSlider.value += volume;
                 SaveDataManager.Instance.SEVolSave(seSlider.value);
                 break;
+        }
+    }
+
+    private void CameraSensitivityChange(Vector2 soundMenuNum, float volume)
+    {
+        if (soundMenuNum.x != 1)
+        {
+            return;
+        }
+        if(soundMenuNum.y == 2)
+        {
+            sensitivitySlider.value += volume;
+            SaveDataManager.Instance.SensitivitySave(sensitivitySlider.value);
         }
     }
 
@@ -92,12 +138,10 @@ public class VolumeConfigUI : MonoBehaviour
     public void SetBGMVolume(float bgmVolume)
     {
         bgmSlider.value = bgmVolume;
-
     }
     public void SetSeVolume(float seVolume)
     {
         seSlider.value = seVolume;
-
     }
 
     // スライダーに変更があったら値を反映させる(イベント)

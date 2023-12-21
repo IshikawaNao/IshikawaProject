@@ -7,7 +7,11 @@ TagManager:
   - Move
   - Goal
   - Climb
-  - Fly
+  - Teleport
+  - GameOver
+  - SensingFloor
+  - Sonar
+  - Bridge
   layers:
   - Default
   - TransparentFX
@@ -19,7 +23,7 @@ TagManager:
   - Move
   - Wall
   - Ground
-  - 
+  - Beam
   - 
   - 
   - 

@@ -12,7 +12,7 @@ public class CreateData : MonoBehaviour
     const float DefaultMasterVol = 1;
     const float DefaultBGMVol = 0.5f;
     const float DefaultSEVol = 0.5f;
-    const float DefaultSensitivity = 0.1f;
+    const float DefaultSensitivity = 0.5f;
     const float DefaultClearTime = 0;
     const string DefaultRank = "";
     const bool DefultScreenSize = true;

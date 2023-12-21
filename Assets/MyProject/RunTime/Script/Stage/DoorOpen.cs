@@ -5,13 +5,13 @@ public class DoorOpen : MonoBehaviour
     [SerializeField]
     Animator anim;
     [SerializeField]
-    HouseRoom hr;
+    DetectionObject detection;
     [SerializeField]
     Collider collider;
 
     private void Update()
     {
-        if(hr.Placed)
+        if(detection.Placed)
         {
             anim.SetBool("Open", true);
             collider.isTrigger = true;

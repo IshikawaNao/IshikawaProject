@@ -15,7 +15,7 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "Jump",
+                    "name": "Teleport",
                     "type": "Button",
                     "id": "d7acb597-769e-424a-a880-0711caeb2b64",
                     "expectedControlType": "Button",
@@ -54,6 +54,15 @@
                     "name": "KeyDetection",
                     "type": "Button",
                     "id": "fe3e44b9-b9c8-4b7b-b71f-4b72f201fc3e",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "BeamRotate",
+                    "type": "Button",
+                    "id": "0e408b56-9d2f-45b2-9582-c8938710175e",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -134,7 +143,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Jump",
+                    "action": "Teleport",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -145,7 +154,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Jump",
+                    "action": "Teleport",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -163,7 +172,7 @@
                 {
                     "name": "",
                     "id": "6e43b932-1c2d-4714-a6fe-c2cea38d13b9",
-                    "path": "<Gamepad>/rightTrigger",
+                    "path": "<Gamepad>/buttonEast",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -185,7 +194,7 @@
                 {
                     "name": "",
                     "id": "a8da3bd7-31e1-457b-a519-cd804ea4d7a6",
-                    "path": "<Gamepad>/buttonEast",
+                    "path": "<Gamepad>/buttonNorth",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -247,6 +256,28 @@
                     "action": "KeyDetection",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "3ce4450d-10b9-420f-9b99-65a65408f5b9",
+                    "path": "<Keyboard>/f",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "BeamRotate",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "6f73249f-8c86-4d81-8a57-667428de8de0",
+                    "path": "<Gamepad>/buttonWest",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "BeamRotate",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         },
@@ -299,7 +330,7 @@
                     "id": "87e3755f-0548-4b0e-903f-df4fd2ba191a",
                     "path": "<Gamepad>/rightStick",
                     "interactions": "",
-                    "processors": "ScaleVector2(x=5,y=5)",
+                    "processors": "ScaleVector2",
                     "groups": "",
                     "action": "Move",
                     "isComposite": false,

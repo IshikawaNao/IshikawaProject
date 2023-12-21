@@ -2,7 +2,6 @@ using System.Collections;
 using UnityEngine;
 using UniRx;
 using System;
-using UnityEngine.Animations;
 
 public class FallingGameOver : MonoBehaviour
 {
@@ -10,7 +9,7 @@ public class FallingGameOver : MonoBehaviour
     Transform resetPosition;
     public Vector3 ResetPosition { get { return resetPosition.position; } } 
     WaitForSeconds waitForSeconds;
-    const float waitTime = 3;
+    const float WaitTime = 3;
 
     bool isFalling = false;
     public bool IsFalling { get { return isFalling; } }
@@ -20,15 +19,14 @@ public class FallingGameOver : MonoBehaviour
 
     private void Start()
     {
-        waitForSeconds = new WaitForSeconds(waitTime);
+        waitForSeconds = new WaitForSeconds(WaitTime);
     }
 
-    IEnumerator FallDeray(GameObject player)
+    IEnumerator FallDeray(GameObject obj)
     {
         yield return waitForSeconds;
-        player.gameObject.transform.position = resetPosition.position;
-        player.gameObject.transform.rotation = this.transform.rotation;
-        count.Value++; 
+        obj.gameObject.transform.position = resetPosition.position;
+        obj.gameObject.transform.rotation = this.transform.rotation;
         isFalling = false;
     }
 
@@ -37,6 +35,11 @@ public class FallingGameOver : MonoBehaviour
         if (other.gameObject.CompareTag("Player"))
         {
             isFalling = true;
+            count.Value++;
+            StartCoroutine(FallDeray(other.gameObject));
+        }
+        else if(other.gameObject.CompareTag("Move"))
+        {
             StartCoroutine(FallDeray(other.gameObject));
         }
     }

@@ -4,6 +4,25 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.Audio;
 
+public enum BGMList
+{
+    Title,
+    Main
+}
+
+public enum SEList
+{
+    Select,
+    Decision,
+    Run,
+    Push,
+    Cancel,
+    PressureSensitive,
+    Teleport,
+    Up,
+    Beam
+}
+
 namespace SoundSystem
 {
     public class SoundManager : MonoBehaviour
@@ -108,53 +127,63 @@ namespace SoundSystem
             return audioSource;
         }
 
-        public void PlayOneShotSe(string clipName)
+        public bool IsSEPlay()
         {
-            var audioClip = seAudioClipList.FirstOrDefault(clip => clip.name == clipName);
+            return seAudioSource.isPlaying;
+        }
+
+        public void PlayOneShotSe(int clipNum)
+        {
+            var audioClip = seAudioClipList[clipNum];
 
             if (audioClip == null)
             {
-                Debug.Log(clipName + "は見つかりません");
+                Debug.LogError(clipNum + "は見つかりません");
                 return;
             }
 
             seAudioSource.PlayOneShot(audioClip);
         }
 
-        public void PlayShotSe(string clipName)
+        public void PlayShotSe(int clipNum)
         {
-            var audioClip = seAudioClipList.FirstOrDefault(clip => clip.name == clipName);
+            var audioClip = seAudioClipList[clipNum];
 
             if (audioClip == null)
             {
-                Debug.Log(clipName + "は見つかりません");
+                Debug.LogError(clipNum + "は見つかりません");
                 return;
             }
 
             seAudioSource.Play(audioClip);
         }
+
+        public void StopSE()
+        {
+            seAudioSource.Stop();
+        }
       
-        public void PlayBGMWithFadeIn(string clipName, float fadeTime = 2f)
+        public void PlayBGMWithFadeIn(int clipNum, float fadeTime = 2f)
         {
             if (IsPaused) { return; }
 
-            var audioClip = bgmAudioClipList.FirstOrDefault(clip => clip.name == clipName);
+            var audioClip = bgmAudioClipList[clipNum];
 
             if (audioClip == null)
             {
-                Debug.Log(clipName + "は見つかりません");
+                Debug.LogError(clipNum + "は見つかりません");
                 return;
             }
 
             if (bgmAudioSourceList.Any(source => source.clip == audioClip))
             {
-                Debug.Log(clipName + "はすでに再生されています");
+                Debug.LogError(clipNum + "はすでに再生されています");
                 return;
             }
 
             StopBGMWithFadeOut(fadeTime); // 現在再生中のBGMをフェードアウトする
 
-            AudioSource audioSource = bgmAudioSourceList.FirstOrDefault(asb => asb.isPlaying == false);
+            AudioSource audioSource = bgmAudioSourceList[clipNum];
 
             if (audioSource != null)
             {
@@ -164,15 +193,15 @@ namespace SoundSystem
             }
         }
 
-        public void StopBGMWithFadeOut(string clipName, float fadeTime)
+        public void StopBGMWithFadeOut(int clipNum, float fadeTime)
         {
             if (IsPaused) { return; }
 
-            AudioSource audioSource = bgmAudioSourceList.FirstOrDefault(bas => bas.clip.name == clipName);
+            AudioSource audioSource = bgmAudioSourceList[clipNum];
             
             if (audioSource == null || audioSource.isPlaying == false)
             {
-                Debug.Log(clipName + "は再生されていません");
+                Debug.LogError(clipNum + "は再生されていません");
                 return;
             }
 

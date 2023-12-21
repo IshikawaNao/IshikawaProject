@@ -2,31 +2,42 @@ using UnityEngine;
 
 public class OperationExplanationMove : MonoBehaviour
 {
-    [SerializeField]
-    GameObject plyer;
-
-    [SerializeField]
+    [SerializeField,Header("プレイヤーコントローラー")]
+    RayHitDetection rayHitDetection;
+    [SerializeField, Header("PushImage")]
     GameObject push;
-    [SerializeField]
+    [SerializeField, Header("ClimbImage")]
     GameObject climb;
-    [SerializeField]
-    GameObject jump;
+    [SerializeField, Header("Teleportコントローラー")]
+    GameObject teleport;
+    [SerializeField, Header("BeamRotateImage")]
+    GameObject beamRotate;
 
+    public void Update()
+    {
+        ClimbCheck(rayHitDetection.ClimbCheck());
+        PushCheck(rayHitDetection.CanPush());
+        TeleportCheck(rayHitDetection.IsTeleport());
+        BeamRotatetCheck(rayHitDetection.IsBeamRotate);
+    }
 
-    public void ClimbCheck(bool check)
+    void ClimbCheck(bool check)
     {
         climb.SetActive(check);
     }
 
-    public void PushCheck(bool check)
+    void PushCheck(bool check)
     {
         push.SetActive(check);
     }
 
-    public void JumpCheck(bool check)
+    void TeleportCheck(bool check)
     {
-        jump.SetActive(check);
+        teleport.SetActive(check);
     }
 
-
+    void BeamRotatetCheck(bool check)
+    {
+        beamRotate.SetActive(check);
+    }
 }

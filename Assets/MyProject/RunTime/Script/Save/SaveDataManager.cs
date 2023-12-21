@@ -78,7 +78,7 @@ public class SaveDataManager : MonoBehaviour
         rank2 = _rank2;
     }
     /// <summary> スクリーンサイズ変更</summary>
-    public void ScreenSize2Save(bool _screenSize)
+    public void ScreenSizeSave(bool _screenSize)
     {
         screenSize = _screenSize;
     }

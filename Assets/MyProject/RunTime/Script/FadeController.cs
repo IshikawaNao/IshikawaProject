@@ -6,15 +6,15 @@ public class FadeController : MonoBehaviour
     Material mat;
 
     float fadeNum = 0;
-    const float addFadeNum = 0.00001f;
-    const float minFadeNum = 0;
-    const float maxFadeNum = 0.5f;
+    const float AddFadeNum = 0.00001f;
+    const float MinFadeNum = 0;
+    const float MaxFadeNum = 0.5f;
 
     public void FadeOpen()
     {
-        if(fadeNum != maxFadeNum)
+        if(fadeNum != MaxFadeNum)
         {
-            for (float i = minFadeNum; i < maxFadeNum; i += addFadeNum)
+            for (float i = MinFadeNum; i < MaxFadeNum; i += AddFadeNum)
             {
                 mat.SetFloat("_Float", i);
             }
@@ -27,7 +27,7 @@ public class FadeController : MonoBehaviour
     {
         if (fadeNum != 0)
         {
-            for (float i = maxFadeNum; i < minFadeNum; i -= addFadeNum)
+            for (float i = MaxFadeNum; i < MinFadeNum; i -= AddFadeNum)
             {
                 mat.SetFloat("_Float", i);
             }

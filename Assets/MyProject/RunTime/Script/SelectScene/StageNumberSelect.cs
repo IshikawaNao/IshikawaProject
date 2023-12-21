@@ -21,7 +21,14 @@ public class StageNumberSelect : MonoBehaviour
     }
 
     // ステージナンバー
-    public int StageNumber { get; set; } = 0;
+    private int stageNumber;
+    public int StageNumber { get { return stageNumber;} }
+
+    // ステージを決定したときに呼ばれる
+    public void SelectStage(int _stageNumber)
+    {
+        stageNumber = _stageNumber;
+    }
 
     private void Awake()
     {

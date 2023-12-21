@@ -1,5 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UniRx;
+using Unity.VisualScripting;
 
 /// <summary>
 /// Key入力
@@ -28,9 +30,9 @@ public class KeyInput : MonoBehaviour
     public bool PressedMove { get { return myInput.Player.Move.WasPressedThisFrame(); } }   
     public bool LongPressedMove { get { return myInput.Player.Move.IsPressed(); } }   
     // マウスポジション
-    public Vector2 CameraPos { get { return myInput.Camera.Move.ReadValue<Vector2>(); } }
+    public Vector2 CameraPos { get { return new Vector2 (myInput.Camera.Move.ReadValue<Vector2>().x, -myInput.Camera.Move.ReadValue<Vector2>().y); } }
     // ジャンプ入力
-    public bool InputJump { get { return myInput.Player.Jump.triggered; } }
+    public bool InputTeleport { get { return myInput.Player.Teleport.triggered; } }
     // アクションボタン入力
     public bool PushAction { get { return myInput.Player.PushAction.IsPressed(); } }
     // アクションボタン入力
@@ -45,15 +47,29 @@ public class KeyInput : MonoBehaviour
     public bool CameraReset { get { return myInput.Camera.CameraReset.WasPerformedThisFrame(); } }
     // スクロール入力
     public float Scroll { get { return myInput.Camera.Scroll.ReadValue<Vector2>().y; } }
-    // 入力された
+    // ビームオブジェクト回転ボタン
+    public bool BeamRotateAction { get { return myInput.Player.BeamRotate.WasPerformedThisFrame(); } }
+    // PadかKeyのどちらで動かしているか
     public bool Inputdetection{ get { return Pressed();} }
-    bool pressed = true;
     bool Pressed()
     {
-        if (myInput.Player.KeyDetection.IsPressed()) { pressed = true; }
-        else if (Gamepad.current != null && Gamepad.current.IsPressed()) { pressed = false;  }
-        return pressed;
+        if (Gamepad.current != null) { return false;  }
+        else if (myInput.Player.KeyDetection.IsPressed()) { return true; }
+        return true;
     }
+
+    // 決定ボタン入力検知
+    private readonly ReactiveProperty<bool> decisionInputDetection = new ReactiveProperty<bool>();
+    public IReadOnlyReactiveProperty<bool> DecisionInputDetection => decisionInputDetection;
+    private readonly ReactiveProperty<bool> backInput = new ReactiveProperty<bool>();
+    public IReadOnlyReactiveProperty<bool> BackInput => backInput;
+
+    private void Update()
+    {
+        decisionInputDetection.Value = myInput.UI.Decision.WasPressedThisFrame();
+        backInput.Value = myInput.UI.Return.WasPressedThisFrame();
+    }
+
     #region　InputAction
     MyInput myInput;
     void Awake()

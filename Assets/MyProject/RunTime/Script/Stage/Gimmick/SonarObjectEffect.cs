@@ -1,37 +1,24 @@
 using UnityEngine;
 using DG.Tweening;
 
-public class SonarObjectEffect : MonoBehaviour
+public class SonarObjectEffect 
 {
-    [SerializeField]
-    SonarEffect sonarEffect;
-
-    [SerializeField]
-    Material[] mat;
-
     // 1ならソナーオン0ならオフ
-    const int sonarOn = 1;
-    const int sonarOff = 0;
-
-    const float waiteTime = 1f;
+    const int SonarOn = 1;
+    const int SonarOff = 0;
 
     float intensity = 4;
-    const int maxIntensity = 30;
+    const int MaxIntensity = 30;
 
-    private void Update()
-    {
-        ObjectEffect(sonarEffect.IsOnSonar);
-    }
 
     // ソナーの際のオブジェクトのエフェクト切り替え
-    public void ObjectEffect(bool isSonar)
+    public void ObjectEffect(bool isSonar, Material[] mat)
     {
         if (isSonar)
         {
-            
             for (int i = 0; i < mat.Length; i++)
             {
-                mat[i].SetFloat("_Boolean", sonarOn);
+                mat[i].SetFloat("_Boolean", SonarOn);
                 mat[i].SetFloat("_intensity", intensity);
             }
         }
@@ -39,19 +26,19 @@ public class SonarObjectEffect : MonoBehaviour
         {
             for (int i = 0; i < mat.Length; i++)
             {
-                mat[i].SetFloat("_Boolean", sonarOff);
+                mat[i].SetFloat("_Boolean", SonarOff);
             }
         }
     }
 
     // 光量加算
-    public void SonarIntensity()
+    public void SonarIntensity(float waiteTime)
     {
         DOTween.To
        (
            () => intensity,
            (x) => intensity = x,
-           maxIntensity,
+           MaxIntensity,
            waiteTime
        )
        .SetLoops(2, LoopType.Yoyo);
